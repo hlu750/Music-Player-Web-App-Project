@@ -1,3 +1,27 @@
-<nav id="navbar">
-    <img src="" alt="" id="">log
-</nav>
+<nav id="nav">
+    <!-- <img src="/static/images/music-ico.png" alt="Music icon"  id="icon"> -->
+    <img id="logo" src="{{ url_for('static', filename='images/music-ico.png') }}" alt="Icon">
+    <h2 id="nav-header">Music</h2>
+    <a class="btn-nav" href="">Music</a>
+    <a class="btn-nav" href="">Music</a>
+    <a class="btn-nav" href="">Music</a>
+    <a class="btn-nav" href="">Music</a>
+    <div>
+        <h3>
+          <a class="btn-nav" href="">
+            Browse timeline
+          </a>
+        </h3>
+      </div>
+    
+      <div>
+        <h3 id="sub-nav-header">Browse by tag</h3>
+        {% for key in tag_urls %}
+          <a class="btn-nav" href="{{ tag_urls[key] }}">{{ key }}</a>
+        {% endfor %}
+      </div>
+    
+      <div id="nav-footer">
+        COMPSCI 235 Software Development Methodologies
+      </div>
+    </nav>

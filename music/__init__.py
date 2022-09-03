@@ -17,13 +17,13 @@ def create_some_track():
 
 
 def create_app():
-    app = Flask(__name__, static_url_path='/static')
+    app = Flask(__name__)
     app.debug = True
     @app.route('/')
     def home():
         some_track = create_some_track()
         # Use Jinja to customize a predefined html page rendering the layout for showing a single track.
-        return render_template('simple_track.html', track=some_track)
-        # return render_template('layout.html')
+        # return render_template('simple_track.html', track=some_track)
+        return render_template('layout.html')
 
     return app
