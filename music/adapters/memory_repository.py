@@ -1,3 +1,4 @@
+from pathlib import Path
 from random import random
 from music.adapters.repository import AbstractRepository, RepositoryException
 from music.domainmodel.track import Track
@@ -47,3 +48,9 @@ class MemoryRepository(AbstractRepository):
 
         pass
         #TODO needs to be implemented
+
+def load_tracks(data_path:Path, repo:MemoryRepository ):
+    album_path = str(data_path / "raw_albums_excerpt.csv")
+    track_path = str(data_path / "raw_tracks_excerpt.csv")
+    reader = TrackCSVReader(album_path, track_path)
+    repo.__track_index = reader.read_csv_files()
