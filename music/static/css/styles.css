@@ -57,8 +57,19 @@ h1 {
   color: #fff;
 }
 
+#main > .title{
+  font-size: 4rem;
+  font-weight: bold;
+  text-align: center;
+  /* font-size: min(14vw, 4rem); */
+  color : rgb(165, 122, 235)
+}
 
-
+.animate__animated{
+  padding: 30px;
+  font-size: 40px;
+  color: beige;
+}
 #nav {
   width: 200px;
   height: 100%;
@@ -97,8 +108,10 @@ h1 {
   margin: 20px;
   color: #717171;
   line-height: 25px;
-  padding: 10px;
-  width: 66.666667%;
+  padding: 20px;
+  /* padding-top: 10px; */
+  /* width: 66.666667%; */
+  text-align: center;
 }
 
 #logo {
@@ -112,3 +125,4 @@ h1 {
     fill: currentColor;
     overflow: hidden;
 }
+
