@@ -9,5 +9,5 @@ def create_some_track():
     return some_track
 @home_blueprint.route('/', methods=['GET'])
 def home():
-    return render_template('home/home.html',track = create_some_track() )
+    return render_template('home/home.html',track = utilities.get_random_track())
 

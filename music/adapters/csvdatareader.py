@@ -7,67 +7,24 @@ from music.domainmodel.album import Album
 from music.domainmodel.track import Track
 from music.domainmodel.genre import Genre
 
-
-def create_track_object(track_row):
-    track = Track(int(track_row['track_id']), track_row['track_title'])
-    track.track_url = track_row['track_url']
-    track_duration = round(float(
-        track_row['track_duration'])) if track_row['track_duration'] is not None else None
-    if type(track_duration) is int:
-        track.track_duration = track_duration
-    return track
-
-
-def create_artist_object(track_row):
-    artist_id = int(track_row['artist_id'])
-    artist = Artist(artist_id, track_row['artist_name'])
-    return artist
-
-
-def create_album_object(row):
-    album_id = int(row['album_id'])
-    album = Album(album_id, row['album_title'])
-    album.album_url = row['album_url']
-    album.album_type = row['album_type']
-
-    album.release_year = int(
-        row['album_year_released']) if row['album_year_released'].isdigit() else None
-
-    return album
-
-
-def extract_genres(track_row: dict):
-    # List of dictionaries inside the string.
-    track_genres_raw = track_row['track_genres']
-    # Populate genres. track_genres can be empty (None)
-    genres = []
-    if track_genres_raw:
-        try:
-            genre_dicts = ast.literal_eval(
-                track_genres_raw) if track_genres_raw != "" else []
-
-            for genre_dict in genre_dicts:
-                genre = Genre(
-                    int(genre_dict['genre_id']), genre_dict['genre_title'])
-                genres.append(genre)
-        except Exception as e:
-            print(track_genres_raw)
-            print(f'Exception occurred while parsing genres: {e}')
-
-    return genres
 class TrackCSVReader:
 
     def __init__(self, albums_csv_file: str, tracks_csv_file: str):
+        
         current_path = os.path.dirname(__file__)
         if type(albums_csv_file) is str:
             # self.__albums_csv_file = albums_csv_file
-            self.__albums_csv_file = os.path.relpath('..\\data\\{}'.format(albums_csv_file), current_path) ##Changed path to this
+            # self.__albums_csv_file = os.path.relpath('..\\data\\{}'.format(albums_csv_file), current_path) ##Changed path to this
+            self.__albums_csv_file = os.path.join(current_path, 'data\\' + albums_csv_file)
+            # self.__tracks_csv_file = str(Path('covid') / 'adapters' / 'data' / albums_csv_file)
         else:
             raise TypeError('albums_csv_file should be a type of string')
 
         if type(tracks_csv_file) is str:
             # self.__tracks_csv_file = tracks_csv_file
-            self.__tracks_csv_file = os.path.relpath('..\\data\\{}'.format(tracks_csv_file), current_path)##Changed path to this
+            # self.__tracks_csv_file = os.path.relpath('..\\data\\{}'.format(tracks_csv_file), current_path)##Changed path to this
+            self.__tracks_csv_file =os.path.join(current_path, 'data\\' + tracks_csv_file)
+            # self.__tracks_csv_file = str(Path('covid' / 'adapters' / 'data') / tracks_csv_file)
         else:
             raise TypeError('tracks_csv_file should be a type of string')
 
@@ -165,58 +122,56 @@ class TrackCSVReader:
                     self.__dataset_of_genres.add(genre)
 
             self.__dataset_of_tracks.append(track)
-
+        # print(reader.__albums_csv_file)
         return self.__dataset_of_tracks
 
+def create_track_object(track_row):
+    track = Track(int(track_row['track_id']), track_row['track_title'])
+    track.track_url = track_row['track_url']
+    track_duration = round(float(
+        track_row['track_duration'])) if track_row['track_duration'] is not None else None
+    if type(track_duration) is int:
+        track.track_duration = track_duration
+    return track
 
 
-# def create_track_object(track_row):
-#     track = Track(int(track_row['track_id']), track_row['track_title'])
-#     track.track_url = track_row['track_url']
-#     track_duration = round(float(
-#         track_row['track_duration'])) if track_row['track_duration'] is not None else None
-#     if type(track_duration) is int:
-#         track.track_duration = track_duration
-#     return track
+def create_artist_object(track_row):
+    artist_id = int(track_row['artist_id'])
+    artist = Artist(artist_id, track_row['artist_name'])
+    return artist
 
 
-# def create_artist_object(track_row):
-#     artist_id = int(track_row['artist_id'])
-#     artist = Artist(artist_id, track_row['artist_name'])
-#     return artist
+def create_album_object(row):
+    album_id = int(row['album_id'])
+    album = Album(album_id, row['album_title'])
+    album.album_url = row['album_url']
+    album.album_type = row['album_type']
+
+    album.release_year = int(
+        row['album_year_released']) if row['album_year_released'].isdigit() else None
+
+    return album
 
 
-# def create_album_object(row):
-#     album_id = int(row['album_id'])
-#     album = Album(album_id, row['album_title'])
-#     album.album_url = row['album_url']
-#     album.album_type = row['album_type']
+def extract_genres(track_row: dict):
+    # List of dictionaries inside the string.
+    track_genres_raw = track_row['track_genres']
+    # Populate genres. track_genres can be empty (None)
+    genres = []
+    if track_genres_raw:
+        try:
+            genre_dicts = ast.literal_eval(
+                track_genres_raw) if track_genres_raw != "" else []
 
-#     album.release_year = int(
-#         row['album_year_released']) if row['album_year_released'].isdigit() else None
+            for genre_dict in genre_dicts:
+                genre = Genre(
+                    int(genre_dict['genre_id']), genre_dict['genre_title'])
+                genres.append(genre)
+        except Exception as e:
+            print(track_genres_raw)
+            print(f'Exception occurred while parsing genres: {e}')
 
-#     return album
-
-
-# def extract_genres(track_row: dict):
-#     # List of dictionaries inside the string.
-#     track_genres_raw = track_row['track_genres']
-#     # Populate genres. track_genres can be empty (None)
-#     genres = []
-#     if track_genres_raw:
-#         try:
-#             genre_dicts = ast.literal_eval(
-#                 track_genres_raw) if track_genres_raw != "" else []
-
-#             for genre_dict in genre_dicts:
-#                 genre = Genre(
-#                     int(genre_dict['genre_id']), genre_dict['genre_title'])
-#                 genres.append(genre)
-#         except Exception as e:
-#             print(track_genres_raw)
-#             print(f'Exception occurred while parsing genres: {e}')
-
-#     return genres
+    return genres
 
 
 # class TrackCSVReader:

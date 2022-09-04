@@ -13,7 +13,8 @@
 body,
 html {
   height: 100%;
-  background-color: #202b38;
+  /* background-color: #202b38; */
+  background-color: #16213E;
 }
 
 h1 {
@@ -49,12 +50,15 @@ h1 {
 #header {
   padding: 20px;
   /* background: #fff; */
-  background-color:  #202b38;
-  border-bottom: 5px solid #e0e4e8f1;
+  /* background-color:  #202b38; */
+  background-color: #16213E;
+  color: #533483;
+  border-bottom: 5px solid #533483;
   font-size: 64px;
   font-weight: bold;
   text-align: center;
-  color: #fff;
+  /* color: #fff; */
+
 }
 
 #main > .title{
@@ -62,18 +66,19 @@ h1 {
   font-weight: bold;
   text-align: center;
   /* font-size: min(14vw, 4rem); */
-  color : rgb(165, 122, 235)
+  color : #E94560
 }
 
 .animate__animated{
   padding: 40px;
   font-size: 40px;
-  color: beige;
+  color: #F2F2F2;
 }
 #nav {
   width: 200px;
   height: 100%;
-  background: #382920;
+  /* background: #382920; */
+  background: #0F3460;
   padding: 30px 0px;
   position: fixed;
 }
@@ -104,15 +109,7 @@ h1 {
   word-wrap: break-word;
 }
 
-#main {
-  margin: 20px;
-  color: #717171;
-  line-height: 25px;
-  padding: 20px;
-  /* padding-top: 10px; */
-  /* width: 66.666667%; */
-  text-align: center;
-}
+
 
 #logo {
   width: 150px;
@@ -126,3 +123,23 @@ h1 {
     overflow: hidden;
 }
 
+div.container {
+  height: 30em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;}
+div.container p {
+  margin: 0; 
+ 
+}
+
+
+  /* #main {
+    margin: 20px;
+    color: #717171;
+    line-height: 25px;
+    padding: 20px;
+    /* padding-top: 10px; */
+    /* width: 66.666667%; */
+    /* text-align: center;}  */

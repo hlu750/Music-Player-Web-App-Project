@@ -1,5 +1,5 @@
 from pathlib import Path
-from random import random
+import random
 from music.adapters.repository import AbstractRepository, RepositoryException
 from music.domainmodel.track import Track
 from music.domainmodel.album import  Album
@@ -8,7 +8,8 @@ from music.domainmodel.genre  import Genre
 from music.domainmodel.playlist  import PlayList
 from music.domainmodel.review import Review
 from music.domainmodel.user import User 
-from csvdatareader import TrackCSVReader
+from .csvdatareader import TrackCSVReader
+# from csvdatareader import TrackCSVReader
 from typing import List
 from bisect import bisect, bisect_left, insort_left
 class MemoryRepository(AbstractRepository):
@@ -20,7 +21,7 @@ class MemoryRepository(AbstractRepository):
         self.__tags = list()
         self.__users = list()
         self.__comments = list()
-        t = Track()
+        # t = Track()
 
     def add_user(self, user: User):
         self.__users.append(user)
@@ -41,16 +42,31 @@ class MemoryRepository(AbstractRepository):
         except KeyError:
             pass
         return track
-
-    def get_random_track(self)-> Track:
+    @property
+    def tracks(self) -> List[Track]:
+        return self.__tracks
+    @property
+    def track_index(self) -> dict:
+        return self.__track_index
+    def get_random_track(self):
         return random.choice(self.__tracks)
     def get_track_by_genre(self, target_genre: Genre) -> List[Track]:
 
         pass
         #TODO needs to be implemented
 
-def load_tracks(data_path:Path, repo:MemoryRepository ):
-    album_path = str(data_path / "raw_albums_excerpt.csv")
-    track_path = str(data_path / "raw_tracks_excerpt.csv")
+def load_tracks(album_path, track_path ,repo:MemoryRepository ):
+ 
     reader = TrackCSVReader(album_path, track_path)
-    repo.__track_index = reader.read_csv_files()
+    for track in reader.read_csv_files():
+        repo.add_track(track)
+    # print(repo.tracks)
+    # print(repo.track_index)
+    # print(repo.get_random_track())
+
+def populate(album_path,track_path ,repo:MemoryRepository):
+    load_tracks(album_path, track_path,repo)
+    
+
+
+
