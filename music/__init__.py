@@ -1,5 +1,7 @@
 """Initialize Flask app."""
 
+from pathlib import Path
+
 from flask import Flask, render_template
 
 # TODO: Access to the tracks should be implemented via the repository pattern and using blueprints, so this can not
@@ -16,8 +18,16 @@ def create_some_track():
     return some_track
 
 
-def create_app():
+def create_app(test_config=None):
     app = Flask(__name__)
+    app.config.from_object('config.Config')
+    data_path = Path('music') / 'adapters' / 'data'
+
+    if test_config is not None:
+        # Load test configuration, and override any configuration settings.
+        app.config.from_mapping(test_config)
+        data_path = app.config['TEST_DATA_PATH']
+
     album_file = "raw_albums_excerpt.csv"
     track_file = "raw_tracks_excerpt.csv"
     repo.repo_instance = MemoryRepository()
@@ -35,5 +45,8 @@ def create_app():
     
         from .authentication import authentication
         app.register_blueprint(authentication.authentication_blueprint)
+
+        from .utilities import utilities
+        app.register_blueprint(utilities.utilities_blueprint)
 
     return app

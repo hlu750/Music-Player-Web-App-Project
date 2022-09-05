@@ -43,3 +43,20 @@ class AbstractRepository(abc.ABC):
     @abc.abstractmethod
     def get_track_by_genre(self, target_genre: Genre) -> List[Track]:
         raise NotImplementedError    
+
+    # @abc.abstractmethod
+    # def add_comment(self, comment: Comment):
+    #     """ Adds a Comment to the repository.
+
+    #     If the Comment doesn't have bidirectional links with an Article and a User, this method raises a
+    #     RepositoryException and doesn't update the repository.
+    #     """
+    #     if comment.user is None or comment not in comment.user.comments:
+    #         raise RepositoryException('Comment not correctly attached to a User')
+    #     if comment.article is None or comment not in comment.article.comments:
+    #         raise RepositoryException('Comment not correctly attached to an Article')
+
+    # @abc.abstractmethod
+    # def get_comments(self):
+    #     """ Returns the Comments stored in the repository. """
+    #     raise NotImplementedError

@@ -1,3 +1,7 @@
 pytest
 Flask==2.0.3
 Flask-WTF
+flask-wtf==0.15.0
+password-validator==1.0
+python-dotenv==0.19.0
+better-profanity==0.7.0
