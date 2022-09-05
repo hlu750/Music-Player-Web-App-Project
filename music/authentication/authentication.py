@@ -46,6 +46,7 @@ def register():
     # if request.method == 'POST':
     #     return redirect(url_for('authentication_bp.login'))
     if form.validate_on_submit():
+        print(form.password.data)
         try:
             services.add_user(form.user_name.data, form.password.data, repo.repo_instance)
             return redirect(url_for('authentication_bp.login'))
@@ -130,9 +131,11 @@ class PasswordValid:
 
 class RegistrationForm(FlaskForm):
     user_name = StringField('Username', [
-        DataRequired()])
+        DataRequired(message='Your user name is required'),
+        Length(min=3, message='Your user name is too short')])
     password = PasswordField('Password', [
-        DataRequired()])
+        DataRequired(message='Your password is required'),
+        PasswordValid()])
     submit = SubmitField('Register')
 
 

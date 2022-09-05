@@ -14,7 +14,7 @@ class User:
         else:
             self.__user_name = None
 
-        if isinstance(password, str) and len(password) >= 7:
+        if isinstance(password , str) and len(password) >= 7:
             self.__password = password
         else:
             self.__password = None

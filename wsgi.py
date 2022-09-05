@@ -1,5 +1,5 @@
 """App entry point."""
-from music import create_app
+from music.__init__ import create_app
 
 app = create_app()
 # if app.debug == True:
