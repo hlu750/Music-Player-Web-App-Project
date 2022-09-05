@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<section id="main">
+    <h1 class="title" style="color:white;">Browse Tracks</h1>
+    <table id="tracks">
+        <tr>
+            <th>Song</th>
+            <th>Artist</th>
+        </tr>
+        {% for track in tracks %}
+        <track>
+            <tr>
+                <td>{{track.title}}</td>
+                <td>{{track.artist.full_name}}</td>
+            </tr>
+        </track>
+        {% endfor %}
+    </table>
+</section>
+
+{% endblock %}

@@ -52,5 +52,8 @@ def create_app(test_config=None):
         from .profile import profile
         app.register_blueprint(profile.profile_blueprint)
 
+        from .track import track
+        app.register_blueprint(track.track_blueprint)
+
 
     return app

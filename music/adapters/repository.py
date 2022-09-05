@@ -62,3 +62,16 @@ class AbstractRepository(abc.ABC):
     # def get_comments(self):
     #     """ Returns the Comments stored in the repository. """
     #     raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_number_of_tracks(self) -> int:
+        """ Returns the number of Articles in the repository. """
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_tracks_by_id(self, id_list):
+        """ Returns a list of Articles, whose ids match those in id_list, from the repository.
+
+        If there are no matches, this method returns an empty list.
+        """
+        raise NotImplementedError

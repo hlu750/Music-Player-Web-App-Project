@@ -56,9 +56,19 @@ class MemoryRepository(AbstractRepository):
 
         pass
         #TODO needs to be implemented
+        
+    def get_number_of_tracks(self):
+            return len(self.__tracks)
+
+    def get_tracks_by_id(self, id_list):
+            # Strip out any ids in id_list that don't represent Article ids in the repository.
+            existing_ids = [id for id in id_list if id in self.__track_index]
+
+            # Fetch the Articles.
+            tracks = [self.__track_index[id] for id in existing_ids]
+            return tracks
 
 def load_tracks(album_path, track_path ,repo:MemoryRepository ):
- 
     reader = TrackCSVReader(album_path, track_path)
     for track in reader.read_csv_files():
         repo.add_track(track)
@@ -68,7 +78,3 @@ def load_tracks(album_path, track_path ,repo:MemoryRepository ):
 
 def populate(album_path,track_path ,repo:MemoryRepository):
     load_tracks(album_path, track_path,repo)
-    
-
-
-
