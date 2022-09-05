@@ -12,6 +12,6 @@ def get_random_track():
     random_track = services.get_random_track(repo.repo_instance)
     return random_track
 
-def get_selected_tracks(quantity=50):
+def get_selected_tracks(quantity=20):
     tracks = services.get_random_tracks(quantity, repo.repo_instance)
     return tracks

@@ -132,6 +132,7 @@ def create_track_object(track_row):
         track_row['track_duration'])) if track_row['track_duration'] is not None else None
     if type(track_duration) is int:
         track.track_duration = track_duration
+    track.album = track_row['album_title']
     return track
 
 

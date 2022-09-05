@@ -8,14 +8,18 @@
     </header>
     <table class="tracks">
         <tr>
+            <th>Track ID</th>
             <th>Song</th>
             <th>Artist</th>
+            <th>Album</th>
         </tr>
         {% for track in tracks %}
         <track>
             <tr>
+                <td>{{track.track_id}}</td>
                 <td>{{track.title}}</td>
                 <td>{{track.artist.full_name}}</td>
+                <td>{{track.album.title}}</td>
             </tr>
         </track>
         {% endfor %}

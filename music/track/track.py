@@ -9,5 +9,6 @@ track_blueprint = Blueprint('track_blueprint', __name__, url_prefix='/browse')
 
 @track_blueprint.route('/browse', methods=['GET'])
 def track():
-    return render_template('track/track.html', tracks = utilities.get_selected_tracks())
+    track_list = (utilities.get_selected_tracks())
+    return render_template('track/track.html', tracks = track_list)
 

@@ -61,6 +61,8 @@ h1 {
 
 }
 #main {
+  /* flex: 0.5; */
+  margin-top: 200px;
   margin: 20px;
   color: #717171;
   line-height: 25px;
@@ -120,7 +122,6 @@ h1 {
 #logo {
   width: 150px;
 }
-
 .icon {
     width: 1.5em;
     height: 1.5em;
@@ -130,7 +131,9 @@ h1 {
 }
 
 div.container {
-  height: 30em;
+  /* height: 30em; */
+  flex-direction: column;
+  min-height: 50vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -210,13 +213,15 @@ input[type="submit"] {
   padding: 8px; 
   color: white;
 }
-
+.tracks {
+  margin-top: 40px;
+}
 .tracks tr:hover {background-color: #E94560;}
 
 .tracks th {
   padding-top: 12px;
   padding-bottom: 12px;
-  text-align: left;
+  text-align: center;
   background-color: #533483;
   color: white;
 }

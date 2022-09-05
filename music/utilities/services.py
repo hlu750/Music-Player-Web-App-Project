@@ -18,7 +18,8 @@ def get_random_tracks(quantity, repo: AbstractRepository):
     random_ids = random.sample(range(1, track_count), quantity)
     tracks = repo.get_tracks_by_id(random_ids)
 
-    return tracks_to_dict(tracks)
+    # return tracks_to_dict(tracks)
+    return tracks
 
 def track_to_dict(track: Track):
     track_dict = {
