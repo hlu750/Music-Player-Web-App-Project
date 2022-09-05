@@ -28,12 +28,14 @@ class MemoryRepository(AbstractRepository):
 
     def get_user(self, user_name) -> User:
         return next((user for user in self.__users if user.user_name == user_name), None)
+    def get_number_of_users(self):
+        return len(self.__users)
 
     def add_track(self, track: Track):
         insort_left(self.__tracks, track)
         self.__track_index[track.track_id] = track 
 
-
+    
     def get_track(self, id:int) -> Track:
         track = None
 

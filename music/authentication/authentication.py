@@ -46,7 +46,6 @@ def register():
     # if request.method == 'POST':
     #     return redirect(url_for('authentication_bp.login'))
     if form.validate_on_submit():
-        print(form.password.data)
         try:
             services.add_user(form.user_name.data, form.password.data, repo.repo_instance)
             return redirect(url_for('authentication_bp.login'))
