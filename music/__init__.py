@@ -49,4 +49,8 @@ def create_app(test_config=None):
         from .utilities import utilities
         app.register_blueprint(utilities.utilities_blueprint)
 
+        from .profile import profile
+        app.register_blueprint(profile.profile_blueprint)
+
+
     return app
