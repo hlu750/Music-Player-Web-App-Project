@@ -146,7 +146,6 @@ div.container p {
   text-align: right;
 }
 
-<<<<<<< Updated upstream
 input[type='text']{
    width:100%;
    padding: 12px 20px;
@@ -190,7 +189,6 @@ input[type="submit"] {
   color :#F2F2F2;
   /* text-align: left; */
   padding-bottom: 4%;
-=======
   /* #main {
     margin: 20px;
     color: #717171;
@@ -199,6 +197,7 @@ input[type="submit"] {
     /* padding-top: 10px; */
     /* width: 66.666667%; */
     /* text-align: center;}  */
+  }
 
 #tracks {
   font-family: Arial, Helvetica, sans-serif;
@@ -223,5 +222,27 @@ input[type="submit"] {
   text-align: left;
   background-color: #17254e;
   color: white;
->>>>>>> Stashed changes
+}
+
+.button {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 24px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #E94560;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 6px #2e3448;
+}
+
+.button:hover {background-color: #821a2c}
+
+.button:active {
+  background-color: #821a2c;
+  box-shadow: 0 3px #2e3448;
+  transform: translateY(4px);
 }
