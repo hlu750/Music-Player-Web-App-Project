@@ -32,5 +32,8 @@ def create_app():
         # Use Jinja to customize a predefined html page rendering the layout for showing a single track.
         # return render_template('simple_track.html', track=some_track)
         # return render_template('layout.html')
+    
+        from .authentication import authentication
+        app.register_blueprint(authentication.authentication_blueprint)
 
     return app

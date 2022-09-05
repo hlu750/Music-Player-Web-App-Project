@@ -3,7 +3,7 @@
     <img id="logo" src="{{ url_for('static', filename='images/music-ico.png') }}" alt="Icon">
     <h2 id="nav-header">Music</h2>
     <a class="btn-nav" href="{{ url_for('home_bp.home') }}">Home</a>
-    <a class="btn-nav" href="">Register</a>
+    <a class="btn-nav" href="{{ url_for('authentication_bp.register') }}">Register</a>
     <a class="btn-nav" href="">Login</a>
     <a class="btn-nav" href="">Logout</a>
     <div>
