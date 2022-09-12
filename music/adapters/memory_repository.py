@@ -24,10 +24,11 @@ class MemoryRepository(AbstractRepository):
         # t = Track()
 
     def add_user(self, user: User):
+        print(user)
         self.__users.append(user)
 
     def get_user(self, user_name) -> User:
-        return next((user for user in self.__users if user.user_name == user_name), None)
+        return next((user for user in self.__users if user.user_name == user_name.lower()), None)
     def get_number_of_users(self):
         return len(self.__users)
 
