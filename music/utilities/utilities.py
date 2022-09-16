@@ -12,12 +12,15 @@ def get_random_track():
     random_track = services.get_random_track(repo.repo_instance)
     return random_track
 
+def get_selected_track(track_id):
+    track = services.get_selected_track(track_id, repo.repo_instance)
+    return track
+
 def get_selected_tracks(quantity=20):
     tracks = services.get_random_tracks(quantity, repo.repo_instance)
     return tracks
 
 def get_ordered_tracks(startIndex, quantity=20):
-
     tracks = services.get_ordered_tracks(startIndex * quantity, quantity, repo.repo_instance)
     return tracks 
 

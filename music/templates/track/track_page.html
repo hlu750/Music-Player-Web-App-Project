@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<main id="main">
+    <header id="track-header" style="color:white;">
+        <h1 class="title" style="color:white;">{{track.title}}</h1>
+    </header>
+      <div class="row justify-content-md-center">
+        <track>
+            <div class="col-sm">{{track.track_id}}</div>
+            <div class="col-sm">{{track.artist.full_name}}</div>
+            <div class="col-sm">{{track.album.title}}</div>
+        </track>
+      
+
+</main>
+
+{% endblock %}
