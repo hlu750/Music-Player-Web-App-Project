@@ -341,7 +341,18 @@ input[type="submit"] {
   font-family: Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
-  padding: 40px;
-  font-size: 25px;
+  padding: 20px;
   color: white;
+}
+
+th {
+  color:white;
+  padding: 20px;
+  font-size: 13px;
+}
+
+td {
+  color:white;
+  padding: 5px;
+  font-size: 25px;
 }

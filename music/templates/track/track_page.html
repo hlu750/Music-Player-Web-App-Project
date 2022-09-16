@@ -4,13 +4,12 @@
 
 <main id="main">
     <header id="track-header" style="color:white;">
-        <h1 class="title" style="color:white;">{{track.track_id}}. {{track.title}}</h1>
+        <h1 class="title" style="color:white;"  style="padding-top: 10px;">{{track.track_id}}. {{track.title}}</h1>
     </header>
     
-    <div><img src="{{ url_for('static', filename='images/image-not-found.png') }}" alt="Album Cover"></div>
+    <div style="padding: 40px;"><img src="{{ url_for('static', filename='images/image-not-found.png') }}" alt="Album Cover"></div>
     <div class="track-container">
-        <h2 class="track-h2">{{track.title}}</h2>
-        <table id="track-details">
+        <table class="track-details">
             <tr>
             <th>Track ID</th>
             <th>Song</th>
@@ -22,8 +21,9 @@
             <td>{{track.track_duration}}</td>
             </tr>
         </table>
-
-        <table id="track-details">
+    </div>
+    <div>
+        <table class="track-details" style="color:white;">
             <tr>
             <th>Album</th>
             </tr>
@@ -31,9 +31,15 @@
             <td>{{track.album.title}}</td>
             </tr>
         </table>
+        <div style="padding: 40px;">
 
-        <div class="track_page_body">{{track.track_genres}}</div>
-</div>
+        </div>
+    </div style="padding: 40px;" style="color:white;">
+        Genre(s):<br>
+        {% for genre in track.genres %}
+        {{genre.name}} 
+        {% endfor %}
+    </div>
 
 </main>
 
