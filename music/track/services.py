@@ -150,3 +150,15 @@
 #     track = track(dict.id, dict.date, dict.title, dict.first_para, dict.hyperlink)
 #     # Note there's no reviews or tags.
 #     return track
+
+# from typing import Iterable
+# import random
+
+# from music.adapters.repository import AbstractRepository
+# from music.domainmodel.track import Track
+
+# def get_genre_names(repo: AbstractRepository):
+#     genres = repo.get_genres()
+#     genre_names = [genre.name for genre in genres]
+
+#     return genre_names
