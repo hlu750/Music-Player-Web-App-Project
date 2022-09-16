@@ -1,10 +1,17 @@
 {% extends 'layout.html' %}{%block content%}
 
 <section id="main">
-    <h1 class="title">Your Random Song:</h1>
-    <h2 class="animate__animated animate__zoomInDown">{{track.title}}</h2>
-    <h2 class="animate__animated animate__zoomInDown">by</h2>
-    <h2 class="animate__animated animate__zoomInDown">{{track.artist.full_name}}</h2>
+    <h1 class="title animate__animated animate__fadeIn">Your Random Song:</h1>
+    <h2 class="animate__animated animate__bounceInDown">{{track.title}}</h2>
+    <h2 class="animate__animated animate__bounceInLeft">by</h2>
+    <h2 class="animate__animated animate__bounceInRight">{{track.artist.full_name}}</h2>
+    <h1 class="title animate__animated animate__fadeInDownBig animate__delay-1s">Genre(s):</h2>
+        {% for genre in track.genres %}
+            <h2 class="animate__animated animate__fadeInUp animate__delay-2s">{{genre.name}}</h2>
+        {% endfor %}
+    <h1 class="title animate__animated animate__fadeInUpBig animate__delay-2s">Album:</h2>
+        <h2 class="animate__animated animate__fadeInUp animate__delay-3s">{{track.album.title}}</h2>
+        
 </section>
 
 

@@ -21,6 +21,10 @@ def get_selected_tracks(quantity=20):
     return tracks
 
 def get_ordered_tracks(startIndex, quantity=20):
-
-    tracks = services.get_ordered_tracks(startIndex * 20, quantity, repo.repo_instance)
+    tracks = services.get_ordered_tracks(startIndex * quantity, quantity, repo.repo_instance)
     return tracks 
+
+def get_number_of_pages(quantity=20):
+    
+    number_of_pages = services.get_number_of_pages(quantity , repo.repo_instance)
+    return number_of_pages

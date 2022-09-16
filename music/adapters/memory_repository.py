@@ -11,6 +11,7 @@ from music.domainmodel.user import User
 from .csvdatareader import TrackCSVReader
 # from csvdatareader import TrackCSVReader
 from typing import List
+import math 
 from bisect import bisect, bisect_left, insort_left
 class MemoryRepository(AbstractRepository):
     # Articles ordered by date, not id. id is assumed unique.
@@ -72,15 +73,18 @@ class MemoryRepository(AbstractRepository):
     def get_tracks_by_quantity(self,startIndex, quantity):
         if startIndex >= 0 and startIndex + quantity < len(self.__tracks):
             return self.__tracks[startIndex: startIndex + quantity]
+        elif startIndex >= 0:
+            return self.__tracks[startIndex:]
         else:
             return None
+    def get_number_of_pages(self, quantity):
+        number_of_pages = math.ceil(len(self.__tracks) / quantity)
+        print(number_of_pages, len(self.__tracks))
+        return math.ceil(len(self.__tracks) / quantity)
 def load_tracks(album_path, track_path ,repo:MemoryRepository ):
     reader = TrackCSVReader(album_path, track_path)
     for track in reader.read_csv_files():
         repo.add_track(track)
-    # print(repo.tracks)
-    # print(repo.track_index)
-    # print(repo.get_random_track())
 
 def populate(album_path,track_path ,repo:MemoryRepository):
     load_tracks(album_path, track_path,repo)
