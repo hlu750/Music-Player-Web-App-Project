@@ -16,7 +16,7 @@ def get_selected_tracks(quantity=20):
     tracks = services.get_random_tracks(quantity, repo.repo_instance)
     return tracks
 
-def get_ordered_tracks(startIndex, quantity=10):
+def get_ordered_tracks(startIndex, quantity=20):
 
-    tracks = services.get_ordered_tracks(startIndex * 10, quantity, repo.repo_instance)
+    tracks = services.get_ordered_tracks(startIndex * 20, quantity, repo.repo_instance)
     return tracks 

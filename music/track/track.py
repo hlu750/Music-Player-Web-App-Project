@@ -40,8 +40,13 @@ def track():
 
 @track_blueprint.route('/track', methods=['GET'])
 def track_page():
-    track = (utilities.get_selected_track())
-    return render_template('track/track_page.html', track = track)
+    return render_template('track/track_page.html')
+
+# @track_blueprint.route('/track', methods=['GET'])
+# def track_page():
+#     track = request.args.get('track')
+#     return render_template('track/track_page.html', track = track)
+
 
 # @track_blueprint.route('/tracks_by_genre', methods=['GET'])
 # def tracks_by_genre():
