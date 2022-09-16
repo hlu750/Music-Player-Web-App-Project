@@ -75,3 +75,9 @@ class AbstractRepository(abc.ABC):
         If there are no matches, this method returns an empty list.
         """
         raise NotImplementedError
+
+    @abc.abstractmethod
+    def get_tracks_by_quantity(self,startIndex, quantity):
+        raise NotImplementedError
+
+    

@@ -69,6 +69,11 @@ class MemoryRepository(AbstractRepository):
             tracks = [self.__track_index[id] for id in existing_ids]
             return tracks
 
+    def get_tracks_by_quantity(self,startIndex, quantity):
+        if startIndex >= 0 and startIndex + quantity < len(self.__tracks):
+            return self.__tracks[startIndex: startIndex + quantity]
+        else:
+            return None
 def load_tracks(album_path, track_path ,repo:MemoryRepository ):
     reader = TrackCSVReader(album_path, track_path)
     for track in reader.read_csv_files():

@@ -6,7 +6,30 @@
     <header id="track-header" style="color:white;">
         <h1 class="title" style="color:white;">Browse Tracks</h1>
     </header>
-    <table class="tracks">
+    <div class="tracks">
+        <div class="row justify-content-md-center">
+          <div class="col-sm">Track ID</div>
+          <div class="col-sm">Song</div>
+          <!-- <div class="w-100"></div> -->
+          <div class="col-sm">Artist</div>
+          <div class="col-sm">Album</div>
+        </div>
+        {% for track in tracks %}
+      <div class="row justify-content-md-center">
+        <track>
+            <div class="col-sm">{{track.track_id}}</div>
+            <div class="col-sm">{{track.title}}</div>
+            <!-- <div class="w-100"></div> -->
+            <div class="col-sm">{{track.artist.full_name}}</div>
+            <div class="col-sm">{{track.album.title}}</div>
+        </track>
+        
+    </div>
+    {% endfor %}
+    </div>
+      
+    
+    <!-- <table class="tracks">
         <tr>
             <th>Track ID</th>
             <th>Song</th>
@@ -23,20 +46,20 @@
             </tr>
         </track>
         {% endfor %}
-    </table>
+    </table> -->
 
     <footer>
         <nav style="clear:both">
             <div style="float:left">
                 {% if prev_track_url is not none %}
-                    <button class="button" onclick="location.href='{{prev_track_url}}'">Back</button>
+                    <button class="button" onclick="location.href='{{prev_tracks_url}}'">Back</button>
                 {% else %}
                     <button class="button" disabled>Previous</button>
                 {% endif %}
             </div>
             <div style="float:right">
                 {% if next_track_url is not none %}
-                    <button class="button" onclick="location.href='{{next_track_url}}'">Next</button>
+                    <button class="button" onclick="location.href='{{next_tracks_url}}'">Next</button>
                 {% else %}
                     <button class="button" disabled>Next</button>
                 {% endif %}

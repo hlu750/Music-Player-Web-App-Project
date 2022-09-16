@@ -10,12 +10,12 @@
   font-family: 'Josefin Sans', sans-serif;
 }
 
-body,
-html {
+html  {
   height: 100%;
   /* background-color: #202b38; */
   background-color: #16213E;
 }
+
 
 h1 {
     text-align: center;
@@ -130,7 +130,7 @@ h1 {
     overflow: hidden;
 }
 
-div.container {
+div.outer-container {
   /* height: 30em; */
   flex-direction: column;
   min-height: 50vh;
@@ -138,8 +138,10 @@ div.container {
   align-items: center;
   justify-content: center;
   flex-direction: row;
-  text-align: center;}
-div.container p {
+  text-align: center;
+  background-color: #16213E;
+}
+div.outer-container p {
   margin: 0; 
  
 }
@@ -225,6 +227,7 @@ input[type="submit"] {
   background-color: #533483;
   color: white;
 }
+.row:hover{background-color: #E94560;}
 
 .button {
   display: inline-block;
