@@ -24,10 +24,11 @@ class MemoryRepository(AbstractRepository):
         # t = Track()
 
     def add_user(self, user: User):
+        print(user)
         self.__users.append(user)
 
     def get_user(self, user_name) -> User:
-        return next((user for user in self.__users if user.user_name == user_name), None)
+        return next((user for user in self.__users if user.user_name == user_name.lower()), None)
     def get_number_of_users(self):
         return len(self.__users)
 
@@ -68,6 +69,11 @@ class MemoryRepository(AbstractRepository):
             tracks = [self.__track_index[id] for id in existing_ids]
             return tracks
 
+    def get_tracks_by_quantity(self,startIndex, quantity):
+        if startIndex >= 0 and startIndex + quantity < len(self.__tracks):
+            return self.__tracks[startIndex: startIndex + quantity]
+        else:
+            return None
 def load_tracks(album_path, track_path ,repo:MemoryRepository ):
     reader = TrackCSVReader(album_path, track_path)
     for track in reader.read_csv_files():

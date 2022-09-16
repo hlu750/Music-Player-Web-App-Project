@@ -31,3 +31,10 @@ def track_to_dict(track: Track):
 
 def tracks_to_dict(tracks: Iterable[Track]):
     return [track_to_dict(track) for track in tracks]
+
+def get_ordered_tracks(startIndex, quantity, repo: AbstractRepository):
+    tracks = repo.get_tracks_by_quantity(startIndex, quantity)
+    return tracks
+    
+
+    
