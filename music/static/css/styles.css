@@ -321,3 +321,11 @@ input[type="submit"] {
   opacity: 1;
 }
 
+.track-details {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  padding: 40px;
+  font-size: 25px;
+  color: white;
+}

@@ -4,15 +4,36 @@
 
 <main id="main">
     <header id="track-header" style="color:white;">
-        <h1 class="title" style="color:white;">{{track.title}}</h1>
+        <h1 class="title" style="color:white;">{{track.track_id}}. {{track.title}}</h1>
     </header>
-      <div class="row justify-content-md-center">
-        <track>
-            <div class="col-sm">{{track.track_id}}</div>
-            <div class="col-sm">{{track.artist.full_name}}</div>
-            <div class="col-sm">{{track.album.title}}</div>
-        </track>
-      
+    
+    <div><img src="{{ url_for('static', filename='images/image-not-found.png') }}" alt="Album Cover"></div>
+    <div class="track-container">
+        <h2 class="track-h2">{{track.title}}</h2>
+        <table id="track-details">
+            <tr>
+            <th>Track ID</th>
+            <th>Song</th>
+            <th>Duration</th>
+            </tr>
+            <tr>
+            <td>{{track.track_id}}</td>
+            <td>{{track.title}}</td>
+            <td>{{track.track_duration}}</td>
+            </tr>
+        </table>
+
+        <table id="track-details">
+            <tr>
+            <th>Album</th>
+            </tr>
+            <tr>
+            <td>{{track.album.title}}</td>
+            </tr>
+        </table>
+
+        <div class="track_page_body">{{track.track_genres}}</div>
+</div>
 
 </main>
 
