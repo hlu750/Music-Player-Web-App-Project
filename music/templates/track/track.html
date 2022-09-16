@@ -14,16 +14,42 @@
             <th>Album</th>
         </tr>
         {% for track in tracks %}
-        <track>
+        <track href="{{ url_for('track_blueprint.details') }}">
             <tr>
                 <td>{{track.track_id}}</td>
                 <td>{{track.title}}</td>
                 <td>{{track.artist.full_name}}</td>
                 <td>{{track.album.title}}</td>
+                <!-- <td><button class="open-button" onclick="openForm()">Review</button></td>
+                <td><button class="open-button" onclick="openForm()">Favourite</button></td>
+                <td><button class="open-button" onclick="openForm()">Add to playlist</button></td> -->
             </tr>
         </track>
         {% endfor %}
     </table>
+
+<!-- <div class="form-popup" id="myForm">
+  <form action="/action_page.php" class="form-container">
+    <label for="rating"><b>Rate</b></label>
+    <input type="text" placeholder="Enter Rating" name="rating" required>
+
+    <label for="review"><b>Review</b></label>
+    <input type="text" placeholder="Enter Review" name="review" required>
+
+    <button type="submit" class="btn">Submit</button>
+    <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+  </form>
+</div>
+
+<script>
+function openForm() {
+  document.getElementById("myForm").style.display = "block";
+}
+
+function closeForm() {
+  document.getElementById("myForm").style.display = "none";
+}
+</script> -->
 
     <footer>
         <nav style="clear:both">
