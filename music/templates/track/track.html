@@ -19,7 +19,7 @@
         <track>
     
             <div class="col-sm">{{track.track_id}}</div>
-            <div class="col-sm"><a href="{{ url_for('track_blueprint.track_page') }}" style="text-decoration:none; color: black;">{{track.title}}</a></div>
+            <div class="col-sm"><a href="{{ url_for('track_blueprint.track_page', track_id = track.track_id ) }}" style="text-decoration:none; color: black;">{{track.title}}</a></div>
             <!-- <div class="w-100"></div> -->
             <div class="col-sm">{{track.artist.full_name}}</div>
             <div class="col-sm">{{track.album.title}}</div>

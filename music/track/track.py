@@ -38,14 +38,14 @@ def track():
     next_tracks_url = next_tracks_url, 
     prev_tracks_url = prev_tracks_url)
 
-@track_blueprint.route('/track', methods=['GET'])
-def track_page():
-    return render_template('track/track_page.html')
-
 # @track_blueprint.route('/track', methods=['GET'])
 # def track_page():
-#     track = request.args.get('track')
-#     return render_template('track/track_page.html', track = track)
+#     return render_template('track/track_page.html')
+
+@track_blueprint.route('/track/<int:track_id>', methods=['GET'])
+def track_page(track_id):
+    track = utilities.get_selected_track(track_id)
+    return render_template('track/track_page.html', track = track)
 
 
 # @track_blueprint.route('/tracks_by_genre', methods=['GET'])

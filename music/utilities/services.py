@@ -36,5 +36,7 @@ def get_ordered_tracks(startIndex, quantity, repo: AbstractRepository):
     tracks = repo.get_tracks_by_quantity(startIndex, quantity)
     return tracks
     
-
+def get_selected_track(track_id, repo: AbstractRepository):
+    track = repo.get_track(track_id)
+    return track
     

@@ -8,10 +8,9 @@
     <a class="btn-nav" href="{{ url_for('authentication_bp.logout') }}">Logout</a>
     <a class="btn-nav" href="{{ url_for('profile_bp.favourites') }}">Favourites</a>
     <a class="btn-nav" href="{{ url_for('profile_bp.playlists') }}">Playlists</a>
-    <a class="btn-nav" href="{{ url_for('track_blueprint.track_page') }}">Music</a>
     <div>
         <h3>
-          <a class="btn-nav">
+          <a class="btn-nav" href="{{ url_for('track_blueprint.track') }}">
             Browse songs
           </a>
         </h3>
