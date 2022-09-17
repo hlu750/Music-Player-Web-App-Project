@@ -59,6 +59,12 @@ def track():
         # print("hello")
         # print(form.title.data)
         return redirect(url_for('track_blueprint.filter_track', title = form.title.data, type = form.select.data))
+
+@track_blueprint.route('/track/<int:track_id>', methods=['GET'])
+def track_page(track_id):
+    track = utilities.get_selected_track(track_id)
+    return render_template('track/track_page.html', track = track)
+
 @track_blueprint.route('/track/<title>&<type>', methods=['GET', 'POST'])
 def filter_track(title, type):
     # print(title)
