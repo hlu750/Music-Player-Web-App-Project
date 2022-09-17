@@ -56,8 +56,6 @@ def track():
             print('No tracks found')
             
     else:
-        # print("hello")
-        # print(form.title.data)
         return redirect(url_for('track_blueprint.filter_track', title = form.title.data, type = form.select.data))
 @track_blueprint.route('/track/<title>&<type>', methods=['GET', 'POST'])
 def filter_track(title, type):
