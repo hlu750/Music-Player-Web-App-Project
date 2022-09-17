@@ -1,5 +1,6 @@
 from pathlib import Path
 import random
+from re import T
 from music.adapters.repository import AbstractRepository, RepositoryException
 from music.domainmodel.track import Track
 from music.domainmodel.album import  Album
@@ -79,8 +80,38 @@ class MemoryRepository(AbstractRepository):
             return None
     def get_number_of_pages(self, quantity):
         number_of_pages = math.ceil(len(self.__tracks) / quantity)
-        print(number_of_pages, len(self.__tracks))
+        # print(number_of_pages, len(self.__tracks))
         return math.ceil(len(self.__tracks) / quantity)
+
+    def get_filtered_tracks(self, title, type):
+        # print(type)
+        filtered_tracks =[]
+        album = False
+        track_bool = False
+        artist= False
+        genre = False
+        if type == 'track':
+            track = True
+        elif type == 'artist':
+            artist = True
+        elif type == 'album':
+            album = True
+        elif type == 'genre':
+            genre = True    
+        else:
+            album = True
+            track_bool = True
+            artist= True
+        for track in self.__tracks:
+            if album and track.album and title in track.album.title.lower():
+                filtered_tracks.append(track)
+            elif artist and track.artist and title in track.artist.full_name.lower():
+                filtered_tracks.append(track)
+            elif track_bool and title in track.title.lower():
+                filtered_tracks.append(track)
+            elif genre and title in [genre.name.lower() for genre in track.genres]:
+                filtered_tracks.append(track)
+        return filtered_tracks 
 def load_tracks(album_path, track_path ,repo:MemoryRepository ):
     reader = TrackCSVReader(album_path, track_path)
     for track in reader.read_csv_files():

@@ -39,5 +39,7 @@ def get_ordered_tracks(startIndex, quantity, repo: AbstractRepository):
 def get_number_of_pages(quantity, repo: AbstractRepository):
     number_of_pages = repo.get_number_of_pages(quantity)
     return number_of_pages
-
+def get_filtered_tracks(title, type, repo: AbstractRepository):
+    filtered_tracks = repo.get_filtered_tracks(title, type)
+    return filtered_tracks
     
