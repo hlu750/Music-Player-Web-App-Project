@@ -4,6 +4,8 @@ from music.domainmodel.track import Track
 from typing import Iterable
 import random
 
+from music.track import services
+
 def get_random_track(repo: AbstractRepository):
     return repo.get_random_track()
 
@@ -42,4 +44,8 @@ def get_number_of_pages(quantity, repo: AbstractRepository):
 def get_filtered_tracks(title, type, repo: AbstractRepository):
     filtered_tracks = repo.get_filtered_tracks(title, type)
     return filtered_tracks
+
+def get_selected_track(track_id, repo: AbstractRepository):
+    track = repo.get_track(track_id)
+    return track
     
