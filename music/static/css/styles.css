@@ -373,7 +373,7 @@ td {
 .tracks {
   margin-top: 40px;
 }
-.tracks tr:hover {background-color: #E94560;}
+/* .tracks tr:hover {background-color: #E94560;} */
 
 .tracks th {
   padding-top: 12px;
@@ -382,4 +382,10 @@ td {
   background-color: #533483;
   color: white;
 }
-.row:hover{background-color: #E94560;}
+a.fill-div {
+  display: block;
+  height: 100%;
+  width: 100%;
+  text-decoration: none;
+}
+/* .row:hover{background-color: #E94560;} */
