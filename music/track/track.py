@@ -23,8 +23,9 @@ track_blueprint = Blueprint('track_blueprint', __name__, url_prefix='/browse')
 @track_blueprint.route('/', methods=['GET', 'POST'])
 def track():
     form = SearchForm()
+  
     if not form.validate_on_submit():
-       
+    
         song_page = request.args.get('page')
     # print(request.args)
         if song_page is None:
@@ -55,23 +56,27 @@ def track():
             print('No tracks found')
             
     else:
-        print("hello")
-        print(form.title.data)
+        # print("hello")
+        # print(form.title.data)
         return redirect(url_for('track_blueprint.filter_track', title = form.title.data, type = form.select.data))
-@track_blueprint.route('/track/<title>&<type>', methods=['GET'])
+@track_blueprint.route('/track/<title>&<type>', methods=['GET', 'POST'])
 def filter_track(title, type):
     # print(title)
     form = SearchForm()
-    form.title.default = title 
-    filtered_tracks = utilities.get_filtered_tracks(title.lower(), type.lower())
-    # print(filtered_tracks)
-    if filtered_tracks is not None:
-            return render_template('track/track.html', tracks = filtered_tracks, 
-            next_tracks_url = None, 
-            prev_tracks_url = None, form = form)
+    if form.validate_on_submit():
+        return redirect(url_for('track_blueprint.filter_track', title = form.title.data, type = form.select.data))
     else:
-        print('No tracks found')
-        return redirect(url_for('track_blueprint.track'))
+        
+        
+        filtered_tracks = utilities.get_filtered_tracks(title.lower(), type.lower())
+        # print(filtered_tracks)
+        if filtered_tracks is not None:
+                return render_template('track/track.html', tracks = filtered_tracks, 
+                next_tracks_url = None, 
+                prev_tracks_url = None, form = form)
+        else:
+            print('No tracks found')
+            return redirect(url_for('track_blueprint.track'))
 # <!-- <a href="{{ url_for('track_blueprint.track_page', track_id = track.track_id ) }}" style="text-decoration:none; color: #F2F2F2;"></a> -->
 
  # <!-- <div class="col-sm"><a href="{{ url_for('track_blueprint.track_page', track_id = track.track_id ) }}" style="text-decoration:none; color: #F2F2F2;">{{track.title}}</a></div> -->
