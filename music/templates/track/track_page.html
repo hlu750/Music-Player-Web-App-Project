@@ -42,6 +42,18 @@
         {% endfor %}
     </div>
 
+    <div style="float:right">
+        <button class="btn-general" onclick="location.href='{{ view_review_url }}'">{{ track.reviews|length }} reviews</button>
+        <button class="btn-general" onclick="location.href='{{ add_review_url }}'">Review</button>
+    </div>
+
+    {% if track.track_id == show_reviews_for_track %}
+    <div style="clear:both">
+        {% for review in track.reviews %}
+            <p>{{review.review_text}}, by {{review.user_name}}, {{review.timestamp}}</p>
+        {% endfor %}
+    </div>
+    {% endif %}
 </main>
 
 {% endblock %}

@@ -1,3 +1,4 @@
+import imp
 from pathlib import Path
 import random
 from re import T
@@ -8,29 +9,35 @@ from music.domainmodel.artist import Artist
 from music.domainmodel.genre  import Genre
 from music.domainmodel.playlist  import PlayList
 from music.domainmodel.review import Review
-from music.domainmodel.user import User 
+from music.domainmodel.user import User
 from .csvdatareader import TrackCSVReader
 # from csvdatareader import TrackCSVReader
 from typing import List
 import math 
 from bisect import bisect, bisect_left, insort_left
+
+import csv
+from datetime import date, datetime
+from werkzeug.security import generate_password_hash
+
+
 class MemoryRepository(AbstractRepository):
-    # Articles ordered by date, not id. id is assumed unique.
+    # tracks ordered by date, not id. id is assumed unique.
 
     def __init__(self):
         self.__tracks = list()
         self.__track_index = dict()
-        self.__tags = list()
+        self.__genres = list()
         self.__users = list()
-        self.__comments = list()
-        # t = Track()
+        self.__reviews = list()
 
     def add_user(self, user: User):
         print(user)
         self.__users.append(user)
 
     def get_user(self, user_name) -> User:
-        return next((user for user in self.__users if user.user_name == user_name.lower()), None)
+        return next((user for user in self.__users if user.user_name == user_name), None)
+
     def get_number_of_users(self):
         return len(self.__users)
 
@@ -64,10 +71,10 @@ class MemoryRepository(AbstractRepository):
             return len(self.__tracks)
 
     def get_tracks_by_id(self, id_list):
-            # Strip out any ids in id_list that don't represent Article ids in the repository.
+            # Strip out any ids in id_list that don't represent track ids in the repository.
             existing_ids = [id for id in id_list if id in self.__track_index]
 
-            # Fetch the Articles.
+            # Fetch the tracks.
             tracks = [self.__track_index[id] for id in existing_ids]
             return tracks
 
@@ -112,6 +119,15 @@ class MemoryRepository(AbstractRepository):
             elif genre and title in [genre.name.lower() for genre in track.genres]:
                 filtered_tracks.append(track)
         return filtered_tracks 
+
+    def add_review(self, review: Review):
+        # call parent class first, add_review relies on implementation of code common to all derived classes
+        super().add_review(review)
+        self.__reviews.append(review)
+
+    def get_reviews(self):
+        return self.__reviews
+
 def load_tracks(album_path, track_path ,repo:MemoryRepository ):
     reader = TrackCSVReader(album_path, track_path)
     for track in reader.read_csv_files():
@@ -119,3 +135,28 @@ def load_tracks(album_path, track_path ,repo:MemoryRepository ):
 
 def populate(album_path,track_path ,repo:MemoryRepository):
     load_tracks(album_path, track_path,repo)
+
+def load_users(data_path: Path, repo: MemoryRepository):
+    users = dict()
+
+    users_filename = str(Path(data_path) / "users.csv")
+    for data_row in TrackCSVReader.read_csv_files(users_filename):
+        user = User(
+            user_name=data_row[1],
+            password=generate_password_hash(data_row[2])
+        )
+        repo.add_user(user)
+        users[data_row[0]] = user
+    return users
+
+
+def load_reviews(data_path: Path, repo: MemoryRepository, users):
+    reviews_filename = str(Path(data_path) / "reviews.csv")
+    for data_row in TrackCSVReader.read_csv_files(reviews_filename):
+        review = User.add_review(
+            review_text=data_row[3],
+            user=users[data_row[1]],
+            track=repo.get_track(int(data_row[2])),
+            timestamp=datetime.fromisoformat(data_row[4])
+        )
+        repo.add_review(review)
