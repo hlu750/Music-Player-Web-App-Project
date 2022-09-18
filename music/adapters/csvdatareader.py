@@ -175,6 +175,27 @@ def extract_genres(track_row: dict):
 
     return genres
 
+def read_csv_file(filename: str):
+    # with open(filename, encoding='utf-8-sig') as infile:
+    #     reader = csv.reader(infile)
+    #     # Read first line of the the CSV file.
+    #     headers = next(reader)
+    #     # Read remaining rows from the CSV file.
+    #     for row in reader:
+    #         # Strip any leading/trailing white space from data read.
+    #         row = [item.strip() for item in row]
+    #         yield row
+
+    if not os.path.exists(filename):
+        print(f"path {filename} does not exist!")
+        return
+    users_rows = []
+    # encoding of unicode_escape is required to decode successfully
+    with open(filename, encoding='unicode_escape') as users_csv:
+        reader = csv.DictReader(users_csv)
+        for user_row in reader:
+            users_rows.append(users_rows)
+    return users_rows
 
 # class TrackCSVReader:
 

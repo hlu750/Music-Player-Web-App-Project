@@ -72,7 +72,8 @@ def track_page(track_id):
     view_review_url = url_for('track_blueprint.track')
     add_review_url = url_for('track_blueprint.review_on_track')
 
-    return render_template('track/track_page.html', track = track, 
+    return render_template('track/track_page.html', 
+    title='Track', track = track, 
     show_reviews_for_track=track_to_show_reviews,
     view_review_url=view_review_url,
     add_review_url=add_review_url
@@ -116,38 +117,20 @@ class SearchForm(FlaskForm):
 @track_blueprint.route('/review', methods=['GET', 'POST'])
 @login_required
 def review_on_track():
-    # Obtain the user name of the currently logged in user.
     user_name = session['user_name']
-
-    # Create form. The form maintains state, e.g. when this method is called with a HTTP GET request and populates
-    # the form with an track id, when subsequently called with a HTTP POST request, the track id remains in the
-    # form.
     form = reviewForm()
 
     if form.validate_on_submit():
-        # Successful POST, i.e. the review text has passed data validation.
-        # Extract the track id, representing the reviewed track, from the form.
-
         track_id = int(form.track_id.data)
-
-        # Use the service layer to store the new review.
         services.add_review(track_id, form.review.data, user_name, repo.repo_instance)
-
-        track = services.get_track(track_id, repo.repo_instance)
-
-        # Cause the web browser to display the page of all tracks that have the same date as the reviewed track,
-        # and display all reviews, including the new review.
+        track = services.get_track(track_id, repo.repo_instance)        
         return redirect(url_for('track_blueprint.track_page', view_reviews_for=track_id))
 
     if request.method == 'GET':
-        # Request is a HTTP GET to display the form.
-        # Extract the track id, representing the track to review, from a query parameter of the GET request.
         if request.args.get('track') == None:
             track_id = 2
         else:
             track_id = int(request.args.get('track'))
-
-        # Store the track id in the form.
         form.track_id.data = track_id
     else:
         # Request is a HTTP POST where form validation has failed.
