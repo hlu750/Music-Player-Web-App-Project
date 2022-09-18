@@ -68,6 +68,7 @@ h1 {
   line-height: 25px;
   padding: 10px;
   width: 66.666667%;
+ 
 }
 
 #main > .title{
@@ -388,4 +389,25 @@ a.fill-div {
   width: 100%;
   text-decoration: none;
 }
+:root{
+  --gradient:linear-gradient(
+    45deg,
+    #845ec2,
+    #d65db1,
+    #ff6f91,
+    #ff9671,
+    #ffc75f,
+    #f9f871,
+  );
+}
 /* .row:hover{background-color: #E94560;} */
+ #gradient {
+  width:540px;
+  height: 540px;
+  /* background: -webkit-gradient(linear, 0 0, 0 100%, from(#053F63), to(#105C97)); */
+  background-image: var(--gradient);
+  margin: auto;
+  width: 50%;
+  border :0;
+   padding: 0.5em 1.5em;
+ }
