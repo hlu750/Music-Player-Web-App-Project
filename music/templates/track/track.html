@@ -25,7 +25,7 @@
           <div class="col-sm title">Artist</div>
           <div class="col-sm title">Album</div>
         </div>
-        {% for track in tracks %}
+        {% for track in tracks %}  
         <a class= "fill-div" href="{{ url_for('track_blueprint.track_page', track_id = track.track_id ) }}">  
             <track>
         <div class="row justify-content-md-center entry">

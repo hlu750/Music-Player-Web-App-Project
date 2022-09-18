@@ -13,10 +13,13 @@ import music.utilities.utilities as utilities
 import music.track.services as services
 
 from music.authentication.authentication import login_required
+from music.authentication.services import get_user
 
 import  music.utilities.utilities as utilities
 import  music.track.services as services
 from music.domainmodel.track import Track
+from music.domainmodel.user import User
+
 
 track_blueprint = Blueprint('track_blueprint', __name__, url_prefix='/browse')
 
@@ -167,3 +170,19 @@ class reviewForm(FlaskForm):
         ProfanityFree(message='Your review must not contain profanity')])
     track_id = HiddenField("track id")
     submit = SubmitField('Submit')
+
+@track_blueprint.route('/track/<int:track_id>/like', methods=['GET', 'POST'])
+@login_required
+def like_track(track_id):
+    user_name = session['user_name']
+    user: User = get_user(user_name, repo.repo_instance)
+    
+    track = utilities.get_selected_track(track_id)
+    user.add_liked_track(track_id)
+
+    like_track_url = url_for('track_blueprint.like_track')
+
+    return render_template('profile/favourites.html', 
+    title='Track', track = track, user = user,
+    like_track_url = like_track_url
+    )

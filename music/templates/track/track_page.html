@@ -40,6 +40,10 @@
         {% for genre in track.genres %}
         {{genre.name}} 
         {% endfor %}
+    </div> 
+
+    <div style="float:right">
+        <button class="btn-general" href="{{ url_for('track_blueprint.like_track', track_id = track.track_id ) }}">Favourite</button>
     </div>
 
     <div style="float:right">
