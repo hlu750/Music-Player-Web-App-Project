@@ -117,12 +117,8 @@ class AbstractRepository(abc.ABC):
         If the review doesn't have bidirectional links with an Article and a User, this method raises a
         RepositoryException and doesn't update the repository.
         """
-        # if review.user is None or review not in review.user.reviews:
-        #     raise RepositoryException('review not correctly attached to a User')
-        # if review.article is None or review not in review.article.reviews:
-        #     raise RepositoryException('review not correctly attached to an Article')
-        raise NotImplementedError
-
+        if review.track is None:
+            raise RepositoryException('review not correctly attached to a User')
     @abc.abstractmethod
     def get_reviews(self):
         """ Returns the reviews stored in the repository. """

@@ -118,7 +118,7 @@ class SearchForm(FlaskForm):
 def review_on_track():
     # Obtain the user name of the currently logged in user.
     user_name = session['user_name']
-
+    print("initial username:",user_name)
     # Create form. The form maintains state, e.g. when this method is called with a HTTP GET request and populates
     # the form with an track id, when subsequently called with a HTTP POST request, the track id remains in the
     # form.
@@ -134,10 +134,10 @@ def review_on_track():
         services.add_review(track_id, form.review.data, user_name, repo.repo_instance)
 
         track = services.get_track(track_id, repo.repo_instance)
-
+        print(track)
         # Cause the web browser to display the page of all tracks that have the same date as the reviewed track,
         # and display all reviews, including the new review.
-        return redirect(url_for('track_blueprint.track_page', view_reviews_for=track_id))
+        return redirect(url_for('track_blueprint.track_page', track_id=track_id,view_reviews_for=track_id))
 
     if request.method == 'GET':
         # Request is a HTTP GET to display the form.

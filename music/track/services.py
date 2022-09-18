@@ -16,13 +16,13 @@ def add_review(track_id: int, review_text: str, user_name: str, repo: AbstractRe
     track = repo.get_track(track_id)
     if track is None:
         raise NonExistentTrackException
-
+    print("services",user_name)
     user = repo.get_user(user_name)
     if user is None:
         raise UnknownUserException
 
     # Create review.
-    review = add_review(track_id, review_text, user, repo)
+    review = Review(track, review_text, 5)
 
     # Update the repository.
     repo.add_review(review)

@@ -32,11 +32,14 @@ class MemoryRepository(AbstractRepository):
         self.__reviews = list()
 
     def add_user(self, user: User):
-        print(user)
+        print(user.user_name)
         self.__users.append(user)
+        print(self.__users)
 
     def get_user(self, user_name) -> User:
-        return next((user for user in self.__users if user.user_name == user_name), None)
+        print("username :",user_name)
+        if type(user_name) == str:
+            return next((user for user in self.__users if user.user_name == user_name.lower()), None)
 
     def get_number_of_users(self):
         return len(self.__users)
