@@ -29,7 +29,7 @@ def add_user(user_name: str, password: str, repo: AbstractRepository):
     user_id = repo.get_number_of_users()
     user = User(user_id,user_name, password_hash)
     repo.add_user(user)
-    return user
+    # return user
 
 
 def get_user(user_name: str, repo: AbstractRepository):

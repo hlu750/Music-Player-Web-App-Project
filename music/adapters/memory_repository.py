@@ -10,7 +10,7 @@ from music.domainmodel.genre  import Genre
 from music.domainmodel.playlist  import PlayList
 from music.domainmodel.review import Review
 from music.domainmodel.user import User
-from .csvdatareader import TrackCSVReader
+from .csvdatareader import TrackCSVReader, read_csv_file
 # from csvdatareader import TrackCSVReader
 from typing import List
 import math 
@@ -57,14 +57,18 @@ class MemoryRepository(AbstractRepository):
         except KeyError:
             pass
         return track
+
     @property
     def tracks(self) -> List[Track]:
         return self.__tracks
+
     @property
     def track_index(self) -> dict:
         return self.__track_index
+
     def get_random_track(self):
         return random.choice(self.__tracks)
+
     def get_track_by_genre(self, target_genre: Genre) -> List[Track]:
 
         pass
@@ -136,14 +140,11 @@ def load_tracks(album_path, track_path ,repo:MemoryRepository ):
     for track in reader.read_csv_files():
         repo.add_track(track)
 
-def populate(album_path,track_path ,repo:MemoryRepository):
-    load_tracks(album_path, track_path,repo)
-
 def load_users(data_path: Path, repo: MemoryRepository):
     users = dict()
 
     users_filename = str(Path(data_path) / "users.csv")
-    for data_row in TrackCSVReader.read_csv_files(users_filename):
+    for data_row in read_csv_file(users_filename):
         user = User(
             user_name=data_row[1],
             password=generate_password_hash(data_row[2])
@@ -163,3 +164,12 @@ def load_reviews(data_path: Path, repo: MemoryRepository, users):
             timestamp=datetime.fromisoformat(data_row[4])
         )
         repo.add_review(review)
+
+def populate(album_path,track_path ,repo:MemoryRepository):
+    load_tracks(album_path, track_path,repo)
+
+    # # Load users into the repository.
+    # users = load_users(track_path, repo)
+
+    # # Load comments into the repository.
+    # load_reviews(track_path, repo, users)

@@ -1,24 +1,3 @@
-# from flask_wtf import FlaskForm, RecaptchaField
-# from wtforms import StringField, PasswordField, BooleanField, SubmitField, EmailField
-# from wtforms.validators import EqualTo, DataRequired
-
-# from flask import Blueprint, render_template
-# import music.utilities.utilities as utilities
-# from music.domainmodel.track import Track
-
-# class RegistrationForm(FlaskForm):
-#     user_name = StringField('Username', [DataRequired()])
-#     password = PasswordField('Password', [DataRequired()])
-#     submit = SubmitField('Register')
-
-# authentication_blueprint = Blueprint('authentication_bp', __name__, url_prefix='/authentication')
-
-# @authentication_blueprint.route('/register', methods=['GET', 'POST'])
-# def register():
-#     form = RegistrationForm()
-#     return render_template('authentication/credentials.html', title='Register', form=form)
-
-
 from flask import Blueprint, render_template, redirect, url_for, session, request
 
 from flask_wtf import FlaskForm
@@ -43,8 +22,6 @@ def register():
     form = RegistrationForm()
     user_name_not_unique = None
 
-    # if request.method == 'POST':
-    #     return redirect(url_for('authentication_bp.login'))
     if form.validate_on_submit():
         try:
             services.add_user(form.user_name.data, form.password.data, repo.repo_instance)
@@ -67,9 +44,6 @@ def login():
     form = LoginForm()
     user_name_not_recognised = None
     password_does_not_match_user_name = None
-
-    # if request.method == 'POST':
-    #     return redirect(url_for('home_bp.home'))
 
     if form.validate_on_submit():
         try:
