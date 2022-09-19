@@ -347,13 +347,14 @@ input[type="submit"] {
   color: white;
 }
 
-th {
+th, .th {
   color:white;
   padding: 20px;
-  font-size: 13px;
+  font-size: 33px;
+  font-weight: bold;
 }
 
-td {
+td,.td {
   color:white;
   padding: 5px;
   font-size: 25px;
@@ -411,3 +412,4 @@ a.fill-div {
   border :0;
    padding: 0.5em 1.5em;
  }
+

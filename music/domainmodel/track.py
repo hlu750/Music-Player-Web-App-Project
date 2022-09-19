@@ -1,8 +1,8 @@
 from music.domainmodel.artist import Artist
 from music.domainmodel.genre import Genre
 from music.domainmodel.album import Album
-
-
+# from music.domainmodel.review import Review
+from datetime import datetime
 class Track:
     def __init__(self, track_id: int, track_title: str):
         if type(track_id) is not int or track_id < 0:
@@ -19,6 +19,7 @@ class Track:
         # duration in seconds
         self.__track_duration: int | None = None
         self.__genres: list = []
+        self.__reviews: list = []
 
     @property
     def track_id(self) -> int:
@@ -82,7 +83,14 @@ class Track:
     @property
     def genres(self) -> list:
         return self.__genres
-
+    @property 
+    def reviews(self) -> list:
+        return self.__reviews
+    def add_review(self, review):
+        if type(review) is Review and review not in self.__reviews:
+            self.__reviews.append(review)
+        else:
+            print("error when adding review to track") 
     def add_genre(self, new_genre):
         if not isinstance(new_genre, Genre) or new_genre in self.__genres:
             return
@@ -103,3 +111,60 @@ class Track:
 
     def __hash__(self):
         return hash(self.track_id)
+class Review:
+
+    def __init__(self, track: Track, review_text: str, rating: int):
+        self.__track = None
+        if isinstance(track, Track):
+            self.__track = track
+
+        self.__review_text = 'N/A'
+        if isinstance(review_text, str):
+            self.__review_text = review_text.strip()
+
+        if isinstance(rating, int) and 1 <= rating <= 5:
+            self.__rating = rating
+        else:
+            raise ValueError('Invalid value for the rating.')
+
+        self.__timestamp = datetime.now()
+
+    @property
+    def track(self) -> Track:
+        return self.__track
+
+    @property
+    def review_text(self) -> str:
+        return self.__review_text
+
+    @review_text.setter
+    def review_text(self, new_text):
+        if type(new_text) is str:
+            self.__review_text = new_text.strip()
+        else:
+            self.__review_text = None
+
+    @property
+    def rating(self) -> int:
+        return self.__rating
+
+    @rating.setter
+    def rating(self, new_rating: int):
+        if isinstance(new_rating, int) and 1 <= new_rating <= 5:
+            self.__rating = new_rating
+        else:
+            self.__rating = None
+            raise ValueError("Wrong value for the rating")
+
+    @property
+    def timestamp(self) -> datetime:
+        return self.__timestamp
+
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return False
+        return other.track == self.track and other.review_text == self.review_text and other.rating == self.rating and other.timestamp == self.timestamp
+
+    def __repr__(self):
+        return f'<Review of track {self.track}, rating = {self.rating}, review_text = {self.review_text}>'
+

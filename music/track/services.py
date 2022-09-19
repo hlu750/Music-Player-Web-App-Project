@@ -1,7 +1,7 @@
 from typing import List, Iterable
 
 from music.adapters.repository import AbstractRepository
-from music.domainmodel.review import Review
+from music.domainmodel.track import Review
 from music.domainmodel.track import Track
 from music.domainmodel.genre import Genre
 
@@ -16,15 +16,15 @@ def add_review(track_id: int, review_text: str, user_name: str, repo: AbstractRe
     track = repo.get_track(track_id)
     if track is None:
         raise NonExistentTrackException
-    print("services",user_name)
     user = repo.get_user(user_name)
     if user is None:
         raise UnknownUserException
 
     # Create review.
     review = Review(track, review_text, 5)
-
+    print(track, review)
     # Update the repository.
+    track.add_review(review)
     repo.add_review(review)
 
 
@@ -33,7 +33,7 @@ def get_track(track_id: int, repo: AbstractRepository):
 
     if track is None:
         raise NonExistentTrackException
-
+    return track
     return track_to_dict(track)
 
 
