@@ -151,10 +151,11 @@ def review_on_track():
     # For a GET or an unsuccessful POST, retrieve the track to review in dict form, and return a Web page that allows
     # the user to enter a review. The generated Web page includes a form object.
     track = services.get_track(track_id, repo.repo_instance)
+    user: User = get_user(user_name, repo.repo_instance)
     return render_template(
         'track/review_on_track.html',
         title='Edit track',
-        track=track,
+        track=track, user=user,
         form=form,
         handler_url=url_for('track_blueprint.review_on_track'),
         selected_track=utilities.get_selected_track(track_id)

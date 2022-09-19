@@ -27,8 +27,8 @@
             </form>
         </div>
         <div style="clear:both">
-            {% for review in track.reviews %}
-                <p>{{review.review_text}}, by {{review.user_name}}, {{review.timestamp}}</p>
+            {% for review in user.reviews %}
+                <p>{{review.review_text}}, by {{user.user_name}}, {{review.timestamp}}</p>
             {% endfor %}
         </div>
     </track>

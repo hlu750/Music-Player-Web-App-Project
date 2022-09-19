@@ -37,9 +37,10 @@ class MemoryRepository(AbstractRepository):
         print(self.__users)
 
     def get_user(self, user_name) -> User:
-        print("username :",user_name)
+        print("username :", user_name)
+        
         if type(user_name) == str:
-            return next((user for user in self.__users if user.user_name == user_name.lower()), None)
+            return next((user for user in self.__users if user.user_name == user_name), None)
 
     def get_number_of_users(self):
         return len(self.__users)
@@ -156,7 +157,7 @@ def load_users(data_path: Path, repo: MemoryRepository):
 
 def load_reviews(data_path: Path, repo: MemoryRepository, users):
     reviews_filename = str(Path(data_path) / "reviews.csv")
-    for data_row in TrackCSVReader.read_csv_files(reviews_filename):
+    for data_row in read_csv_file(reviews_filename):
         review = User.add_review(
             review_text=data_row[3],
             user=users[data_row[1]],
@@ -168,7 +169,7 @@ def load_reviews(data_path: Path, repo: MemoryRepository, users):
 def populate(album_path,track_path ,repo:MemoryRepository):
     load_tracks(album_path, track_path,repo)
 
-    # # Load users into the repository.
+    # Load users into the repository.
     # users = load_users(track_path, repo)
 
     # # Load comments into the repository.

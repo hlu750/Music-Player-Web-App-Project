@@ -37,9 +37,16 @@ def get_user(user_name: str, repo: AbstractRepository):
     user = repo.get_user(user_name)
     if user is None:
         raise UnknownUserException
-
+    print(user_to_dict(user))
     return user_to_dict(user)
+#find a way to get user instead of user_to_dict(user)
 
+# def get_user2(user_name: str, repo: AbstractRepository):
+    
+#     user = repo.get_user(user_name)
+#     if user is None:
+#         raise UnknownUserException
+#     return user
 
 def authenticate_user(user_name: str, password: str, repo: AbstractRepository):
     authenticated = False
