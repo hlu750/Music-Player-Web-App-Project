@@ -60,8 +60,15 @@ def track():
     else:
         return redirect(url_for('track_blueprint.filter_track', title = form.title.data, type = form.select.data))
 
-@track_blueprint.route('/track/<int:track_id>', methods=['GET'])
-def track_page(track_id):
+@track_blueprint.route('/track', methods=['GET', 'POST'])
+def track_page():
+    track_id = request.args.get('track_id')
+    # print(request.args)
+    if track_id is None:
+        track_id = 2
+    else:
+        track_id = int(track_id)
+    # track_id = int(request.args.get('track_id'))
     track = utilities.get_selected_track(track_id)
     if track:
         genres = utilities.get_genres()
@@ -140,6 +147,7 @@ class SearchForm(FlaskForm):
 @track_blueprint.route('/review', methods=['GET', 'POST'])
 @login_required
 def review_on_track():
+    # track_id = int(request.args.get('track_id'))
     user_name = session['user_name']
     print("initial username (track.py):",user_name)
     # Create form. The form maintains state, e.g. when this method is called with a HTTP GET request and populates
@@ -158,24 +166,16 @@ def review_on_track():
         return redirect(url_for('track_blueprint.track_page', track_id=track_id,view_reviews_for=track_id))
 
     if request.method == 'GET':
-        if request.args.get('track') == None:
-            track_id = 2
-            print("bruh")
-        else:
-            track_id = int(request.args.get('track'))
+        track_id = int(request.args.get('track_id'))
         form.track_id.data = track_id
     else:
-        # Request is a HTTP POST where form validation has failed.
-        # Extract the track id of the track being reviewed from the form.
         track_id = int(form.track_id.data)
-
-    # For a GET or an unsuccessful POST, retrieve the track to review in dict form, and return a Web page that allows
-    # the user to enter a review. The generated Web page includes a form object.
+   
     track = services.get_track(track_id, repo.repo_instance)
     user: User = get_user(user_name, repo.repo_instance)
     return render_template(
         'track/review_on_track.html',
-        title='Edit track',
+        title='Edit track', track_id = track_id,
         track=track, user=user,
         form=form,
         handler_url=url_for('track_blueprint.review_on_track'),

@@ -109,7 +109,7 @@ class AbstractRepository(abc.ABC):
     #     """ Returns the reviews stored in the repository. """
     #     raise NotImplementedError
     @abc.abstractmethod
-    def get_tracks_by_quantity(self,startIndex, quantity):
+    def get_tracks_by_quantity(self, startIndex, quantity):
         raise NotImplementedError
 
     @abc.abstractmethod
