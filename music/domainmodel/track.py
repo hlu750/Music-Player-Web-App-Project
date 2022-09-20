@@ -111,6 +111,21 @@ class Track:
 
     def __hash__(self):
         return hash(self.track_id)
+
+    def __iter__(self):
+        return GenreIterator(self)
+
+class GenreIterator:
+    def __init__(self, track:Track):
+        self._track = track
+        self._index = 0
+    
+    def __next__(self):
+        if self._index < (len(self._track.genres)):
+            result = (self._track.genres[self._index])
+            self._index +=1
+            return result 
+        raise StopIteration
 class Review:
 
     def __init__(self, track: Track, review_text: str, rating: int):

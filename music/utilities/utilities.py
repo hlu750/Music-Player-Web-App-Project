@@ -32,3 +32,7 @@ def get_number_of_pages(quantity=20):
 def get_filtered_tracks(title, type):
     filtered_tracks = services.get_filtered_tracks(title, type, repo.repo_instance)
     return filtered_tracks
+
+def get_genres():
+    genres = services.get_genres(repo.repo_instance)
+    return genres

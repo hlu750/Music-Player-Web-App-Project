@@ -48,4 +48,7 @@ def get_filtered_tracks(title, type, repo: AbstractRepository):
 def get_selected_track(track_id, repo: AbstractRepository):
     track = repo.get_track(track_id)
     return track
+def get_genres(repo:AbstractRepository):
+    return repo.get_genres()
+
     

@@ -400,9 +400,15 @@ a.fill-div {
     #ffc75f,
     #f9f871
   );
+  --gradient-folk :linear-gradient(25deg,#d64c7f,#ee4758 50%);
+  --gradient-avant-garde:linear-gradient(to right top, #fc5c7d, #6a82fb);
+  --gradient-hip-hop:linear-gradient(to right top, #8e2de2, #4a00e0);
+  --gradient-electronic: linear-gradient(to right top, #ff9966, #ff5e62);
+  --gradient-rock:linear-gradient(to right top, #f84171, #cf3458, #a72841, #801c2c, #5c101a);
 }
 /* .row:hover{background-color: #E94560;} */
- #gradient {
+ #gradient,#gradient-rock,#gradient-avant-garde,#gradient-hip-hop-rap, #gradient-electronic
+ ,#gradient-folk{
   width:540px;
   height: 540px;
   /* background: -webkit-gradient(linear, 0 0, 0 100%, from(#053F63), to(#105C97)); */
@@ -412,4 +418,20 @@ a.fill-div {
   border :0;
    padding: 0.5em 1.5em;
  }
+ #gradient-rock{
+  background-image: var(--gradient-rock);
+ }
 
+ #gradient-avant-garde{
+  background-image: var(--gradient-avant-garde);
+ }
+ #gradient-hip-hop-rap{
+  background-image: var(--gradient-hip-hop);
+ }
+ #gradient-electronic{
+  background-image: var( --gradient-electronic);
+ }
+ 
+ #gradient-folk{
+  background-image: var(--gradient-folk);
+ }

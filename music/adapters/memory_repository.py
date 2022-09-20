@@ -27,7 +27,7 @@ class MemoryRepository(AbstractRepository):
     def __init__(self):
         self.__tracks = list()
         self.__track_index = dict()
-        self.__genres = list()
+        self.__genres = dict()
         self.__users = list()
         self.__reviews = list()
 
@@ -37,8 +37,6 @@ class MemoryRepository(AbstractRepository):
         print(self.__users)
 
     def get_user(self, user_name) -> User:
-        
-        
         if type(user_name) == str:
             return next((user for user in self.__users if user.user_name == user_name), None)
 
@@ -48,6 +46,9 @@ class MemoryRepository(AbstractRepository):
     def add_track(self, track: Track):
         insort_left(self.__tracks, track)
         self.__track_index[track.track_id] = track 
+        for index in range(len(track.genres)):
+            self.add_genre(track.genres[index])
+        
 
     
     def get_track(self, id:int) -> Track:
@@ -69,6 +70,15 @@ class MemoryRepository(AbstractRepository):
 
     def get_random_track(self):
         return random.choice(self.__tracks)
+    def add_genre(self, genre):
+        # print(genre)
+        if genre.name not in self.__genres.keys():
+            self.__genres[genre.name] = 1 
+        else:
+            self.__genres[genre.name] += 1
+
+    def get_genres(self):
+        return self.__genres
 
     def get_track_by_genre(self, target_genre: Genre) -> List[Track]:
 
