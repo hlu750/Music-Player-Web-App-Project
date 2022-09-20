@@ -62,47 +62,30 @@ def track():
 
 @track_blueprint.route('/track/<int:track_id>', methods=['GET', 'POST'])
 def track_page(track_id):
-    song_page = request.args.get('page')
-    if song_page is None:
-        song_page = 0
-    track = utilities.get_ordered_tracks(int(song_page), 1)
-    if track is not None:
-        song_page = int(song_page)
-        next_track_url = None
-        prev_track_url = None
-        next_track_url = url_for('track_blueprint.track_page', track_id, page = song_page + 1)
-        prev_track_url = url_for('track_blueprint.track_page', track_id, page = song_page - 1)
-        number_of_pages = utilities.get_number_of_pages()
-        if song_page + 1> number_of_pages:
-            next_track_url = None
-            prev_track_url = url_for('track_blueprint.track_page', track_id, page = song_page - 1)
-        elif song_page == 0:
-            next_track_url = url_for('track_blueprint.track_page', track_id, page = song_page + 1)
-            prev_track_url = None
-        
-        track_to_show_reviews = request.args.get('view_reviews_for')
-    
-        if track_to_show_reviews == None:
-            # No view-reviews query parameter, so set to a non-existent track id.
-            track_to_show_reviews = -1
-        elif track_to_show_reviews is not None:
-            # Convert track_to_show_reviews from string to int.
-            track_to_show_reviews = int(track_to_show_reviews)
-
-        view_review_url = url_for('track_blueprint.track')
-        add_review_url = url_for('track_blueprint.review_on_track')
-
-        return render_template('track/track_page.html', 
-        title='Track', track = track, track_id = track_id,
-        show_reviews_for_track=track_to_show_reviews,
-        view_review_url=view_review_url,
-        add_review_url=add_review_url,
-        next_track_url = next_track_url, 
-        prev_track_url = prev_track_url
-        )
-
+    track = utilities.get_selected_track(track_id)
+    print(track.reviews)
+    track_to_show_reviews = request.args.get('view_reviews_for')
+    print("hfadsf", track_to_show_reviews)
+    if track_to_show_reviews == None:
+        # No view-reviews query parameter, so set to a non-existent track id.
+        track_to_show_reviews = -1
+    elif track_to_show_reviews is not None:
+        # Convert track_to_show_reviews from string to int.
+        track_to_show_reviews = int(track_to_show_reviews)
+    if track_to_show_reviews is None :
+        track_to_show_reviews = -1
     else:
-        print('No tracks found')
+        track_to_show_reviews = int(track_to_show_reviews)
+    view_review_url = url_for('track_blueprint.track_page',track_id = track_id,  view_reviews_for=int(track_id))
+    add_review_url = url_for('track_blueprint.review_on_track')
+
+    return render_template('track/track_page.html', 
+    title='Track', track = track, track_id = track_id,
+    show_reviews_for_track=track_to_show_reviews,
+    view_review_url=view_review_url,
+    add_review_url=add_review_url
+    )
+
             
     
 
@@ -145,7 +128,7 @@ class SearchForm(FlaskForm):
 @login_required
 def review_on_track():
     user_name = session['user_name']
-    print("initial username:",user_name)
+    print("initial username (track.py):",user_name)
     # Create form. The form maintains state, e.g. when this method is called with a HTTP GET request and populates
     # the form with an track id, when subsequently called with a HTTP POST request, the track id remains in the
     # form.

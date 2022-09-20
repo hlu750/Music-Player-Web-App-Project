@@ -1,4 +1,4 @@
-from music.domainmodel.review import Review
+from music.domainmodel.track import Review
 from music.domainmodel.track import Track
 
 
