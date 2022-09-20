@@ -48,17 +48,37 @@
     </div>
 
     <div style="float:right">
-        <button class="btn-general" onclick="location.href='{{ view_review_url }}'">{{ track.reviews|length }} reviews</button>
+        <button class="btn-general" onclick="location.href='{{ view_review_url }}'">Reviews</button>
         <button class="btn-general" onclick="location.href='{{ add_review_url }}'">Review</button>
     </div>
 
     {% if track.track_id == show_reviews_for_track %}
     <div style="clear:both">
-        {% for review in track.reviews %}
-            <p>{{review.review_text}}, by {{review.user_name}}, {{review.timestamp}}</p>
+        {% for review in user.reviews %}
+            <p>{{review.review_text}}, by {{user.user_name}}, {{review.timestamp}}</p>
         {% endfor %}
     </div>
     {% endif %}
+
+    <footer>
+        <nav style="clear:both">
+            <div style="float:left">
+                {% if prev_track_url is not none %}
+                    <button class="button" onclick="location.href='{{prev_track_url}}'">Back</button>
+                {% else %}
+                    <button class="button-disabled" disabled>Back</button>
+                {% endif %}
+            </div>
+            <div style="float:right">
+                {% if next_track_url is not none %}
+                    <button class="button" onclick="location.href='{{next_track_url}}'">Next</button>
+                {% else %}
+                    <button class="button-disabled" disabled>Next</button>
+                {% endif %}
+            </div>
+        </nav>
+    </footer>
+
 </main>
 
 {% endblock %}

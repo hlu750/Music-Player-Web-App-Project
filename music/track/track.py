@@ -60,27 +60,51 @@ def track():
     else:
         return redirect(url_for('track_blueprint.filter_track', title = form.title.data, type = form.select.data))
 
-@track_blueprint.route('/track/<int:track_id>', methods=['GET'])
+@track_blueprint.route('/track/<int:track_id>', methods=['GET', 'POST'])
 def track_page(track_id):
-    track = utilities.get_selected_track(track_id)
-    track_to_show_reviews = request.args.get('view_reviews_for')
+    song_page = request.args.get('page')
+    if song_page is None:
+        song_page = 0
+    track = utilities.get_ordered_tracks(int(song_page), 1)
+    if track is not None:
+        song_page = int(song_page)
+        next_track_url = None
+        prev_track_url = None
+        next_track_url = url_for('track_blueprint.track_page', track_id, page = song_page + 1)
+        prev_track_url = url_for('track_blueprint.track_page', track_id, page = song_page - 1)
+        number_of_pages = utilities.get_number_of_pages()
+        if song_page + 1> number_of_pages:
+            next_track_url = None
+            prev_track_url = url_for('track_blueprint.track_page', track_id, page = song_page - 1)
+        elif song_page == 0:
+            next_track_url = url_for('track_blueprint.track_page', track_id, page = song_page + 1)
+            prev_track_url = None
+        
+        track_to_show_reviews = request.args.get('view_reviews_for')
     
-    if track_to_show_reviews == None:
-        # No view-reviews query parameter, so set to a non-existent track id.
-        track_to_show_reviews = -1
-    elif track_to_show_reviews is not None:
-        # Convert track_to_show_reviews from string to int.
-        track_to_show_reviews = int(track_to_show_reviews)
+        if track_to_show_reviews == None:
+            # No view-reviews query parameter, so set to a non-existent track id.
+            track_to_show_reviews = -1
+        elif track_to_show_reviews is not None:
+            # Convert track_to_show_reviews from string to int.
+            track_to_show_reviews = int(track_to_show_reviews)
 
-    view_review_url = url_for('track_blueprint.track')
-    add_review_url = url_for('track_blueprint.review_on_track')
+        view_review_url = url_for('track_blueprint.track')
+        add_review_url = url_for('track_blueprint.review_on_track')
 
-    return render_template('track/track_page.html', 
-    title='Track', track = track, 
-    show_reviews_for_track=track_to_show_reviews,
-    view_review_url=view_review_url,
-    add_review_url=add_review_url
-    )
+        return render_template('track/track_page.html', 
+        title='Track', track = track, track_id = track_id,
+        show_reviews_for_track=track_to_show_reviews,
+        view_review_url=view_review_url,
+        add_review_url=add_review_url,
+        next_track_url = next_track_url, 
+        prev_track_url = prev_track_url
+        )
+
+    else:
+        print('No tracks found')
+            
+    
 
             
 

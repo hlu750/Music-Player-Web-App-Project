@@ -126,6 +126,40 @@ class TrackCSVReader:
         # print(reader.__albums_csv_file)
         return self.__dataset_of_tracks
 
+    # def read_csv_file(filename: str):
+    #     with open(filename, encoding='utf-8-sig') as infile:
+    #         reader = csv.reader(infile)
+
+    #         # Read first line of the the CSV file.
+    #         headers = next(reader)
+
+    #         # Read remaining rows from the CSV file.
+    #         for row in reader:
+    #             # Strip any leading/trailing white space from data read.
+    #             row = [item.strip() for item in row]
+    #             yield row
+
+    # def read_csv_files2(self):
+    #     # TODO
+    #     with open(self.__tracks_csv_file, 'r', encoding='unicode_escape') as file:
+    #         track_file = csv.DictReader(file)
+    #         for row in track_file:
+    #             try:
+    #                 track = Track(int(row['track_id']), row['track_title'])
+    #                 self.__dataset_of_tracks.append(track)
+    #                 artist = Artist(int(row['artist_id']),row['artist_name'])
+    #                 self.__dataset_of_artists.add(artist) 
+    #                 try:
+    #                     track_genres = row['track_genres']
+    #                     genre_list = ast.literal_eval(track_genres)
+    #                     for genre_dict in genre_list:
+    #                         genre = Genre(int(genre_dict['genre_id']), genre_dict['genre_title'])
+    #                         self.__dataset_of_genres.add(genre)
+    #                 except SyntaxError:
+    #                     pass
+    #             except ValueError:
+    #                 pass
+
 def create_track_object(track_row):
     track = Track(int(track_row['track_id']), track_row['track_title'])
     track.track_url = track_row['track_url']
