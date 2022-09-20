@@ -60,32 +60,54 @@ def track():
     else:
         return redirect(url_for('track_blueprint.filter_track', title = form.title.data, type = form.select.data))
 
-@track_blueprint.route('/track/<int:track_id>', methods=['GET', 'POST'])
+@track_blueprint.route('/track/<int:track_id>', methods=['GET'])
 def track_page(track_id):
-    track = utilities.get_selected_track(track_id)
-    print(track.reviews)
-    track_to_show_reviews = request.args.get('view_reviews_for')
-    print("hfadsf", track_to_show_reviews)
-    if track_to_show_reviews == None:
-        # No view-reviews query parameter, so set to a non-existent track id.
-        track_to_show_reviews = -1
-    elif track_to_show_reviews is not None:
-        # Convert track_to_show_reviews from string to int.
-        track_to_show_reviews = int(track_to_show_reviews)
-    if track_to_show_reviews is None :
-        track_to_show_reviews = -1
+    prev_track, track, next_track = utilities.get_selected_track(track_id)
+    print(prev_track)
+    if track:
+        # genres = utilities.get_genres()
+        
+        # print(track.reviews)
+        track_to_show_reviews = request.args.get('view_reviews_for')
+        # print("hfadsf", track_to_show_reviews)
+        if track_to_show_reviews == None:
+            # No view-reviews query parameter, so set to a non-existent track id.
+            track_to_show_reviews = -1
+        elif track_to_show_reviews is not None:
+            # Convert track_to_show_reviews from string to int.
+            track_to_show_reviews = int(track_to_show_reviews)
+        if track_to_show_reviews is None :
+            track_to_show_reviews = -1
+        else:
+            track_to_show_reviews = int(track_to_show_reviews)
+        view_review_url = url_for('track_blueprint.track_page',track_id = track_id,  view_reviews_for=int(track_id))
+        add_review_url = url_for('track_blueprint.review_on_track')
+        next_track_url = url_for('track_blueprint.track_page',track_id  = next_track.track_id) if next_track else None 
+        prev_track_url = url_for('track_blueprint.track_page', track_id = prev_track.track_id) if prev_track else None
+        print(next_track_url)
+        print(prev_track_url)
+        genres_list = track.genres
+        if len(track.genres) >0:
+            genre = track.genres[0]
+        else:
+            genre = "No Genre"
+        
+        return render_template('track/track_page.html', 
+        title='Track', track = track, 
+        show_reviews_for_track=track_to_show_reviews,
+        view_review_url=view_review_url,
+        add_review_url=add_review_url,
+        genre = genre,
+        next_track_url = next_track_url,
+        prev_track_url = prev_track_url
+        )
     else:
-        track_to_show_reviews = int(track_to_show_reviews)
-    view_review_url = url_for('track_blueprint.track_page',track_id = track_id,  view_reviews_for=int(track_id))
-    add_review_url = url_for('track_blueprint.review_on_track')
+        return render_template('404.html')
 
-    return render_template('track/track_page.html', 
-    title='Track', track = track,track_id = track_id, 
-    show_reviews_for_track=track_to_show_reviews,
-    view_review_url=view_review_url,
-    add_review_url=add_review_url
-    )
 
+@track_blueprint.errorhandler(404)
+def page_not_found():
+    return render_template('404.html')
             
 
 
@@ -124,7 +146,6 @@ class SearchForm(FlaskForm):
 @track_blueprint.route('/review', methods=['GET', 'POST'])
 @login_required
 def review_on_track():
-    # track_id = int(request.args.get('track_id'))
     user_name = session['user_name']
     print("initial username (track.py):",user_name)
     # Create form. The form maintains state, e.g. when this method is called with a HTTP GET request and populates
@@ -137,29 +158,30 @@ def review_on_track():
         services.add_review(track_id, form.review.data, user_name, repo.repo_instance)
 
         track = services.get_track(track_id, repo.repo_instance)
-        print(track)
+        # print(track)
         # Cause the web browser to display the page of all tracks that have the same date as the reviewed track,
         # and display all reviews, including the new review.
         return redirect(url_for('track_blueprint.track_page', track_id=track_id,view_reviews_for=track_id))
 
     if request.method == 'GET':
-<<<<<<< HEAD
-        track_id = int(request.args.get('track_id'))
-=======
         if request.args.get('track') == None:
             track_id = 2
+            print("bruh")
         else:
             track_id = int(request.args.get('track'))
->>>>>>> parent of abe28c7 (Finished linear gradient:)
         form.track_id.data = track_id
     else:
+        # Request is a HTTP POST where form validation has failed.
+        # Extract the track id of the track being reviewed from the form.
         track_id = int(form.track_id.data)
-   
+
+    # For a GET or an unsuccessful POST, retrieve the track to review in dict form, and return a Web page that allows
+    # the user to enter a review. The generated Web page includes a form object.
     track = services.get_track(track_id, repo.repo_instance)
     user: User = get_user(user_name, repo.repo_instance)
     return render_template(
         'track/review_on_track.html',
-        title='Edit track', track_id = track_id,
+        title='Edit track',
         track=track, user=user,
         form=form,
         handler_url=url_for('track_blueprint.review_on_track'),

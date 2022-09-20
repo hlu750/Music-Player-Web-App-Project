@@ -13,8 +13,8 @@ def get_random_track():
     return random_track
 
 def get_selected_track(track_id):
-    track = services.get_selected_track(track_id, repo.repo_instance)
-    return track
+    prev_track, track, next_track = services.get_selected_track(track_id, repo.repo_instance)
+    return prev_track, track, next_track
 
 def get_selected_tracks(quantity=20):
     tracks = services.get_random_tracks(quantity, repo.repo_instance)

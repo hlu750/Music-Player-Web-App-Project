@@ -8,11 +8,33 @@
     </header>
     
     <!-- <div style="padding: 40px;"><img src="{{ url_for('static', filename='images/image-not-found.png') }}" alt="Album Cover"></div> -->
-    <div id="gradient"></div>
+   
+    {% if "Avant-Garde" in genre.name %}
+        <div id="gradient-avant-garde"></div>
+    {% elif "Rock" in genre.name %}
+    <div id="gradient-rock"></div>       
+    {% elif "Hip-Hop" in genre.name %}
+    <div id="gradient-hip-hop-rap"></div>    
+    {% elif ("Electronic" or "Electro") in genre.name %}
+    <div id="gradient-electronic"></div>     
+    
+    {% else%}
+    <div id="gradient"></div>   
+        
+    {% endif %}
+       
     
     
-
+    
         <div class ="row justify-content-md-center">
+            
+            <div class="col-sm th"><button class="button" onclick="location.href='{{ prev_track_url }}'">Prev Song</button></div>
+        <!-- <div class="w-100"></div> -->
+        <div class="col-sm th ">Song details</div>
+        <div class="col-sm th"><button class="button" onclick="location.href='{{ next_track_url }}'">Next Song</button></div>
+        </div> 
+        <div class ="row justify-content-md-center">
+           
             <div class="col-sm th">Song</div>
           <!-- <div class="w-100"></div> -->
           <div class="col-sm th ">Artist</div>
@@ -44,8 +66,8 @@
         {% if track.reviews|length > 0 and track.track_id != show_reviews_for_track%}
             <button class="f" onclick="location.href='{{ view_review_url }}'">{{ track.reviews|length }} reviews</button>
         {% endif %}
-        <button class="f" onclick="location.href='{{ view_review_url }}'">{{ track.reviews|length }}  reviews</button>
-        <button class="filename" onclick="location.href='{{ add_review_url }}'">Review</button>
+        <!-- <button class="f" onclick="location.href='{{ view_review_url }}'">{{ track.reviews|length }}  reviews</button> -->
+        <button class="button" onclick="location.href='{{ add_review_url }}'">Review</button>
     </div>
     <div style="float:left">
         <header id="track-header" style = "color:white" style="text-align: left"></header>
@@ -55,24 +77,6 @@
         {% endfor %}
     </div>
 
-    <!-- <footer>
-        <nav style="clear:both">
-            <div style="float:left">
-                {% if prev_track_url is not none %}
-                    <button class="button" onclick="location.href='{{prev_track_url}}'">Back</button>
-                {% else %}
-                    <button class="button-disabled" disabled>Back</button>
-                {% endif %}
-            </div>
-            <div style="float:right">
-                {% if next_track_url is not none %}
-                    <button class="button" onclick="location.href='{{next_track_url}}'">Next</button>
-                {% else %}
-                    <button class="button-disabled" disabled>Next</button>
-                {% endif %}
-            </div>
-        </nav>
-    </footer> -->
 </main>
 
 {% endblock %}

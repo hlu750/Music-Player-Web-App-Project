@@ -52,12 +52,18 @@ class MemoryRepository(AbstractRepository):
     
     def get_track(self, id:int) -> Track:
         track = None
-
+        prev_track = None
+        next_track =None
+        # print(self.track_index)
         try:
             track = self.__track_index[id]
+            track_index = self.tracks.index(track)
+            prev_track = self.tracks[track_index-1] if track_index - 1 >= 0 else None 
+            next_track = self.tracks[track_index + 1] if track_index + 1 < len(self.__tracks) else None
         except KeyError:
+          
             pass
-        return track
+        return prev_track, track, next_track
 
     @property
     def tracks(self) -> List[Track]:
