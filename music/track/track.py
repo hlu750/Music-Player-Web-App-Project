@@ -60,15 +60,8 @@ def track():
     else:
         return redirect(url_for('track_blueprint.filter_track', title = form.title.data, type = form.select.data))
 
-@track_blueprint.route('/track', methods=['GET', 'POST'])
-def track_page():
-    track_id = request.args.get('track_id')
-    # print(request.args)
-    if track_id is None:
-        track_id = 2
-    else:
-        track_id = int(track_id)
-    # track_id = int(request.args.get('track_id'))
+@track_blueprint.route('/track/<int:track_id>', methods=['GET', 'POST'])
+def track_page(track_id):
     track = utilities.get_selected_track(track_id)
     print(track.reviews)
     track_to_show_reviews = request.args.get('view_reviews_for')
@@ -87,7 +80,7 @@ def track_page():
     add_review_url = url_for('track_blueprint.review_on_track')
 
     return render_template('track/track_page.html', 
-    title='Track', track = track, 
+    title='Track', track = track,track_id = track_id, 
     show_reviews_for_track=track_to_show_reviews,
     view_review_url=view_review_url,
     add_review_url=add_review_url
