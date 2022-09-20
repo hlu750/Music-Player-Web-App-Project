@@ -60,8 +60,14 @@ def track():
     else:
         return redirect(url_for('track_blueprint.filter_track', title = form.title.data, type = form.select.data))
 
-@track_blueprint.route('/track/<int:track_id>', methods=['GET', 'POST'])
-def track_page(track_id):
+@track_blueprint.route('/track', methods=['GET', 'POST'])
+def track_page():
+    track_id = request.args.get('track_id')
+    # print(request.args)
+    if track_id is None:
+        track_id = 2
+    else:
+        track_id = int(track_id)
     # track_id = int(request.args.get('track_id'))
     track = utilities.get_selected_track(track_id)
     print(track.reviews)
@@ -77,34 +83,35 @@ def track_page(track_id):
         track_to_show_reviews = -1
     else:
         track_to_show_reviews = int(track_to_show_reviews)
-    view_review_url = url_for('track_blueprint.track_page', track_id = track_id,  view_reviews_for=int(track_id))
-    add_review_url = url_for('track_blueprint.review_on_track', track_id = track_id)
     
-    # song_page = request.args.get('page')
-    # # print(request.args)
-    # if song_page is None:
-    #     song_page = 0
-    # # track_list = (utilities.get_ordered_tracks())
-    # tracks = utilities.get_ordered_tracks(int(song_page))
-    # # print(tracks)
-    # if tracks is not None:
-    #     song_page = int(song_page)
-    #     next_tracks_url = None
-    #     prev_tracks_url = None
-    #     next_tracks_url = url_for('track_blueprint.track', page = song_page + 1 )
-    #     prev_tracks_url = url_for('track_blueprint.track', page = song_page - 1 )
-    #     number_of_pages = utilities.get_number_of_pages()
-    #     # print(number_of_pages)
-    #     if song_page + 1> number_of_pages:
-    #         next_tracks_url = None
-    #         prev_tracks_url =url_for('track_blueprint.track', page = song_page - 1)
-    #     elif song_page == 0:
-    #         next_tracks_url = url_for('track_blueprint.track', page = song_page + 1)
-    #         prev_tracks_url = None
+    song_page = request.args.get('page')
+    # print(request.args)
+    if song_page is None:
+        song_page = 0
+    # track_list = (utilities.get_ordered_tracks())
+    track = utilities.get_ordered_tracks(int(song_page))
+
+    view_review_url = url_for('track_blueprint.track_page', track_id = track_id, page = song_page, view_reviews_for=int(track_id))
+    add_review_url = url_for('track_blueprint.review_on_track', track_id = track_id)
+    # print(tracks)
+    if track is not None:
+        song_page = int(song_page)
+        next_track_url = None
+        prev_track_url = None
+        next_track_url = url_for('track_blueprint.track_page', track_id, page = song_page + 1 )
+        prev_track_url = url_for('track_blueprint.track_page', track_id, page = song_page - 1 )
+        number_of_pages = utilities.get_number_of_pages()
+        # print(number_of_pages)
+        if song_page + 1> number_of_pages:
+            next_track_url = None
+            prev_track_url =url_for('track_blueprint.track_page', track_id, page = song_page - 1)
+        elif song_page == 0:
+            next_track_url = url_for('track_blueprint.track_page', track_id, page = song_page + 1)
+            prev_track_url = None
         
-    #     return render_template('track/track.html', tracks = tracks, 
-    #     next_tracks_url = next_tracks_url, 
-    #     prev_tracks_url = prev_tracks_url)
+        return render_template('track/track_page.html', track = track, track_id = track_id,
+        next_track_url = next_track_url, 
+        prev_track_url = prev_track_url)
 
     return render_template('track/track_page.html', 
     title='Track', track = track, track_id = track_id,
