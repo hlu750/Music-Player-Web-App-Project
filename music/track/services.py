@@ -53,8 +53,7 @@ def get_reviews_for_track(track_id, repo: AbstractRepository):
         raise NonExistentTrackException
 
     return reviews_to_dict(track.reviews)
-def get_genres(repo):
-    return repo.get_genres()
+
 
 # ============================================
 # Functions to convert model entities to dicts

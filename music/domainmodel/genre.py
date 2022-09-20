@@ -7,10 +7,8 @@ class Genre:
 
         if type(genre_name) is str:
             self.__name = genre_name.strip()
-        
         else:
             self.__name = None
-       
 
     @property
     def genre_id(self) -> int:
@@ -43,4 +41,3 @@ class Genre:
 
     def __hash__(self):
         return hash(self.genre_id)
-

@@ -8,22 +8,7 @@
     </header>
     
     <!-- <div style="padding: 40px;"><img src="{{ url_for('static', filename='images/image-not-found.png') }}" alt="Album Cover"></div> -->
-   
-    {% if "Avant-Garde" in genre.name %}
-        <div id="gradient-avant-garde"></div>
-    {% elif "Rock" in genre.name %}
-    <div id="gradient-rock"></div>       
-    {% elif ("Hip-Hop" or "Rap") in genre.name %}
-    <div id="gradient-hip-hop-rap"></div>    
-    {% elif ("Electronic" or "Electro") in genre.name %}
-    <div id="gradient-electronic"></div>     
-    {% elif "Folk" in genre.name %}
-    <div id="gradient-electronic"></div>  
-    {% else%}
-    <div id="gradient"></div>       
-    {% endif %}
-       
-    
+    <div id="gradient"></div>
     
     
 

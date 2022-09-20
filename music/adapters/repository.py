@@ -45,9 +45,7 @@ class AbstractRepository(abc.ABC):
     @abc.abstractmethod
     def get_track_by_genre(self, target_genre: Genre) -> List[Track]:
         raise NotImplementedError    
-    @abc.abstractmethod
-    def get_genres(self):
-        raise NotImplementedError
+
     # @abc.abstractmethod
     # def add_tag(self, tag: Genre):
     #     raise NotImplementedError

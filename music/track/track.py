@@ -70,45 +70,29 @@ def track_page():
         track_id = int(track_id)
     # track_id = int(request.args.get('track_id'))
     track = utilities.get_selected_track(track_id)
-    if track:
-        genres = utilities.get_genres()
-        print({k: v for k, v in sorted(genres.items(), key=lambda item: item[1], reverse=True)})
-        # print(track.reviews)
-        track_to_show_reviews = request.args.get('view_reviews_for')
-        print("hfadsf", track_to_show_reviews)
-        if track_to_show_reviews == None:
-            # No view-reviews query parameter, so set to a non-existent track id.
-            track_to_show_reviews = -1
-        elif track_to_show_reviews is not None:
-            # Convert track_to_show_reviews from string to int.
-            track_to_show_reviews = int(track_to_show_reviews)
-        if track_to_show_reviews is None :
-            track_to_show_reviews = -1
-        else:
-            track_to_show_reviews = int(track_to_show_reviews)
-        view_review_url = url_for('track_blueprint.track_page',track_id = track_id,  view_reviews_for=int(track_id))
-        add_review_url = url_for('track_blueprint.review_on_track')
-
-        genres_list = track.genres
-        if len(track.genres) >0:
-            genre = track.genres[0]
-        else:
-            gengre = "No Genre"
-        print(genre)
-        return render_template('track/track_page.html', 
-        title='Track', track = track, 
-        show_reviews_for_track=track_to_show_reviews,
-        view_review_url=view_review_url,
-        add_review_url=add_review_url,
-        genre = genre
-        )
+    print(track.reviews)
+    track_to_show_reviews = request.args.get('view_reviews_for')
+    print("hfadsf", track_to_show_reviews)
+    if track_to_show_reviews == None:
+        # No view-reviews query parameter, so set to a non-existent track id.
+        track_to_show_reviews = -1
+    elif track_to_show_reviews is not None:
+        # Convert track_to_show_reviews from string to int.
+        track_to_show_reviews = int(track_to_show_reviews)
+    if track_to_show_reviews is None :
+        track_to_show_reviews = -1
     else:
-        return render_template('404.html')
+        track_to_show_reviews = int(track_to_show_reviews)
+    view_review_url = url_for('track_blueprint.track_page',track_id = track_id,  view_reviews_for=int(track_id))
+    add_review_url = url_for('track_blueprint.review_on_track')
 
+    return render_template('track/track_page.html', 
+    title='Track', track = track, 
+    show_reviews_for_track=track_to_show_reviews,
+    view_review_url=view_review_url,
+    add_review_url=add_review_url
+    )
 
-@track_blueprint.errorhandler(404)
-def page_not_found():
-    return render_template('404.html')
             
 
 
@@ -160,7 +144,7 @@ def review_on_track():
         services.add_review(track_id, form.review.data, user_name, repo.repo_instance)
 
         track = services.get_track(track_id, repo.repo_instance)
-        # print(track)
+        print(track)
         # Cause the web browser to display the page of all tracks that have the same date as the reviewed track,
         # and display all reviews, including the new review.
         return redirect(url_for('track_blueprint.track_page', track_id=track_id,view_reviews_for=track_id))
