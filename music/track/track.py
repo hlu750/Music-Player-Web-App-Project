@@ -143,7 +143,14 @@ def review_on_track():
         return redirect(url_for('track_blueprint.track_page', track_id=track_id,view_reviews_for=track_id))
 
     if request.method == 'GET':
+<<<<<<< HEAD
         track_id = int(request.args.get('track_id'))
+=======
+        if request.args.get('track') == None:
+            track_id = 2
+        else:
+            track_id = int(request.args.get('track'))
+>>>>>>> parent of abe28c7 (Finished linear gradient:)
         form.track_id.data = track_id
     else:
         track_id = int(form.track_id.data)
