@@ -84,6 +84,7 @@ def track_page(track_id):
         add_review_url = url_for('track_blueprint.review_on_track', track_id = track_id)
         next_track_url = url_for('track_blueprint.track_page',track_id  = next_track.track_id) if next_track else None 
         prev_track_url = url_for('track_blueprint.track_page', track_id = prev_track.track_id) if prev_track else None
+        like_track_url = url_for('track_blueprint.like_track', track_id = track_id)
         print(next_track_url)
         print(prev_track_url)
         genres_list = track.genres
@@ -99,7 +100,8 @@ def track_page(track_id):
         add_review_url=add_review_url,
         genre = genre,
         next_track_url = next_track_url,
-        prev_track_url = prev_track_url
+        prev_track_url = prev_track_url,
+        like_track_url = like_track_url
         )
     else:
         return render_template('404.html')
@@ -207,18 +209,19 @@ class reviewForm(FlaskForm):
     track_id = HiddenField("track id")
     submit = SubmitField('Submit')
 
-@track_blueprint.route('/track/<int:track_id>/like', methods=['GET', 'POST'])
+@track_blueprint.route('/track/like', methods=['GET', 'POST'])
 @login_required
-def like_track(track_id):
+def like_track():
     user_name = session['user_name']
     user: User = get_user(user_name, repo.repo_instance)
-    
+    if request.args.get('track_id') == None:
+        track_id = 2
+    else:
+        track_id = int(request.args.get('track_id'))
+        
     track = utilities.get_selected_track(track_id)
-    user.add_liked_track(track_id)
-
-    like_track_url = url_for('track_blueprint.like_track')
-
+    services.add_liked_track(track_id, user_name, repo.repo_instance)
+    tracks = services.get_liked_tracks(user, repo.repo_instance)
     return render_template('profile/favourites.html', 
-    title='Track', track = track, user = user,
-    like_track_url = like_track_url
+    title='Liked Tracks', track = track, tracks = tracks, user = user
     )

@@ -4,6 +4,7 @@ from music.adapters.repository import AbstractRepository
 from music.domainmodel.track import Review
 from music.domainmodel.track import Track
 from music.domainmodel.genre import Genre
+from music.domainmodel.user import User
 
 class NonExistentTrackException(Exception):
     pass
@@ -54,6 +55,27 @@ def get_reviews_for_track(track_id, repo: AbstractRepository):
 
     return reviews_to_dict(track.reviews)
 
+def add_liked_track(track_id: int, user_name: str, repo: AbstractRepository):
+    # Check that the track exists.
+    track = repo.get_track(track_id)[1]
+    if track is None:
+        raise NonExistentTrackException
+    user : User = repo.get_user(user_name)
+    if user is None:
+        raise UnknownUserException
+
+    # Create review.
+    print(track)
+    # Update the repository.
+    user.add_liked_track(track)
+
+def get_liked_tracks(user, repo: AbstractRepository):
+    tracks = repo.get_liked_tracks(user)
+
+    if tracks is None:
+        raise NonExistentTrackException
+
+    return reviews_to_dict(tracks)
 
 # ============================================
 # Functions to convert model entities to dicts

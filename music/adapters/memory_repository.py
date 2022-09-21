@@ -30,6 +30,7 @@ class MemoryRepository(AbstractRepository):
         self.__genres = list()
         self.__users = list()
         self.__reviews = list()
+        self.__liked_tracks = list()
 
     def add_user(self, user: User):
         print(user.user_name)
@@ -141,6 +142,16 @@ class MemoryRepository(AbstractRepository):
 
     def get_reviews(self):
         return self.__reviews
+
+    def add_liked_track(self, track: Track):
+        # call parent class first, add_review relies on implementation of code common to all derived classes
+        super().add_liked_track(track)
+        self.__liked_tracks.append(track)
+
+    def get_liked_tracks(self, user):
+        return self.__liked_tracks
+
+
 
 def load_tracks(album_path, track_path ,repo:MemoryRepository ):
     reader = TrackCSVReader(album_path, track_path)

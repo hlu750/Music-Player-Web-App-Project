@@ -4,7 +4,7 @@
     <h1 class="title">Favourited Tracks</h1>
 </section>
 {% for track in tracks %}  
-    <a class= "fill-div" href="{{ url_for('track_blueprint.like_track', track_id = track.track_id ) }}">  
+    <a class= "fill-div">  
     <div>
         {{track.track_id}}<br>
         {{track.title}}<br>
