@@ -55,9 +55,8 @@ def get_reviews_for_track(track_id, repo: AbstractRepository):
 
     return reviews_to_dict(track.reviews)
 
-def add_liked_track(track_id: int, user_name: str, repo: AbstractRepository):
+def add_liked_track(track, user_name: str, repo: AbstractRepository):
     # Check that the track exists.
-    track = repo.get_track(track_id)[1]
     if track is None:
         raise NonExistentTrackException
     user : User = repo.get_user(user_name)
@@ -69,19 +68,34 @@ def add_liked_track(track_id: int, user_name: str, repo: AbstractRepository):
     # Update the repository.
     user.add_liked_track(track)
 
-def get_liked_tracks(user, repo: AbstractRepository):
-    tracks = repo.get_liked_tracks(user)
-
+def get_liked_tracks(user_name, repo: AbstractRepository):
+    user : User = repo.get_user(user_name)
+    if user is None:
+        raise UnknownUserException
+    tracks = user.liked_tracks
     if tracks is None:
         raise NonExistentTrackException
+    print("over here1")
+    print(tracks)
+    return tracks_to_dict(tracks)
 
-    return reviews_to_dict(tracks)
+# def get_liked_tracks(user_name, repo: AbstractRepository):
+#     # tracks = repo.get_liked_tracks(user)
+#     user : User = repo.get_user(user_name)
+#     tracks = user.liked_tracks
+
+#     if tracks is None:
+#         raise NonExistentTrackException
+
+#     return tracks
 
 # ============================================
 # Functions to convert model entities to dicts
 # ============================================
 
 def track_to_dict(track: Track):
+    print("over here3")
+    print(track)
     track_dict = {
         'id': track.track_id,
         'title': track.title,
@@ -91,6 +105,8 @@ def track_to_dict(track: Track):
 
 
 def tracks_to_dict(tracks: Iterable[Track]):
+    print("over here2")
+    print(tracks)
     return [track_to_dict(track) for track in tracks]
 
 

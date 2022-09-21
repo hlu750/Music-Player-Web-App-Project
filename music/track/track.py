@@ -218,10 +218,16 @@ def like_track():
         track_id = 2
     else:
         track_id = int(request.args.get('track_id'))
-        
-    track = utilities.get_selected_track(track_id)
-    services.add_liked_track(track_id, user_name, repo.repo_instance)
-    tracks = services.get_liked_tracks(user, repo.repo_instance)
+
+    prev, track, next = services.get_track(track_id, repo.repo_instance)
+    print("track here")
+    print(track)
+    services.add_liked_track(track, user_name, repo.repo_instance)
+    
+    # tracks = services.get_liked_tracks(user, repo.repo_instance)
+    tracks = services.get_liked_tracks(user_name, repo.repo_instance)
+    print("over here1")
+    print(tracks)
     return render_template('profile/favourites.html', 
     title='Liked Tracks', track = track, tracks = tracks, user = user
     )

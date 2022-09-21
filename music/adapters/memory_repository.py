@@ -38,8 +38,8 @@ class MemoryRepository(AbstractRepository):
         print(self.__users)
 
     def get_user(self, user_name) -> User:
-        
-        
+        print("user")
+        print(user_name)
         if type(user_name) == str:
             return next((user for user in self.__users if user.user_name == user_name), None)
 
@@ -148,8 +148,11 @@ class MemoryRepository(AbstractRepository):
         super().add_liked_track(track)
         self.__liked_tracks.append(track)
 
-    def get_liked_tracks(self, user):
-        return self.__liked_tracks
+    def get_liked_tracks(self, user: User):
+        print("is this okay")
+        print(user.liked_tracks)
+        print(self.__liked_tracks)
+        return user.liked_tracks
 
 
 

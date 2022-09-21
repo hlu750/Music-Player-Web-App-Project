@@ -28,9 +28,9 @@ def playlists():
 def favourites():
     user_name = session['user_name']
     print(user_name)
-    user : User = MemoryRepository.get_user(user_name)
-    tracks = user.liked_tracks()
-
+    user : User = MemoryRepository.get_user(user_name, repo.repo_instance)
+    # tracks = user.liked_tracks()
+    tracks = services.get_liked_tracks(user, repo.repo_instance)
     like_track_url = url_for('track_blueprint.like_track')
 
     return render_template('profile/favourites.html', 

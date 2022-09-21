@@ -50,12 +50,17 @@ class User:
 
     @property
     def liked_tracks(self) -> list:
+        print("shold be here")
+        print(self.__liked_tracks)
         return self.__liked_tracks
 
     def add_liked_track(self, track: Track):
+        print("is this working")
+        print(track)
         if not isinstance(track, Track) or track in self.__liked_tracks:
             return
         self.__liked_tracks.append(track)
+        print(self.__liked_tracks)
 
     def remove_liked_track(self, track: Track):
         if not isinstance(track, Track) or track not in self.__liked_tracks:
