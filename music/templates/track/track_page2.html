@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<main id="main">
+    <header class="track-header" style="color:white;">
+        <h1 class="title" style="color:white;"  style="padding-top: 10px;">{{track.track_id}}. {{track.title}}</h1>
+    </header>
+    
+    <!-- <div style="padding: 40px;"><img src="{{ url_for('static', filename='images/image-not-found.png') }}" alt="Album Cover"></div> -->
+   
+    {% if "Avant-Garde" in genre.name %}
+        <div id="gradient-avant-garde"></div>
+    {% elif "Rock" in genre.name %}
+    <div id="gradient-rock"></div>       
+    {% elif ("Hip-Hop" or "Rap") in genre.name %}
+    <div id="gradient-hip-hop-rap"></div>    
+    {% elif ("Electronic" or "Electro") in genre.name %}
+    <div id="gradient-electronic"></div>     
+    {% elif "Folk" in genre.name %}
+    <div id="gradient-folk"></div>     
+    
+    {% else%}
+    <div id="gradient"></div>   
+        
+    {% endif %}
+       
+    
+    
+    
+        <div class ="row justify-content-md-center">
+            
+            <div class="col-sm th">Song</div>
+          <!-- <div class="w-100"></div> -->
+          <div class="col-sm th ">Artist</div>
+          <div class="col-sm th">Album</div>
+        </div> 
+        <div class ="row justify-content-md-center">
+            <div class="col-sm td">{{track.title}}</div>
+          <div class="col-sm td ">{{track.artist.full_name}}</div>
+          <div class="col-sm td">{{track.album.title}}</div>
+        </div> 
+        <div class ="row justify-content-md-center">
+            <div class="col-sm th">Track ID</div>
+          <div class="col-sm th ">Duration</div>
+          <div class="col-sm th">Genre(s)</div>
+        </div> 
+        <div class ="row justify-content-md-center">
+            <div class="col-sm td">{{track.track_id}}</div>
+          <div class="col-sm td ">{{track.track_duration}}</div>
+          <div class="col-sm td">{% for genre in track.genres %}
+            {{genre.name}} 
+            {% endfor %}</div>
+        </div> 
+        
+    <div style="float:left">
+        <header id="track-header" style = "color:white" style="text-align: left"></header>
+        <h2 style="color:white;"  style="padding-top: 4px;">Reviews</h2>
+        {% for review in track.reviews %}
+            <p style="color:white;">{{review.review_text}}, by {{review.timestamp}}fadsfdsfasdfasdf</p>
+        {% endfor %}
+    </div>
+
+</main>
+
+{% endblock %}

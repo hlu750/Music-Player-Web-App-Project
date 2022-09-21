@@ -231,3 +231,41 @@ def like_track():
     return render_template('profile/favourites.html', 
     title='Liked Tracks', track = track, tracks = tracks, user = user
     )
+
+@track_blueprint.route('/track/like/<int:track_id>', methods=['GET'])
+def track_page2(track_id):
+    print("ello?")
+    prev_track, track, next_track = utilities.get_selected_track(track_id)
+    if track:
+        # genres = utilities.get_genres()
+        
+        # print(track.reviews)
+        track_to_show_reviews = request.args.get('view_reviews_for')
+        # print("hfadsf", track_to_show_reviews)
+        if track_to_show_reviews == None:
+            # No view-reviews query parameter, so set to a non-existent track id.
+            track_to_show_reviews = -1
+        elif track_to_show_reviews is not None:
+            # Convert track_to_show_reviews from string to int.
+            track_to_show_reviews = int(track_to_show_reviews)
+        if track_to_show_reviews is None :
+            track_to_show_reviews = -1
+        else:
+            track_to_show_reviews = int(track_to_show_reviews)
+        view_review_url = url_for('track_blueprint.track_page',track_id = track_id,  view_reviews_for=int(track_id))
+        add_review_url = url_for('track_blueprint.review_on_track', track_id = track_id)
+        genres_list = track.genres
+        if len(track.genres) >0:
+            genre = track.genres[0]
+        else:
+            genre = "No Genre"
+        
+        return render_template('track/track_page2.html', 
+        title='Track', track = track, 
+        show_reviews_for_track=track_to_show_reviews,
+        view_review_url=view_review_url,
+        add_review_url=add_review_url,
+        genre = genre
+        )
+    else:
+        return render_template('404.html')
