@@ -81,7 +81,7 @@ def track_page(track_id):
         else:
             track_to_show_reviews = int(track_to_show_reviews)
         view_review_url = url_for('track_blueprint.track_page',track_id = track_id,  view_reviews_for=int(track_id))
-        add_review_url = url_for('track_blueprint.review_on_track')
+        add_review_url = url_for('track_blueprint.review_on_track', track_id = track_id)
         next_track_url = url_for('track_blueprint.track_page',track_id  = next_track.track_id) if next_track else None 
         prev_track_url = url_for('track_blueprint.track_page', track_id = prev_track.track_id) if prev_track else None
         print(next_track_url)
@@ -162,13 +162,13 @@ def review_on_track():
         # Cause the web browser to display the page of all tracks that have the same date as the reviewed track,
         # and display all reviews, including the new review.
         return redirect(url_for('track_blueprint.track_page', track_id=track_id,view_reviews_for=track_id))
-
+    
     if request.method == 'GET':
         if request.args.get('track') == None:
             track_id = 2
-            print("bruh")
         else:
             track_id = int(request.args.get('track'))
+        track_id = int(request.args.get('track_id'))
         form.track_id.data = track_id
     else:
         # Request is a HTTP POST where form validation has failed.
@@ -182,7 +182,7 @@ def review_on_track():
     return render_template(
         'track/review_on_track.html',
         title='Edit track',
-        track=track, user=user,
+        track=track, user=user, track_id = track_id,
         form=form,
         handler_url=url_for('track_blueprint.review_on_track'),
         selected_track=utilities.get_selected_track(track_id)

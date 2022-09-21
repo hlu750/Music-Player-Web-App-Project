@@ -13,7 +13,7 @@ class UnknownUserException(Exception):
 
 def add_review(track_id: int, review_text: str, user_name: str, repo: AbstractRepository):
     # Check that the track exists.
-    track = repo.get_track(track_id)
+    track = repo.get_track(track_id)[1]
     if track is None:
         raise NonExistentTrackException
     user = repo.get_user(user_name)
