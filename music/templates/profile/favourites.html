@@ -2,17 +2,25 @@
 
 <section id="main">
     <h1 class="title">Favourited Tracks</h1>
-</section>
-{% for track in tracks %}  
-    <a class= "fill-div">  
-    <div>
-        {{track.track_id}}<br>
-        {{track.title}}<br>
-        <br>
-    </div>
+
+    <div class ="row justify-content-md-center">
+        <div class="col-sm-1 th" style="font-size: 30px;">ID</div>
+        <div class="col-sm-2 th" style="font-size: 30px;">Track</div>
+        <div class="col-sm-8 th" style="font-size: 30px;">Hyperlink</div>
+    </div> 
+    {% for track in tracks %}  
+    <a class= "fill-div" href="{{ url_for('track_blueprint.track_page', track_id = track.id ) }}"></a>
+    <div class="tracks" style="width:120%;">
+        <div class ="row justify-content-md-center" id = "favourite">
+            <div class="col-sm-1 td" style="font-size: 18px;">{{track.id}}</div>
+            <div class="col-sm-2 td" style="font-size: 18px;">{{track.title}}</div>
+            <div class="col-sm-9 td" style="font-size: 18px;" href={{track.hyperlink}}>{{track.hyperlink}}</div>
+        </div> 
     </a>
-{% endfor %} 
+    </div>
+    
+    {% endfor %}
+          
+</section>
 
 {% endblock %}
-<div style="clear:both">
-</div>

@@ -435,3 +435,5 @@ a.fill-div {
  #gradient-folk{
   background-image: var(--gradient-folk);
  }
+
+ #favourite:hover {background-color: #E94560;}
