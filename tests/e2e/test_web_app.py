@@ -68,7 +68,7 @@ def test_index(client):
 
 def test_login_required_to_review(client):
     response = client.post('/browse/review')
-    assert response.headers['Location'] == 'http://localhost:8000/authentication/login'
+    assert response.headers['Location'] == '/authentication/login'
 
 
 def test_review(client, auth):
@@ -82,7 +82,7 @@ def test_review(client, auth):
         '/review',
         data={'review': 'Who needs quarantine?', 'track_id': 2}
     )
-    assert response.headers['Location'] == 'http://localhost:8000/browse/track/2&view_reviews_for=2'
+    assert response.headers['Location'] == 'browse/track/2&view_reviews_for=2'
 
 
 @pytest.mark.parametrize(('review', 'messages'), (
