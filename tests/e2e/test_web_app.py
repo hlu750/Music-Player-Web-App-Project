@@ -104,26 +104,6 @@ def test_review_with_invalid_input(client, auth, review, messages):
         assert message in response.data
 
 
-# def test_tracks_without_date(client):
-#     # Check that we can retrieve the tracks page.
-#     response = client.get('/tracks_by_date')
-#     assert response.status_code == 200
-
-#     # Check that without providing a date query parameter the page includes the first track.
-#     assert b'Friday February 28 2020' in response.data
-#     assert b'Coronavirus: First case of virus in New Zealand' in response.data
-
-
-# def test_tracks_with_date(client):
-#     # Check that we can retrieve the tracks page.
-#     response = client.get('/tracks_by_date?date=2020-02-29')
-#     assert response.status_code == 200
-
-    # Check that all tracks on the requested date are included on the page.
-    # assert b'Saturday February 29 2020' in response.data
-    # assert b'Covid 19 coronavirus: US deaths double in two days, Trump says quarantine not necessary' in response.data
-
-
 def test_tracks_with_review(client):
     # Check that we can retrieve the tracks page.
     response = client.get('/browse/track/view_reviews_for=2')

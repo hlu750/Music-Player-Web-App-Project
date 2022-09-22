@@ -515,6 +515,22 @@ class TestReview:
 
 
 class TestUser:
+    #cool feature
+    def test_liked_song_methods(self):
+        """ Test add_liked_track() method """
+        user1 = User(7232, 'pedri', 'pedri9281')
+        track1 = Track(1, 'Shivers')
+        track2 = Track(2, 'Heat Waves')
+        track3 = Track(3, 'Bad Habit')
+
+        user1.add_liked_track(track1)
+        user1.add_liked_track(track2)
+        user1.add_liked_track(track3)
+        assert user1.liked_tracks == [track1, track2, track3]
+
+        track1_copy = Track(1, 'Shivers')
+        user1.add_liked_track(track1_copy)
+        assert len(user1.liked_tracks) == 3
 
     def test_construction(self):
         user1 = User(7231, 'amotys', 'amotys277')
@@ -683,65 +699,65 @@ def create_csv_reader():
     reader.read_csv_files()
     return reader
 
+# Shyamli said you don't need to write tests for csvdatreader
+# class TestCSVReader:
 
-class TestCSVReader:
+#     def test_csv_reader(self):
+#         reader = create_csv_reader()
 
-    def test_csv_reader(self):
-        reader = create_csv_reader()
+#         assert len(reader.dataset_of_tracks) == 2000
+#         assert len(reader.dataset_of_artists) == 263
+#         assert len(reader.dataset_of_albums) == 427
+#         assert len(reader.dataset_of_genres) == 60
 
-        assert len(reader.dataset_of_tracks) == 2000
-        assert len(reader.dataset_of_artists) == 263
-        assert len(reader.dataset_of_albums) == 427
-        assert len(reader.dataset_of_genres) == 60
+#     def test_tracks_dataset(self):
+#         reader = create_csv_reader()
+#         tracks = reader.dataset_of_tracks
 
-    def test_tracks_dataset(self):
-        reader = create_csv_reader()
-        tracks = reader.dataset_of_tracks
+#         sorted_tracks = sorted(tracks)
+#         # Test there are total 10 unique tracks in the test dataset.
+#         assert len(sorted_tracks) == 2000
 
-        sorted_tracks = sorted(tracks)
-        # Test there are total 10 unique tracks in the test dataset.
-        assert len(sorted_tracks) == 2000
+#         sorted_tracks_str = str(sorted_tracks[:3])
+#         assert sorted_tracks_str == '[<Track Food, track id = 2>, <Track Electric Ave, track id = 3>, <Track This World, track id = 5>]'
 
-        sorted_tracks_str = str(sorted_tracks[:3])
-        assert sorted_tracks_str == '[<Track Food, track id = 2>, <Track Electric Ave, track id = 3>, <Track This World, track id = 5>]'
+#         # Test all tracks have artists
+#         tracks_no_artists = list(
+#             filter(lambda track: track.artist is None, tracks))
+#         assert len(tracks_no_artists) == 0
 
-        # Test all tracks have artists
-        tracks_no_artists = list(
-            filter(lambda track: track.artist is None, tracks))
-        assert len(tracks_no_artists) == 0
+#     def test_albums_dataset(self):
+#         reader = create_csv_reader()
+#         albums_set = reader.dataset_of_albums
+#         sorted_albums = sorted(albums_set)
 
-    def test_albums_dataset(self):
-        reader = create_csv_reader()
-        albums_set = reader.dataset_of_albums
-        sorted_albums = sorted(albums_set)
+#         # Test there are total 427 unique albums in the test dataset.
+#         assert len(sorted_albums) == 427
 
-        # Test there are total 427 unique albums in the test dataset.
-        assert len(sorted_albums) == 427
+#         sorted_albums_sample = str(sorted_albums[:3])
+#         assert sorted_albums_sample == '[<Album AWOL - A Way Of Life, album id = 1>, <Album Niris, album id = 4>, <Album Constant Hitmaker, album id = 6>]'
 
-        sorted_albums_sample = str(sorted_albums[:3])
-        assert sorted_albums_sample == '[<Album AWOL - A Way Of Life, album id = 1>, <Album Niris, album id = 4>, <Album Constant Hitmaker, album id = 6>]'
+#     def test_artists_dataset(self):
+#         reader = create_csv_reader()
+#         artists_set = reader.dataset_of_artists
+#         sorted_artists = sorted(artists_set)
 
-    def test_artists_dataset(self):
-        reader = create_csv_reader()
-        artists_set = reader.dataset_of_artists
-        sorted_artists = sorted(artists_set)
+#         # Test there are total 5 unique artists in the test dataset.
+#         assert len(sorted_artists) == 263
 
-        # Test there are total 5 unique artists in the test dataset.
-        assert len(sorted_artists) == 263
+#         sorted_artists_sample = str(sorted_artists[:3])
+#         assert sorted_artists_sample == '[<Artist AWOL, artist id = 1>, <Artist Nicky Cook, artist id = 4>, <Artist Kurt Vile, artist id = 6>]'
 
-        sorted_artists_sample = str(sorted_artists[:3])
-        assert sorted_artists_sample == '[<Artist AWOL, artist id = 1>, <Artist Nicky Cook, artist id = 4>, <Artist Kurt Vile, artist id = 6>]'
+#     def test_genres_dataset(self):
+#         reader = create_csv_reader()
+#         genres_set = reader.dataset_of_genres
 
-    def test_genres_dataset(self):
-        reader = create_csv_reader()
-        genres_set = reader.dataset_of_genres
+#         sorted_genres = sorted(genres_set)
 
-        sorted_genres = sorted(genres_set)
+#         # Test there are total 7 unique genres in the test dataset.
+#         assert len(sorted_genres) == 60
 
-        # Test there are total 7 unique genres in the test dataset.
-        assert len(sorted_genres) == 60
-
-        # Expected output: '[<Genre Avant-Garde, genre id = 1>, <Genre International, genre id = 2>, <Genre Blues,
-        # genre id = 3>]'
-        sorted_genre_sample = str(sorted_genres[:3])
-        assert sorted_genre_sample == '[<Genre Avant-Garde, genre id = 1>, <Genre International, genre id = 2>, <Genre Blues, genre id = 3>]'
+#         # Expected output: '[<Genre Avant-Garde, genre id = 1>, <Genre International, genre id = 2>, <Genre Blues,
+#         # genre id = 3>]'
+#         sorted_genre_sample = str(sorted_genres[:3])
+#         assert sorted_genre_sample == '[<Genre Avant-Garde, genre id = 1>, <Genre International, genre id = 2>, <Genre Blues, genre id = 3>]'
