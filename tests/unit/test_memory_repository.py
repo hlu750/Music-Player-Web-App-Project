@@ -6,9 +6,9 @@ import pytest
 # from music.domainmodel import User, Article, genre, review, make_review
 
 from music.domainmodel.artist import Artist
-from music.domainmodel.track import Track
+from music.domainmodel.track import Track, Review
 from music.domainmodel.genre import Genre
-from music.domainmodel.review import Review
+# from music.domainmodel.review import Review
 from music.domainmodel.album import Album
 from music.domainmodel.user import User
 from music.adapters.repository import RepositoryException

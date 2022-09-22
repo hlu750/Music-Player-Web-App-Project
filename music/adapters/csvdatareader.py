@@ -62,8 +62,7 @@ class TrackCSVReader:
         with open(self.__albums_csv_file, encoding="unicode_escape") as album_csv:
             reader = csv.DictReader(album_csv)
             for row in reader:
-                album_id = int(
-                    row['album_id']) if row['album_id'].isdigit() else row['album_id']
+                album_id = int(row['album_id']) if row['album_id'].isdigit() else row['album_id']
                 if type(album_id) is not int:
                     print(f'Invalid album_id: {album_id}')
                     print(row)

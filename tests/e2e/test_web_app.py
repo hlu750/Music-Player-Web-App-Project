@@ -5,9 +5,8 @@ from flask import session
 
 def test_register(client):
     # Check that we retrieve the register page.
-    response_code = client.get('/authentication/register').status_code
+    response_code = client.get('/authentication/register').status_code 
     assert response_code == 200
-
     # Check that we can register a user successfully, supplying a valid user name and password.
     response = client.post(
         '/authentication/register',

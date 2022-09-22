@@ -2,9 +2,9 @@ import pytest
 import os
 
 from music.domainmodel.artist import Artist
-from music.domainmodel.track import Track
+from music.domainmodel.track import Track, Review
 from music.domainmodel.genre import Genre
-from music.domainmodel.track import Review
+# from music.domainmodel.track import Review
 from music.domainmodel.album import Album
 from music.domainmodel.user import User
 from music.adapters.csvdatareader import TrackCSVReader
