@@ -156,7 +156,7 @@ class MemoryRepository(AbstractRepository):
 
 
 
-def load_tracks(album_path, track_path ,repo:MemoryRepository ):
+def load_tracks(album_path: Path, track_path: Path,repo:MemoryRepository ):
     reader = TrackCSVReader(album_path, track_path)
     for track in reader.read_csv_files():
         repo.add_track(track)

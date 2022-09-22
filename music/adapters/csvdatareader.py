@@ -1,21 +1,31 @@
 import os
 import csv
 import ast
+from tokenize import String
 
 from music.domainmodel.artist import Artist
 from music.domainmodel.album import Album
 from music.domainmodel.track import Track
 from music.domainmodel.genre import Genre
 
+from pathlib import Path
+from utils import get_project_root
+
 class TrackCSVReader:
 
     def __init__(self, albums_csv_file: str, tracks_csv_file: str):
         
         current_path = os.path.dirname(__file__)
+        print("over here:")
+        print(type(albums_csv_file))
         if type(albums_csv_file) is str:
             # self.__albums_csv_file = albums_csv_file
             # self.__albums_csv_file = os.path.relpath('..\\data\\{}'.format(albums_csv_file), current_path) ##Changed path to this
-            self.__albums_csv_file = os.path.join(current_path, 'data\\' + albums_csv_file)
+            # self.__albums_csv_file = os.path.join(albums_csv_file)
+            # self.__albums_csv_file = os.path.join(current_path, 'data\\' + albums_csv_file)
+            # self.__albums_csv_file =  albums_csv_file
+            self.__albums_csv_file = str(get_project_root() / "tests" / "data" / albums_csv_file)
+            # self.__albums_csv_file = os.path.join(os.path.dirname(__file__), 'data\\' + albums_csv_file)
             # self.__tracks_csv_file = str(Path('covid') / 'adapters' / 'data' / albums_csv_file)
         else:
             raise TypeError('albums_csv_file should be a type of string')
@@ -23,7 +33,11 @@ class TrackCSVReader:
         if type(tracks_csv_file) is str:
             # self.__tracks_csv_file = tracks_csv_file
             # self.__tracks_csv_file = os.path.relpath('..\\data\\{}'.format(tracks_csv_file), current_path)##Changed path to this
-            self.__tracks_csv_file =os.path.join(current_path, 'data\\' + tracks_csv_file)
+            # self.__tracks_csv_file = os.path.join(tracks_csv_file)
+            # self.__tracks_csv_file =os.path.join(current_path, 'data\\' + tracks_csv_file)
+            # self.__tracks_csv_file = os.path.join(os.path.dirname(__file__), 'data\\' + tracks_csv_file)
+            # self.__tracks_csv_file = tracks_csv_file
+            self.__tracks_csv_file = str(get_project_root() / "tests" / "data" / tracks_csv_file)
             # self.__tracks_csv_file = str(Path('covid' / 'adapters' / 'data') / tracks_csv_file)
         else:
             raise TypeError('tracks_csv_file should be a type of string')
@@ -54,6 +68,16 @@ class TrackCSVReader:
         return self.__dataset_of_genres
 
     def read_albums_file_as_dict(self) -> dict:
+        # with open(self.__albums_csv_file, encoding='utf-8-sig') as infile:
+        #     reader = csv.reader(infile)
+        #     # Read first line of the the CSV file.
+        #     headers = next(reader)
+        #     # Read remaining rows from the CSV file.
+        #     for row in reader:
+        #         # Strip any leading/trailing white space from data read.
+        #         row = [item.strip() for item in row]
+        #         yield row
+        print("1")
         if not os.path.exists(self.__albums_csv_file):
             print(f"path {self.__albums_csv_file} does not exist!")
 
@@ -69,10 +93,20 @@ class TrackCSVReader:
                     continue
                 album = create_album_object(row)
                 album_dict[album_id] = album
-
+        print("2")
         return album_dict
 
     def read_tracks_file(self):
+        # with open(self.__tracks_csv_file, encoding='utf-8-sig') as infile:
+        #     reader = csv.reader(infile)
+        #     # Read first line of the the CSV file.
+        #     headers = next(reader)
+        #     # Read remaining rows from the CSV file.
+        #     for row in reader:
+        #         # Strip any leading/trailing white space from data read.
+        #         row = [item.strip() for item in row]
+        #         yield row
+
         if not os.path.exists(self.__tracks_csv_file):
             print(f"path {self.__tracks_csv_file} does not exist!")
             return

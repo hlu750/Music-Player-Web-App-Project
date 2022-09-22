@@ -47,6 +47,7 @@ def test_can_add_liked_song(in_memory_repo):
 
     # Check that the reviews include a review with the new review text.
     # assert (track in liked_tracks.values()) 
-    assert next(
-        (dictionary['track'] for dictionary in liked_tracks if dictionary['track'] == track),
-        None) is not None
+    # assert next(
+    #     (dictionary['track'] for dictionary in liked_tracks if dictionary['track'] == track),
+    #     None) is not None
+    assert next((liked_track for liked_track in liked_tracks if liked_track == track), None)

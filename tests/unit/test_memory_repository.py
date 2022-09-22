@@ -12,13 +12,14 @@ from music.domainmodel.genre import Genre
 from music.domainmodel.album import Album
 from music.domainmodel.user import User
 from music.adapters.repository import RepositoryException
+from music.adapters.repository import repo_instance, AbstractRepository
+import music.adapters.repository as repo
 
-
-def test_repository_can_add_a_user(in_memory_repo):
+def test_repository_can_add_a_user(repo : AbstractRepository):
     user = User('5', 'dave', '123456789')
-    in_memory_repo.add_user(user)
+    repo.add_user(user)
 
-    assert in_memory_repo.get_user('dave') is user
+    assert repo.get_user('dave') == user
 
 
 def test_repository_can_retrieve_a_user(in_memory_repo):
