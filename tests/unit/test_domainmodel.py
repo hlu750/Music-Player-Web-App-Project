@@ -515,6 +515,22 @@ class TestReview:
 
 
 class TestUser:
+    #cool feature
+    def test_liked_song_methods(self):
+        """ Test add_liked_track() method """
+        user1 = User(7232, 'pedri', 'pedri9281')
+        track1 = Track(1, 'Shivers')
+        track2 = Track(2, 'Heat Waves')
+        track3 = Track(3, 'Bad Habit')
+
+        user1.add_liked_track(track1)
+        user1.add_liked_track(track2)
+        user1.add_liked_track(track3)
+        assert user1.liked_tracks == [track1, track2, track3]
+
+        track1_copy = Track(1, 'Shivers')
+        user1.add_liked_track(track1_copy)
+        assert len(user1.liked_tracks) == 3
 
     def test_construction(self):
         user1 = User(7231, 'amotys', 'amotys277')

@@ -7,7 +7,22 @@ from music.track import services as track_services
 from music.authentication import services as auth_services
 from music.track.services import NonExistentTrackException
 
+#cool feature
+def test_can_add_liked_song(in_memory_repo):
+    track_id = 2
+    user_name = 'fmercury'
+    prev_track, track, next_track = track_services.get_track(track_id, in_memory_repo)
+    # Call the service layer to add the review.
+    track_services.add_liked_track(track, user_name, in_memory_repo)
+    
+    # Retrieve the reviews for the track from the repository.
+    liked_tracks = track_services.get_liked_tracks(user_name, in_memory_repo)
 
+    # Check that the reviews include a review with the new review text.
+    # assert (track in liked_tracks.values()) 
+    assert next(
+        (dictionary['liked_track'] for dictionary in liked_tracks if dictionary['liked_track'] == track),
+        None) is not None
 
 def test_can_add_user(in_memory_repo):
     new_user_name = 'jzzzz'
