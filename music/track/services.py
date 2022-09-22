@@ -1,4 +1,5 @@
 from typing import List, Iterable
+from urllib.parse import non_hierarchical
 
 from music.adapters.repository import AbstractRepository
 from music.domainmodel.track import Review
@@ -22,7 +23,8 @@ def add_review(track_id: int, review_text: str, user_name: str, repo: AbstractRe
         raise UnknownUserException
 
     # Create review.
-    review = Review(track, review_text, 5)
+    review = Review(track, review_text, 5,user_name)
+    print()
     print(track, review)
     # Update the repository.
     track.add_review(review)
@@ -75,10 +77,14 @@ def get_liked_tracks(user_name, repo: AbstractRepository):
     tracks = user.liked_tracks
     if tracks is None:
         raise NonExistentTrackException
-    print("over here1")
-    print(tracks)
+    # print("over here1")
+    # print(tracks)
     return tracks_to_dict(tracks)
-
+def remove_liked_track(track, user_name: str, repo: AbstractRepository):
+    user : User= repo.get_user(user_name)
+    if user is None:
+        raise UnknownUserException
+    user.remove_liked_track(track)
 # def get_liked_tracks(user_name, repo: AbstractRepository):
 #     # tracks = repo.get_liked_tracks(user)
 #     user : User = repo.get_user(user_name)

@@ -3,6 +3,7 @@
 {% block content %}
 
 <main id="main">
+    
     <header class="track-header" style="color:white;">
         <h1 class="title" style="color:white;"  style="padding-top: 10px;">{{track.track_id}}. {{track.title}}</h1>
     </header>
@@ -25,7 +26,7 @@
         
     {% endif %}
        
-    
+
     
     
         <div class ="row justify-content-md-center">
@@ -59,25 +60,39 @@
             {{genre.name}} 
             {% endfor %}</div>
         </div> 
-        
-   
-    <div class="col-sm th"><button class="button" onclick="location.href='{{ like_track_url }}'">Like</button></div>
-        
+        <div class ="row justify-content-md-center" style="padding:40px 0px">
+         
+            <div class="col-sm td "><button class="like-button" onclick="location.href='{{ like_track_url }}'">Like</button></div>
+            <div class="col-sm td "></div>
+            <div class="col-sm td "><button class="dislike-button" onclick="location.href='{{ unlike_track_url }}'">Unlike</button></div>
+        </div> 
+    <!-- <div class="col-sm th"></div> -->
 
     <div style="float:right">
         <!-- <button class="btn-general" href="{{ url_for('track_blueprint.like_track', track_id = track.track_id ) }}">Favourite</button> -->
-        {% if track.reviews|length > 0 and track.track_id != show_reviews_for_track%}
+        <!-- {% if track.reviews|length > 0 and track.track_id != show_reviews_for_track%}
             <button class="f" onclick="location.href='{{ view_review_url }}'">{{ track.reviews|length }} reviews</button>
-        {% endif %}
+        {% endif %} -->
         <!-- <button class="f" onclick="location.href='{{ view_review_url }}'">{{ track.reviews|length }}  reviews</button> -->
-        <button class="button" onclick="location.href='{{ add_review_url }}'">Review</button>
+        
+        <button class="button" onclick="location.href='{{ add_review_url }}'">Add a Review</button>
+       
     </div>
     <div style="float:left">
         <header id="track-header" style = "color:white" style="text-align: left"></header>
-        <h2 style="color:white;"  style="padding-top: 4px;">Reviews</h2>
-        {% for review in track.reviews %}
-            <p style="color:white;">{{review.review_text}}, by {{review.timestamp}}fadsfdsfasdfasdf</p>
-        {% endfor %}
+        
+        <div class="wrapper" style="text-align: left">
+            {% if track.reviews|length > 0%}
+            <h2 style="color:white;"  style="padding-top: 4px;">Reviews({{ track.reviews|length }})</h2>
+            
+            {% else%}
+            <h2 style="color:white;"  style="padding-top: 4px;">Reviews(0)</h2>
+            <p class="td"> No Reviews</p>
+            {% endif %}
+            {% for review in track.reviews %}
+                <p style="padding: 20px 0px" class ="td">{{review.review_text}}, by {{review.username}} at {{review.timestamp}}</p>
+            {% endfor %}
+    </div>
     </div>
 
 </main>

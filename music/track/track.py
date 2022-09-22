@@ -85,6 +85,7 @@ def track_page(track_id):
         next_track_url = url_for('track_blueprint.track_page',track_id  = next_track.track_id) if next_track else None 
         prev_track_url = url_for('track_blueprint.track_page', track_id = prev_track.track_id) if prev_track else None
         like_track_url = url_for('track_blueprint.like_track', track_id = track_id)
+        unlike_track_url = url_for('track_blueprint.unlike_track', track_id = track_id)
         print(next_track_url)
         print(prev_track_url)
         genres_list = track.genres
@@ -101,7 +102,8 @@ def track_page(track_id):
         genre = genre,
         next_track_url = next_track_url,
         prev_track_url = prev_track_url,
-        like_track_url = like_track_url
+        like_track_url = like_track_url,
+        unlike_track_url = unlike_track_url
         )
     else:
         return render_template('404.html')
@@ -110,8 +112,6 @@ def track_page(track_id):
 @track_blueprint.errorhandler(404)
 def page_not_found():
     return render_template('404.html')
-            
-
 
 @track_blueprint.route('/track/<title>&<type>', methods=['GET', 'POST'])
 def filter_track(title, type):
@@ -120,10 +120,7 @@ def filter_track(title, type):
     if form.validate_on_submit():
         return redirect(url_for('track_blueprint.filter_track', title = form.title.data, type = form.select.data))
     else:
-        
-        
         filtered_tracks = utilities.get_filtered_tracks(title.lower(), type.lower())
-        # print(filtered_tracks)
         if filtered_tracks is not None:
                 return render_template('track/track.html', tracks = filtered_tracks, 
                 next_tracks_url = None, 
@@ -131,38 +128,18 @@ def filter_track(title, type):
         else:
             print('No tracks found')
             return redirect(url_for('track_blueprint.track'))
-# <!-- <a href="{{ url_for('track_blueprint.track_page', track_id = track.track_id ) }}" style="text-decoration:none; color: #F2F2F2;"></a> -->
-
- # <!-- <div class="col-sm"><a href="{{ url_for('track_blueprint.track_page', track_id = track.track_id ) }}" style="text-decoration:none; color: #F2F2F2;">{{track.title}}</a></div> -->
-    
-class SearchForm(FlaskForm):
-    choices = [ ('Select Type', 'Select Type'),  
-                ('Track','Track'),
-                ('Album', 'Album'),
-                ('Artist', 'Artist'),
-                ('Genre', 'Genre')]
-    title = StringField("Title", default = "Enter a track title", validators=[DataRequired(message="Enter a non-empty title")])
-    select = SelectField('Search for music:', choices=choices)
-    submit = SubmitField("Submit")
-
 @track_blueprint.route('/review', methods=['GET', 'POST'])
 @login_required
 def review_on_track():
     user_name = session['user_name']
-    print("initial username (track.py):",user_name)
-    # Create form. The form maintains state, e.g. when this method is called with a HTTP GET request and populates
-    # the form with an track id, when subsequently called with a HTTP POST request, the track id remains in the
-    # form.
+    
     form = reviewForm()
 
     if form.validate_on_submit():
         track_id = int(form.track_id.data)
         services.add_review(track_id, form.review.data, user_name, repo.repo_instance)
 
-        track = services.get_track(track_id, repo.repo_instance)
-        # print(track)
-        # Cause the web browser to display the page of all tracks that have the same date as the reviewed track,
-        # and display all reviews, including the new review.
+        prev, track,next = services.get_track(track_id, repo.repo_instance)
         return redirect(url_for('track_blueprint.track_page', track_id=track_id,view_reviews_for=track_id))
     
     if request.method == 'GET':
@@ -173,13 +150,8 @@ def review_on_track():
         track_id = int(request.args.get('track_id'))
         form.track_id.data = track_id
     else:
-        # Request is a HTTP POST where form validation has failed.
-        # Extract the track id of the track being reviewed from the form.
         track_id = int(form.track_id.data)
-
-    # For a GET or an unsuccessful POST, retrieve the track to review in dict form, and return a Web page that allows
-    # the user to enter a review. The generated Web page includes a form object.
-    track = services.get_track(track_id, repo.repo_instance)
+    prev, track,next = services.get_track(track_id, repo.repo_instance)
     user: User = get_user(user_name, repo.repo_instance)
     return render_template(
         'track/review_on_track.html',
@@ -189,7 +161,52 @@ def review_on_track():
         handler_url=url_for('track_blueprint.review_on_track'),
         selected_track=utilities.get_selected_track(track_id)
     )
+@track_blueprint.route('/track/like', methods=['GET', 'POST'])
+@login_required
+def like_track():
+    user_name = session['user_name']
+    user: User = get_user(user_name, repo.repo_instance)
+    if request.args.get('track_id') == None:
+        track_id = 2
+    else:
+        track_id = int(request.args.get('track_id'))
 
+    prev, track, next = services.get_track(track_id, repo.repo_instance)
+    # print("track here")
+    # print(track)
+    services.add_liked_track(track, user_name, repo.repo_instance)
+    
+    # tracks = services.get_liked_tracks(user, repo.repo_instance)
+    tracks = services.get_liked_tracks(user_name, repo.repo_instance)
+    # print("over here1")
+    # print(tracks)
+    print(track.track_url)
+    return render_template('profile/favourites.html', 
+    title='Liked Tracks', track = track, tracks = tracks, user = user
+    )
+
+@track_blueprint.route('/track/unlike', methods=['GET', 'POST'])
+@login_required
+def unlike_track():
+    user_name = session['user_name']
+    user: User = get_user(user_name, repo.repo_instance)
+    if request.args.get('track_id') == None:
+        track_id = 2
+    else:
+        track_id = int(request.args.get('track_id'))
+
+    prev, track, next = services.get_track(track_id, repo.repo_instance)
+    # print("track here")
+    # print(track)
+    services.remove_liked_track(track, user_name, repo.repo_instance)
+    
+    # tracks = services.get_liked_tracks(user, repo.repo_instance)
+    tracks = services.get_liked_tracks(user_name, repo.repo_instance)
+    # print("over here1")
+    # print(tracks)
+    return render_template('profile/favourites.html', 
+    title='Liked Tracks', track = track, tracks = tracks, user = user
+    )
 class ProfanityFree:
     def __init__(self, message=None):
         if not message:
@@ -202,70 +219,56 @@ class ProfanityFree:
 
 
 class reviewForm(FlaskForm):
-    review = TextAreaField('review', [
+    review = TextAreaField('Review', [
         DataRequired(),
         Length(min=4, message='Your review is too short'),
         ProfanityFree(message='Your review must not contain profanity')])
     track_id = HiddenField("track id")
     submit = SubmitField('Submit')
 
-@track_blueprint.route('/track/like', methods=['GET', 'POST'])
-@login_required
-def like_track():
-    user_name = session['user_name']
-    user: User = get_user(user_name, repo.repo_instance)
-    if request.args.get('track_id') == None:
-        track_id = 2
-    else:
-        track_id = int(request.args.get('track_id'))
-
-    prev, track, next = services.get_track(track_id, repo.repo_instance)
-    print("track here")
-    print(track)
-    services.add_liked_track(track, user_name, repo.repo_instance)
-    
-    # tracks = services.get_liked_tracks(user, repo.repo_instance)
-    tracks = services.get_liked_tracks(user_name, repo.repo_instance)
-    print("over here1")
-    print(tracks)
-    return render_template('profile/favourites.html', 
-    title='Liked Tracks', track = track, tracks = tracks, user = user
-    )
-
-@track_blueprint.route('/track/like/<int:track_id>', methods=['GET'])
-def track_page2(track_id):
-    print("ello?")
-    prev_track, track, next_track = utilities.get_selected_track(track_id)
-    if track:
-        # genres = utilities.get_genres()
+class SearchForm(FlaskForm):
+    choices = [ ('Select Type', 'Select Type'),  
+                ('Track','Track'),
+                ('Album', 'Album'),
+                ('Artist', 'Artist'),
+                ('Genre', 'Genre')]
+    title = StringField("Title", default = "Enter a track title", validators=[DataRequired(message="Enter a non-empty title")])
+    select = SelectField('Search for music:', choices=choices)
+    submit = SubmitField("Submit")
+# @track_blueprint.route('/track/like/<int:track_id>', methods=['GET'])
+# def liked_track_page(track_id):
+#     print("ello?")
+#     prev_track, track, next_track = utilities.get_selected_track(track_id)
+#     if track:
+#         # genres = utilities.get_genres()
         
-        # print(track.reviews)
-        track_to_show_reviews = request.args.get('view_reviews_for')
-        # print("hfadsf", track_to_show_reviews)
-        if track_to_show_reviews == None:
-            # No view-reviews query parameter, so set to a non-existent track id.
-            track_to_show_reviews = -1
-        elif track_to_show_reviews is not None:
-            # Convert track_to_show_reviews from string to int.
-            track_to_show_reviews = int(track_to_show_reviews)
-        if track_to_show_reviews is None :
-            track_to_show_reviews = -1
-        else:
-            track_to_show_reviews = int(track_to_show_reviews)
-        view_review_url = url_for('track_blueprint.track_page',track_id = track_id,  view_reviews_for=int(track_id))
-        add_review_url = url_for('track_blueprint.review_on_track', track_id = track_id)
-        genres_list = track.genres
-        if len(track.genres) >0:
-            genre = track.genres[0]
-        else:
-            genre = "No Genre"
+#         # print(track.reviews)
+#         track_to_show_reviews = request.args.get('view_reviews_for')
+#         # print("hfadsf", track_to_show_reviews)
+#         if track_to_show_reviews == None:
+#             # No view-reviews query parameter, so set to a non-existent track id.
+#             track_to_show_reviews = -1
+#         elif track_to_show_reviews is not None:
+#             # Convert track_to_show_reviews from string to int.
+#             track_to_show_reviews = int(track_to_show_reviews)
+#         if track_to_show_reviews is None :
+#             track_to_show_reviews = -1
+#         else:
+#             track_to_show_reviews = int(track_to_show_reviews)
+#         view_review_url = url_for('track_blueprint.track_page',track_id = track_id,  view_reviews_for=int(track_id))
+#         add_review_url = url_for('track_blueprint.review_on_track', track_id = track_id)
+#         genres_list = track.genres
+#         if len(track.genres) >0:
+#             genre = track.genres[0]
+#         else:
+#             genre = "No Genre"
         
-        return render_template('track/track_page2.html', 
-        title='Track', track = track, 
-        show_reviews_for_track=track_to_show_reviews,
-        view_review_url=view_review_url,
-        add_review_url=add_review_url,
-        genre = genre
-        )
-    else:
-        return render_template('404.html')
+#         return render_template('track/liked_track_page.html', 
+#         title='Track', track = track, 
+#         show_reviews_for_track=track_to_show_reviews,
+#         view_review_url=view_review_url,
+#         add_review_url=add_review_url,
+#         genre = genre
+#         )
+#     else:
+#         return render_template('404.html')
