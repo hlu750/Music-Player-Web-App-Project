@@ -228,8 +228,40 @@ input[type="submit"] {
   box-shadow: 0 3px #2e3448;
   transform: translateY(4px);
 }
-
-
+.like-button {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 24px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #32de84;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 6px #2e3448;
+}
+.like-button:hover{
+  background-color: #4FFFB0;
+}
+.dislike-button{
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 24px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #800020;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 6px #2e3448;
+}
+.dislike-button:hover{
+  background-color: #E32636;
+}
 .open-button {
   background-color: #185bac;
   color: white;

@@ -1,7 +1,7 @@
 <nav id="nav">
     <!-- <img src="/static/images/music-ico.png" alt="Music icon"  id="icon"> -->
     <img id="logo" src="{{ url_for('static', filename='images/music-ico.png') }}" alt="Icon">
-    <h2 id="nav-header">Music</h2>
+    <h2 id="nav-header">Listen up</h2>
     <h2 id="nav-header">
       {% if 'user_name' in session %} Hello, {{ session['user_name'] }} {%
       endif %}
@@ -11,7 +11,7 @@
     <a class="btn-nav" href="{{ url_for('authentication_bp.login') }}">Login</a>
     <a class="btn-nav" href="{{ url_for('authentication_bp.logout') }}">Logout</a>
     <a class="btn-nav" href="{{ url_for('profile_bp.favourites') }}">Favourites</a>
-    <a class="btn-nav" href="{{ url_for('profile_bp.playlists') }}">Playlists</a>
+    <!-- <a class="btn-nav" href="{{ url_for('profile_bp.playlists') }}">Playlists</a> -->
     <div>
         <h3>
           <a class="btn-nav" href="{{ url_for('track_blueprint.track') }}">

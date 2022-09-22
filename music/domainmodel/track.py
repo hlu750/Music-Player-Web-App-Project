@@ -1,6 +1,7 @@
 from music.domainmodel.artist import Artist
 from music.domainmodel.genre import Genre
 from music.domainmodel.album import Album
+# from music.domainmodel.user import User
 # from music.domainmodel.review import Review
 from datetime import datetime
 class Track:
@@ -113,8 +114,12 @@ class Track:
         return hash(self.track_id)
 class Review:
 
-    def __init__(self, track: Track, review_text: str, rating: int):
+    def __init__(self, track: Track, review_text: str, rating: int, user_name:str):
         self.__track = None
+        if (isinstance(user_name, str)):
+            self.__user_name = user_name
+        else:
+            self.__user_name = None
         if isinstance(track, Track):
             self.__track = track
 
@@ -128,7 +133,10 @@ class Review:
             raise ValueError('Invalid value for the rating.')
 
         self.__timestamp = datetime.now()
-
+    @property
+    def username(self):
+        return self.__user_name
+        
     @property
     def track(self) -> Track:
         return self.__track
