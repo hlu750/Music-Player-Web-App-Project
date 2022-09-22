@@ -15,16 +15,16 @@ from music.adapters.repository import RepositoryException
 from music.adapters.repository import repo_instance, AbstractRepository
 import music.adapters.repository as repo
 
-def test_repository_can_add_a_user(repo : AbstractRepository):
-    user = User('5', 'dave', '123456789')
-    repo.add_user(user)
+def test_repository_can_add_a_user(in_memory_repo):
+    user = User(5, 'dave', '123456789')
+    in_memory_repo.add_user(user)
 
-    assert repo.get_user('dave') == user
+    assert in_memory_repo.get_user('dave') == user
 
 
 def test_repository_can_retrieve_a_user(in_memory_repo):
     user = in_memory_repo.get_user('fmercury')
-    assert user == User('2', 'fmercury', '8734gfe2058v')
+    assert user == User(2, 'fmercury', '8734gfe2058v')
 
 
 def test_repository_does_not_retrieve_a_non_existent_user(in_memory_repo):
@@ -40,47 +40,22 @@ def test_repository_does_not_retrieve_a_non_existent_user(in_memory_repo):
 
 
 def test_repository_can_add_track(in_memory_repo):
-    track = Track(
-        2001,
-        'Song for testing'
-    )  
-    assert in_memory_repo.get_track(7) is track
+    track = Track(7, 'Song for testing')  
+    in_memory_repo.add_track(track)
+    prev_track, track2, next_track = in_memory_repo.get_track(track.track_id)
+    assert track2 == track
 
 
 def test_repository_can_retrieve_track(in_memory_repo):
-    track = in_memory_repo.get_track(2)
+    prev_track, track, next_track = in_memory_repo.get_track(2)
 
     # Check that the track has the expected title.
-    assert track.title == 'Test Song'
-
-    # Check that the track is reviewed as expected.
-    review_one = [review for review in track.reviews if review.review == 'Oh no, this song is weird.'][
-        0]
-    review_two = [review for review in track.reviews if review.review == 'Yikes, tragic.'][0]
-
-    assert review_one.user.user_name == 'fmercury'
-    assert review_two.user.user_name == "thorke"
-
-    # Check that the track is genreged as expected.
-    assert track.add_genre(Genre('Rock'))
-    assert track.add_genre(Genre('Pop'))
+    assert track.title == 'Food'
 
 
 def test_repository_does_not_retrieve_a_non_existent_track(in_memory_repo):
-    track = in_memory_repo.get_track(3000)
+    prev_track, track, next_track = in_memory_repo.get_track(3000)
     assert track is None
-
-
-# def test_repository_can_retrieve_tracks_by_date(in_memory_repo):
-#     tracks = in_memory_repo.get_tracks_by_date(date(2020, 3, 1))
-
-#     # Check that the query returned 3 tracks.
-#     assert len(tracks) == 3
-
-
-# def test_repository_does_not_retrieve_an_track_when_there_are_no_tracks_for_a_given_date(in_memory_repo):
-#     tracks = in_memory_repo.get_tracks_by_date(date(2020, 3, 8))
-#     assert len(tracks) == 0
 
 
 def test_repository_can_retrieve_genres(in_memory_repo):
@@ -97,16 +72,6 @@ def test_repository_can_retrieve_genres(in_memory_repo):
     assert genre_two.number_of_genreged_tracks == 2
     assert genre_three.number_of_genreged_tracks == 3
     assert genre_four.number_of_genreged_tracks == 1
-
-
-# def test_repository_can_get_first_track(in_memory_repo):
-#     track = in_memory_repo.get_first_track()
-#     assert track.title == 'Coronavirus: First case of virus in New Zealand'
-
-
-# def test_repository_can_get_last_track(in_memory_repo):
-#     track = in_memory_repo.get_last_track()
-#     assert track.title == 'Coronavirus: Death confirmed as six more test positive in NSW'
 
 
 def test_repository_can_get_tracks_by_ids(in_memory_repo):
