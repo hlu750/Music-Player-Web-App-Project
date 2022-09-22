@@ -1,4 +1,7 @@
 import pytest
+import os
+import csv
+import ast
 
 from music import create_app
 from music.adapters import memory_repository
@@ -9,8 +12,13 @@ from utils import get_project_root
 # the csv files in the test folder are different from the csv files in the covid/adapters/data folder!
 # tests are written against the csv files in tests, this data path is used to override default path for testing
 TEST_DATA_PATH = get_project_root() / "tests" / "data"
-TEST_DATA_ALBUMS_PATH = str(get_project_root() / "tests" / "data" / "raw_albums_test.csv")
-TEST_DATA_TRACKS_PATH = str(get_project_root() / "tests" / "data" / "raw_tracks_test.csv")
+# TEST_DATA_ALBUMS_PATH = str(get_project_root() / "tests" / "data" / "raw_albums_test.csv")
+# TEST_DATA_TRACKS_PATH = str(get_project_root() / "tests" / "data" / "raw_tracks_test.csv")
+current_path = os.path.dirname(__file__)
+TEST_DATA_ALBUMS_PATH = os.path.join(current_path, 'data\\' + "raw_albums_test.csv")
+TEST_DATA_TRACKS_PATH = os.path.join(current_path, 'data\\' + "raw_tracks_test.csv")
+# TEST_DATA_ALBUMS_PATH = os.path.join(get_project_root() / "tests" / "data" / "raw_albums_test.csv")
+# TEST_DATA_TRACKS_PATH = os.path.join(get_project_root() / "tests" / "data" / "raw_tracks_test.csv")
 # TEST_DATA_ALBUMS_PATH = "tests\data\raw_albums_test.csv"
 # TEST_DATA_TRACKS_PATH = "tests\data\raw_tracks_test.csv"
 
