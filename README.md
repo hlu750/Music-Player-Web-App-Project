@@ -18,7 +18,6 @@ From here on you can **choose if you want to use the provided domain model or yo
 $ py -3 -m venv venv
 $ venv\Scripts\activate
 $ pip install -r requirements.txt
-# python –m pytest –v tests
 ```
 
 When using PyCharm, set the virtual environment using 'File'->'Settings' and select your project from the left menu. Select 'Project Interpreter', click on the gearwheel button and select 'Add'. Click the 'Existing environment' radio button to select the virtual environment. 
@@ -40,6 +39,17 @@ After you have configured pytest as the testing tool for PyCharm (File - Setting
 
 Alternatively, from a terminal in the root folder of the project, you can also call 'python -m pytest tests' to run all the tests. PyCharm also provides a built-in terminal, which uses the configured virtual environment. 
 
+**Testing the application**
+
+```command prompt
+python –m pytest –v tests
+```
+
+or
+
+````shell
+$ py.test
+```` 
  
 ## Data sources
 
