@@ -33,9 +33,9 @@ class MemoryRepository(AbstractRepository):
         self.__liked_tracks = list()
 
     def add_user(self, user: User):
-        print(user.user_name)
+        # print(user.user_name)
         self.__users.append(user)
-        print(self.__users)
+        # print(self.__users)
 
     def get_user(self, user_name) -> User:
         print("user")
@@ -165,10 +165,14 @@ def load_users(data_path: Path, repo: MemoryRepository):
     users = dict()
 
     users_filename = str(Path(data_path) / "users.csv")
+
     for data_row in read_csv_file(users_filename):
+        user_num  = repo.get_number_of_users()
         user = User(
+            user_id=user_num + 1,
             user_name=data_row[1],
             password=generate_password_hash(data_row[2])
+           
         )
         repo.add_user(user)
         users[data_row[0]] = user
@@ -186,11 +190,11 @@ def load_reviews(data_path: Path, repo: MemoryRepository, users):
         )
         repo.add_review(review)
 
-def populate(album_path,track_path ,repo:MemoryRepository):
+def populate(data_path, album_path,track_path ,repo:MemoryRepository):
     load_tracks(album_path, track_path,repo)
-
+    # print (data_path )
     # Load users into the repository.
-    # users = load_users(track_path, repo)
-
+    users = load_users(data_path, repo) 
+    print(users)
     # # Load comments into the repository.
     # load_reviews(track_path, repo, users)

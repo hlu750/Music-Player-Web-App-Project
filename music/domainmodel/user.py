@@ -3,7 +3,6 @@ from music.domainmodel.track import Track
 
 
 class User:
-
     def __init__(self, user_id: int, user_name: str, password: str):
         if type(user_id) is not int or user_id < 0:
             raise ValueError("User ID should be a non negative integer.")
@@ -16,12 +15,12 @@ class User:
 
         if isinstance(password , str) and len(password) >= 7:
             self.__password = password
+        
         else:
             self.__password = None
 
         self.__reviews: list[Review] = []
         self.__liked_tracks: list[Track] = []
-
     @property
     def user_id(self) -> int:
         return self.__user_id

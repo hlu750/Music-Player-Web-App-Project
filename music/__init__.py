@@ -31,7 +31,7 @@ def create_app(test_config=None):
     album_file = "raw_albums_excerpt.csv"
     track_file = "raw_tracks_excerpt.csv"
     repo.repo_instance = MemoryRepository()
-    populate(album_file,track_file, repo.repo_instance)
+    populate(data_path,album_file,track_file, repo.repo_instance)
     app.debug = True
     with app.app_context():
         from .home import home
