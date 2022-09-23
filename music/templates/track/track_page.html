@@ -30,12 +30,20 @@
     
     
         <div class ="row justify-content-md-center">
-            
-            <div class="col-sm th"><button class="button" onclick="location.href='{{ prev_track_url }}'">Prev Song</button></div>
-        <!-- <div class="w-100"></div> -->
-        <div class="col-sm th ">Song details</div>
-        <div class="col-sm th"><button class="button" onclick="location.href='{{ next_track_url }}'">Next Song</button></div>
-        </div> 
+            <div class="col-sm th">
+                {% if prev_track_url is not none %}
+                    <button class="button" onclick="location.href='{{ prev_track_url }}'">Prev Song</button>
+                {% else %}
+                    <button class="button-disabled" disabled>Prev Song</button>
+                {% endif %}
+            </div>
+            <div class="col-sm th ">Song details</div>
+                {% if next_track_url is not none %}          
+                    <div class="col-sm th"><button class="button" onclick="location.href='{{ next_track_url }}'">Next Song</button></div>
+                {% else %}
+                    <button class="button-disabled" disabled>Next Song</button>
+                {% endif %}    
+            </div> 
         <div class ="row justify-content-md-center">
            
             <div class="col-sm th">Song</div>

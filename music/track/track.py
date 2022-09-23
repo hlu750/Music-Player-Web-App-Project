@@ -82,8 +82,10 @@ def track_page(track_id):
             track_to_show_reviews = int(track_to_show_reviews)
         view_review_url = url_for('track_blueprint.track_page',track_id = track_id,  view_reviews_for=int(track_id))
         add_review_url = url_for('track_blueprint.review_on_track', track_id = track_id)
+        
         next_track_url = url_for('track_blueprint.track_page',track_id  = next_track.track_id) if next_track else None 
         prev_track_url = url_for('track_blueprint.track_page', track_id = prev_track.track_id) if prev_track else None
+        
         like_track_url = url_for('track_blueprint.like_track', track_id = track_id)
         unlike_track_url = url_for('track_blueprint.unlike_track', track_id = track_id)
         print(next_track_url)
