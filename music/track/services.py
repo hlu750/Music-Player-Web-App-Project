@@ -26,15 +26,9 @@ def add_review(track_id: int, review_text: str, user_name: str, repo: AbstractRe
         raise UnknownUserException
 
     # Create review.
-<<<<<<< HEAD
-    review = Review(track, review_text, 5,user_name)
-    # print()
-    # print(track, review)
-=======
     review = Review(track, review_text, 5, user_name)
     print()
     print(track, review)
->>>>>>> 22bfb55e5b88154deb46db7fdfe82c0b17fc8270
     # Update the repository.
     repo.add_review(review)
     track.add_review(review)
@@ -96,10 +90,14 @@ def get_liked_tracks(user_name, repo: AbstractRepository):
     # print("over here1")
     # print(tracks)
     return tracks_to_dict(tracks)
+
 def get_recommended_tracks(user_name, repo: AbstractRepository):
-    user : User = repo.repo_instance.get_user(user_name)
+    print("test 2")
+    # user : User = repo.repo_instance.get_user(user_name)
+    print("test 3")
     liked_tracks = get_liked_tracks_list(user_name, repo.repo_instance)
     # print(liked_tracks)
+    print("test 4")
     if liked_tracks:
         random_track = liked_tracks[0]
         print(random_track)
