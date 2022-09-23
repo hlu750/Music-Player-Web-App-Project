@@ -125,12 +125,12 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
+    def add_liked_track(self, track):
+        raise NotImplementedError
+
+    @abc.abstractmethod
     def get_liked_tracks(self, user):
-        """ Returns the reviews stored in the repository. """
         raise NotImplementedError
     
-    @abc.abstractmethod
-    def add_liked_track(self):
-        """ Returns the reviews stored in the repository. """
-        raise NotImplementedError
+    
     
