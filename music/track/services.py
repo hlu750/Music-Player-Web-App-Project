@@ -26,10 +26,7 @@ def add_review(track_id: int, review_text: str, user_name: str, repo: AbstractRe
         raise UnknownUserException
 
     # Create review.
-    review = Review(track, review_text, 5, user_name)
-    print()
-    print(track, review)
-    # Update the repository.
+    review = Review(track, review_text, 5,user_name)
     repo.add_review(review)
     track.add_review(review)
 
@@ -100,7 +97,7 @@ def get_recommended_tracks(user_name, repo: AbstractRepository):
     print("test 4")
     if liked_tracks:
         random_track = liked_tracks[0]
-        print(random_track)
+        # print(random_track)
         # print("Random track:", random_track)
         if random_track.genres:
             recommended_tracks = repo.repo_instance.get_filtered_tracks(random_track.album.title, "album")
@@ -113,7 +110,7 @@ def get_next_and_prev_liked_tracks(user_name, repo : AbstractRepository, track):
     liked_tracks = get_liked_tracks_list(user_name, repo.repo_instance)
     prev_track = liked_tracks[liked_tracks.index(track) - 1] if liked_tracks.index(track) - 1 in range(0, len(liked_tracks)) else None
     next_track = liked_tracks[liked_tracks.index(track) + 1] if liked_tracks.index(track) + 1 in range(0, len(liked_tracks)) else None
-    print(prev_track, next_track)
+    # print(prev_track, next_track)
     return prev_track, next_track
 
 def remove_liked_track(track, user_name: str, repo: AbstractRepository):

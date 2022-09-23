@@ -11,8 +11,12 @@
         {% endfor %}
     <h1 class="title animate__animated animate__fadeInUpBig animate__delay-2s">Album:</h2>
         <h2 class="animate__animated animate__fadeInUp animate__delay-3s">{{track.album.title}}</h2>
-        
-</section>
+        <div>
+            <button style="margin-right: 50px;" class="button animate__bounceIn animate__delay-10s" onclick="location.href='{{song_url}}'">Go to track</button>    
+        <button style="margin-left: 50px;" class="button animate__bounceIn animate__delay-10s" onclick="location.href='{{refresh}}'">I'm Feeling Lucky </button>    
+        </div>
+    </section>
+
 
 
 {% endblock %}
