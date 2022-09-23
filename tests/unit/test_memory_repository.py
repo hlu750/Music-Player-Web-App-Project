@@ -18,12 +18,22 @@ import music.adapters.repository as repo
 
 #cool feature
 def test_can_add_liked_song(in_memory_repo):
+    print("hello?")
     track = Track(7, 'Song for testing')
+    print("hello? track")
     user = in_memory_repo.get_user('fmercury')
+    print("hello? user")
     in_memory_repo.add_liked_track(track)
+    print("hello? repo")
 
     assert track in in_memory_repo.get_liked_tracks(user)
 
+def test_repository_can_add_a_review(in_memory_repo):
+    prev_track, track, next_track = in_memory_repo.get_track(2)
+    review = Review(track, "test review", 5, "fmercury")
+    in_memory_repo.add_review(review)
+
+    assert review in in_memory_repo.get_reviews()
 
 #cool feature
 def test_can_get_liked_tracks(in_memory_repo):
@@ -31,6 +41,12 @@ def test_can_get_liked_tracks(in_memory_repo):
     in_memory_repo.add_liked_track(track)
     user = in_memory_repo.get_user('fmercury')
     assert len(in_memory_repo.get_liked_tracks(user)) == 1
+
+def test_repository_can_retrieve_reviews(in_memory_repo):
+    prev_track, track, next_track = in_memory_repo.get_track(2)
+    review = Review(track, "test review", 5, "fmercury")
+    in_memory_repo.add_review(review)
+    assert len(in_memory_repo.get_reviews()) == 1
 
 
 def test_repository_can_add_a_user(in_memory_repo):

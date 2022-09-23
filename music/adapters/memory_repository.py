@@ -144,15 +144,18 @@ class MemoryRepository(AbstractRepository):
         return self.__reviews
 
     def add_liked_track(self, track):
+        print("hello? adding")
         # call parent class first, add_review relies on implementation of code common to all derived classes
-        super().add_liked_track(track)
+        # super().add_liked_track(track)
+        print("hello? adding 2")
         self.__liked_tracks.append(track)
+        print("hello? adding 3")
 
     def get_liked_tracks(self, user):
         print("is this okay")
         print(user.liked_tracks)
         print(self.__liked_tracks)
-        return user.liked_tracks
+        return self.__liked_tracks
 
 
 

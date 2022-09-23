@@ -126,6 +126,7 @@ class AbstractRepository(abc.ABC):
 
     @abc.abstractmethod
     def add_liked_track(self, track):
+        print("hello? why?")
         raise NotImplementedError
 
     @abc.abstractmethod
