@@ -1,3 +1,6 @@
+from msvcrt import kbhit
+from operator import index
+import random
 from typing import List, Iterable
 from urllib.parse import non_hierarchical
 
@@ -23,9 +26,15 @@ def add_review(track_id: int, review_text: str, user_name: str, repo: AbstractRe
         raise UnknownUserException
 
     # Create review.
+<<<<<<< HEAD
+    review = Review(track, review_text, 5,user_name)
+    # print()
+    # print(track, review)
+=======
     review = Review(track, review_text, 5, user_name)
     print()
     print(track, review)
+>>>>>>> 22bfb55e5b88154deb46db7fdfe82c0b17fc8270
     # Update the repository.
     repo.add_review(review)
     track.add_review(review)
@@ -66,10 +75,17 @@ def add_liked_track(track, user_name: str, repo: AbstractRepository):
         raise UnknownUserException
 
     # Create review.
-    print(track)
+    # print(track)
     # Update the repository.
     user.add_liked_track(track)
-
+def get_liked_tracks_list(user_name, repo: AbstractRepository):
+    user : User = repo.get_user(user_name)
+    if user is None:
+        raise UnknownUserException
+    tracks = user.liked_tracks
+    if tracks is None:
+        raise NonExistentTrackException
+    return tracks
 def get_liked_tracks(user_name, repo: AbstractRepository):
     user : User = repo.get_user(user_name)
     if user is None:
@@ -80,6 +96,28 @@ def get_liked_tracks(user_name, repo: AbstractRepository):
     # print("over here1")
     # print(tracks)
     return tracks_to_dict(tracks)
+def get_recommended_tracks(user_name, repo: AbstractRepository):
+    user : User = repo.repo_instance.get_user(user_name)
+    liked_tracks = get_liked_tracks_list(user_name, repo.repo_instance)
+    # print(liked_tracks)
+    if liked_tracks:
+        random_track = liked_tracks[0]
+        print(random_track)
+        # print("Random track:", random_track)
+        if random_track.genres:
+            recommended_tracks = repo.repo_instance.get_filtered_tracks(random_track.album.title, "album")
+            # print("similar",recommended_tracks)
+            recommended_tracks += repo.repo_instance.get_filtered_tracks(random_track.genres[0].name, "genre")
+            recommended_tracks += repo.repo_instance.get_filtered_tracks(random_track.artist.full_name, "artist")
+            return recommended_tracks, random_track
+def get_next_and_prev_liked_tracks(user_name, repo : AbstractRepository, track):
+    user : User =  repo.repo_instance.get_user(user_name)
+    liked_tracks = get_liked_tracks_list(user_name, repo.repo_instance)
+    prev_track = liked_tracks[liked_tracks.index(track) - 1] if liked_tracks.index(track) - 1 in range(0, len(liked_tracks)) else None
+    next_track = liked_tracks[liked_tracks.index(track) + 1] if liked_tracks.index(track) + 1 in range(0, len(liked_tracks)) else None
+    print(prev_track, next_track)
+    return prev_track, next_track
+
 def remove_liked_track(track, user_name: str, repo: AbstractRepository):
     user : User= repo.get_user(user_name)
     if user is None:
@@ -100,8 +138,8 @@ def remove_liked_track(track, user_name: str, repo: AbstractRepository):
 # ============================================
 
 def track_to_dict(track: Track):
-    print("over here3")
-    print(track)
+    # print("over here3")
+    # print(track)
     track_dict = {
         'id': track.track_id,
         'title': track.title,
@@ -111,8 +149,8 @@ def track_to_dict(track: Track):
 
 
 def tracks_to_dict(tracks: Iterable[Track]):
-    print("over here2")
-    print(tracks)
+    # print("over here2")
+    # print(tracks)
     return [track_to_dict(track) for track in tracks]
 
 

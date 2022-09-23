@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}{%block content%}
+
+<section id="main">
+    <header style="color:white; text-align: center;">
+        
+        <h1 class="title" style="color:white;">Tracks For you</h1>
+    {% if selected_track == None %}
+        <h1 class= "title"> Like a few tracks first!</h1>
+    </header>
+    {% else %}
+    </header>
+    <!-- <h1 class="title">Tracks For you</h1> -->
+    <h2 class= "th"style="float: left;"> Because you liked {{selected_track.title}} by {{selected_track.artist.full_name}} we think you'll like:</h2>
+    {% endif %}
+    <div style="padding-top: 50px;"> 
+        {% include '/track/track_list.html' %}
+    </div>
+   
+    
+</section>
+
+
+{% endblock %}

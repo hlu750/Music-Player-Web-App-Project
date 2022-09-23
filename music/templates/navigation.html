@@ -11,15 +11,11 @@
     <a class="btn-nav" href="{{ url_for('authentication_bp.login') }}">Login</a>
     <a class="btn-nav" href="{{ url_for('authentication_bp.logout') }}">Logout</a>
     <a class="btn-nav" href="{{ url_for('profile_bp.favourites') }}">Favourites</a>
-    <!-- <a class="btn-nav" href="{{ url_for('profile_bp.playlists') }}">Playlists</a> -->
-    <div>
-        <h3>
-          <a class="btn-nav" href="{{ url_for('track_blueprint.track') }}">
-            Browse songs
-          </a>
-          <a class="btn-nav" href="{{ url_for('profile_bp.playlists') }}">Search</a>
-        </h3>
-      </div>
+    <a class="btn-nav" href="{{ url_for('track_blueprint.track') }}">
+      Browse songs
+    </a>
+    <a class="btn-nav" href="{{ url_for('profile_bp.recommended_tracks') }}">Tracks For You</a>
+ 
      
     
     
