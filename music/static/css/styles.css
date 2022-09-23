@@ -71,7 +71,7 @@ h1 {
  
 }
 
-#main > .title{
+#main > .title, header > .title{
   font-size: 4rem;
   font-weight: bold;
   text-align: center;

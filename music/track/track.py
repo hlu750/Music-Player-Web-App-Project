@@ -143,11 +143,11 @@ def review_on_track():
         return redirect(url_for('track_blueprint.track_page', track_id=track_id,view_reviews_for=track_id))
     
     if request.method == 'GET':
-        if request.args.get('track') == None:
+        if request.args.get('track_id') == None:
             track_id = 2
         else:
-            track_id = int(request.args.get('track'))
-        track_id = int(request.args.get('track_id'))
+            # track_id = int(request.args.get('track_id'))
+            track_id = int(request.args.get('track_id'))
         form.track_id.data = track_id
     else:
         track_id = int(form.track_id.data)

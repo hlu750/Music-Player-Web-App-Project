@@ -17,29 +17,9 @@
         </form>
       </div>
     {% endif %}
-    <div class="tracks">
-        <div class="row justify-content-md-center title">
-          <!-- <div class="col-sm">Track ID</div> -->
-          <div class="col-sm title">Song</div>
-          <!-- <div class="w-100"></div> -->
-          <div class="col-sm title">Artist</div>
-          <div class="col-sm title">Album</div>
-        </div>
-        {% for track in tracks %}  
-        <a class= "fill-div" href="{{ url_for('track_blueprint.track_page', track_id = track.track_id ) }}">
-            <track>
-        <div class="row justify-content-md-center entry">
-            <div class="col-sm">{{track.title}}</div>
-            <div class="col-sm">{{track.artist.full_name}}</div>
-            <div class="col-sm">{{track.album.title}}</div>
-        </track>
-        </div>
-            </a>
-        {% endfor %}    
-    </div>
-      
-
-    <footer>
+    {% include '/track/track_list.html' %}
+    <!-- {{ super() }} -->
+    <!-- <footer>
         <nav style="clear:both">
             <div style="float:left">
                 {% if prev_tracks_url is not none %}
@@ -56,7 +36,7 @@
                 {% endif %}
             </div>
         </nav>
-    </footer>
+    </footer> -->
 </main>
 
 {% endblock %}

@@ -38,8 +38,8 @@ class MemoryRepository(AbstractRepository):
         # print(self.__users)
 
     def get_user(self, user_name) -> User:
-        print("user")
-        print(user_name)
+        # print("user")
+        # print(user_name)
         if type(user_name) == str:
             return next((user for user in self.__users if user.user_name == user_name), None)
 
@@ -106,7 +106,8 @@ class MemoryRepository(AbstractRepository):
         return math.ceil(len(self.__tracks) / quantity)
 
     def get_filtered_tracks(self, title, type):
-        # print(type)
+        # print(type, title)
+        title = title.lower()
         filtered_tracks =[]
         album = False
         track_bool = False
@@ -149,9 +150,9 @@ class MemoryRepository(AbstractRepository):
         self.__liked_tracks.append(track)
 
     def get_liked_tracks(self, user: User):
-        print("is this okay")
-        print(user.liked_tracks)
-        print(self.__liked_tracks)
+        # print("is this okay")
+        # print(user.liked_tracks)
+        # print(self.__liked_tracks)
         return user.liked_tracks
 
 
@@ -195,6 +196,6 @@ def populate(data_path, album_path,track_path ,repo:MemoryRepository):
     # print (data_path )
     # Load users into the repository.
     users = load_users(data_path, repo) 
-    print(users)
+    # print(users)
     # # Load comments into the repository.
     # load_reviews(track_path, repo, users)

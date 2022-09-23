@@ -44,9 +44,9 @@ def test_login(client, auth):
     assert response.headers['Location'] == '/'
 
     # Check that a session has been created for the logged-in user.
-    # with client:
-    #     client.get('/')
-    #     assert session['user_name'] == 'thorke'
+    with client:
+        client.get('/')
+        assert session['user_name'] == 'thorke'
 
 
 def test_logout(client, auth):

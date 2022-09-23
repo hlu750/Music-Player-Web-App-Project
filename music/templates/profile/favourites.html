@@ -14,7 +14,7 @@
         
         <div class ="row justify-content-md-center" id = "favourite">
            
-            <div class="col-sm-1 td" style="font-size: 18px;""><a class= "fill-div" style="color:white;" href="{{ url_for('track_blueprint.track_page', track_id = track.id ) }}">{{track.id}}</a></div>
+            <div class="col-sm-1 td" style="font-size: 18px;"><a class= "fill-div" style="color:white;" href="{{ url_for('track_blueprint.track_page', track_id = track.id ) }}">{{track.id}}</a></div>
             <div class="col-sm-2 td" style="font-size: 18px;"><a class= "fill-div" style="color:white;" href="{{ url_for('track_blueprint.track_page', track_id = track.id ) }}">{{track.title}}</a></div>
             
             <div class="col-sm-9 td" style="font-size: 18px;" href={{track.hyperlink}}><a class = "fill-div"target="_blank"href={{track.hyperlink}}>{{track.hyperlink}}</a></div>
