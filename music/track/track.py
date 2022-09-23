@@ -63,7 +63,7 @@ def track():
 @track_blueprint.route('/track/<int:track_id>', methods=['GET'])
 def track_page(track_id):
     prev_track, track, next_track = utilities.get_selected_track(track_id)
-    print(prev_track)
+    # print(prev_track)
     if track:
         # genres = utilities.get_genres()
         
