@@ -91,19 +91,18 @@ def get_liked_tracks(user_name, repo: AbstractRepository):
     # print(tracks)
     return tracks_to_dict(tracks)
 def get_recommended_tracks(user_name, repo: AbstractRepository):
-    user : User = repo.repo_instance.get_user(user_name)
-    liked_tracks = get_liked_tracks_list(user_name, repo.repo_instance)
-    # print(liked_tracks)
+    user : User = repo.get_user(user_name)
+    liked_tracks = get_liked_tracks_list(user_name, repo)
     if liked_tracks:
         random_track = liked_tracks[0]
-        # print(random_track)
-        # print("Random track:", random_track)
+        
         if random_track.genres:
-            recommended_tracks = repo.repo_instance.get_filtered_tracks(random_track.album.title, "album")
-            # print("similar",recommended_tracks)
-            recommended_tracks += repo.repo_instance.get_filtered_tracks(random_track.genres[0].name, "genre")
-            recommended_tracks += repo.repo_instance.get_filtered_tracks(random_track.artist.full_name, "artist")
+            recommended_tracks = repo.get_filtered_tracks(random_track.album.title, "album")
+            recommended_tracks += repo.get_filtered_tracks(random_track.genres[0].name, "genre")
+            recommended_tracks += repo.get_filtered_tracks(random_track.artist.full_name, "artist")
             return recommended_tracks, random_track
+
+
 def get_next_and_prev_liked_tracks(user_name, repo : AbstractRepository, track):
     user : User =  repo.repo_instance.get_user(user_name)
     liked_tracks = get_liked_tracks_list(user_name, repo.repo_instance)

@@ -24,7 +24,7 @@ def recommended_tracks():
     user_name = session['user_name']
     liked_tracks = services.get_liked_tracks_list(user_name, repo.repo_instance)
     if liked_tracks:
-        recommended_tracks, random_track= services.get_recommended_tracks(user_name, repo)
+        recommended_tracks, random_track= services.get_recommended_tracks(user_name, repo.repo_instance)
         stripped_recommended_tracks  = [] 
         [stripped_recommended_tracks.append(track) for track in recommended_tracks if track not in stripped_recommended_tracks]
         # print(request.args.get('track_id'))
@@ -33,7 +33,6 @@ def recommended_tracks():
            
         if recommended_tracks is None:
             recommended_tracks = []
-        # print(random_track , "bfsdfasd")
         prev_track, next_track= services.get_next_and_prev_liked_tracks(user_name, repo, random_track)
         prev_track_url = url_for('profile_bp.recommended_tracks',track_id  = prev_track.track_id) if prev_track else None 
         next_track_url = url_for('profile_bp.recommended_tracks',track_id  = next_track.track_id) if next_track else None 

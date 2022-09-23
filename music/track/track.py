@@ -88,8 +88,8 @@ def track_page(track_id):
         
         like_track_url = url_for('track_blueprint.like_track', track_id = track_id)
         unlike_track_url = url_for('track_blueprint.unlike_track', track_id = track_id)
-        print(next_track_url)
-        print(prev_track_url)
+        # print(next_track_url)
+        # print(prev_track_url)
         genres_list = track.genres
         if len(track.genres) >0:
             genre = track.genres[0]
