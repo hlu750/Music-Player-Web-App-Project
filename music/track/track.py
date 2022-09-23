@@ -63,13 +63,8 @@ def track():
 @track_blueprint.route('/track/<int:track_id>', methods=['GET'])
 def track_page(track_id):
     prev_track, track, next_track = utilities.get_selected_track(track_id)
-    # print(prev_track)
     if track:
-        # genres = utilities.get_genres()
-        
-        # print(track.reviews)
         track_to_show_reviews = request.args.get('view_reviews_for')
-        # print("hfadsf", track_to_show_reviews)
         if track_to_show_reviews == None:
             # No view-reviews query parameter, so set to a non-existent track id.
             track_to_show_reviews = -1
@@ -174,15 +169,9 @@ def like_track():
         track_id = int(request.args.get('track_id'))
 
     prev, track, next = services.get_track(track_id, repo.repo_instance)
-    # print("track here")
-    # print(track)
     services.add_liked_track(track, user_name, repo.repo_instance)
-    
-    # tracks = services.get_liked_tracks(user, repo.repo_instance)
     tracks = services.get_liked_tracks(user_name, repo.repo_instance)
-    # print("over here1")
-    # print(tracks)
-    print(track.track_url)
+    
     return render_template('profile/favourites.html', 
     title='Liked Tracks', track = track, tracks = tracks, user = user
     )
@@ -198,14 +187,9 @@ def unlike_track():
         track_id = int(request.args.get('track_id'))
 
     prev, track, next = services.get_track(track_id, repo.repo_instance)
-    # print("track here")
-    # print(track)
     services.remove_liked_track(track, user_name, repo.repo_instance)
-    
-    # tracks = services.get_liked_tracks(user, repo.repo_instance)
     tracks = services.get_liked_tracks(user_name, repo.repo_instance)
-    # print("over here1")
-    # print(tracks)
+    
     return render_template('profile/favourites.html', 
     title='Liked Tracks', track = track, tracks = tracks, user = user
     )

@@ -153,7 +153,7 @@ class MemoryRepository(AbstractRepository):
         # print("hello? adding 3")
 
     def get_liked_tracks(self, user: User):
-        return user.liked_tracks
+        return self.__liked_tracks
 
 
 
