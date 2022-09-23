@@ -152,19 +152,11 @@ class MemoryRepository(AbstractRepository):
         self.__liked_tracks.append(track)
         print("hello? adding 3")
 
-<<<<<<< HEAD
     def get_liked_tracks(self, user: User):
         # print("is this okay")
         # print(user.liked_tracks)
         # print(self.__liked_tracks)
         return user.liked_tracks
-=======
-    def get_liked_tracks(self, user):
-        print("is this okay")
-        print(user.liked_tracks)
-        print(self.__liked_tracks)
-        return self.__liked_tracks
->>>>>>> 22bfb55e5b88154deb46db7fdfe82c0b17fc8270
 
 
 
