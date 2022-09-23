@@ -62,7 +62,7 @@ class MemoryRepository(AbstractRepository):
             prev_track = self.tracks[track_index-1] if track_index - 1 >= 0 else None 
             next_track = self.tracks[track_index + 1] if track_index + 1 < len(self.__tracks) else None
         except KeyError:
-          
+            
             pass
         return prev_track, track, next_track
 
@@ -144,16 +144,27 @@ class MemoryRepository(AbstractRepository):
     def get_reviews(self):
         return self.__reviews
 
-    def add_liked_track(self, track: Track):
+    def add_liked_track(self, track):
+        print("hello? adding")
         # call parent class first, add_review relies on implementation of code common to all derived classes
-        super().add_liked_track(track)
+        # super().add_liked_track(track)
+        print("hello? adding 2")
         self.__liked_tracks.append(track)
+        print("hello? adding 3")
 
+<<<<<<< HEAD
     def get_liked_tracks(self, user: User):
         # print("is this okay")
         # print(user.liked_tracks)
         # print(self.__liked_tracks)
         return user.liked_tracks
+=======
+    def get_liked_tracks(self, user):
+        print("is this okay")
+        print(user.liked_tracks)
+        print(self.__liked_tracks)
+        return self.__liked_tracks
+>>>>>>> 22bfb55e5b88154deb46db7fdfe82c0b17fc8270
 
 
 
