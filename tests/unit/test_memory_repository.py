@@ -38,8 +38,11 @@ def test_repository_can_add_a_review(in_memory_repo):
 #cool feature
 def test_can_get_liked_tracks(in_memory_repo):
     prev_track, track, next_track = in_memory_repo.get_track(2)
+    print("testt")
     in_memory_repo.add_liked_track(track)
+    print("testtt")
     user = in_memory_repo.get_user('fmercury')
+    print("testtt")
     assert len(in_memory_repo.get_liked_tracks(user)) == 1
 
 def test_repository_can_retrieve_reviews(in_memory_repo):
