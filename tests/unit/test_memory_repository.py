@@ -10,7 +10,7 @@ from music.domainmodel.track import Track, Review
 from music.domainmodel.genre import Genre
 # from music.domainmodel.review import Review
 from music.domainmodel.album import Album
-from music.domainmodel.user import User, Review
+from music.domainmodel.user import User
 from music.adapters.repository import RepositoryException
 from music.adapters.repository import repo_instance, AbstractRepository
 import music.adapters.repository as repo

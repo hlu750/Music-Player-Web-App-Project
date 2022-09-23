@@ -27,9 +27,6 @@ def add_review(track_id: int, review_text: str, user_name: str, repo: AbstractRe
 
     # Create review.
     review = Review(track, review_text, 5,user_name)
-    # print()
-    # print(track, review)
-    # Update the repository.
     repo.add_review(review)
     track.add_review(review)
 
@@ -90,6 +87,7 @@ def get_liked_tracks(user_name, repo: AbstractRepository):
     # print("over here1")
     # print(tracks)
     return tracks_to_dict(tracks)
+
 def get_recommended_tracks(user_name, repo: AbstractRepository):
     user : User = repo.get_user(user_name)
     liked_tracks = get_liked_tracks_list(user_name, repo)

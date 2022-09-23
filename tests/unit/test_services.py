@@ -6,6 +6,19 @@ from music.authentication.services import AuthenticationException
 from music.track import services as track_services
 from music.authentication import services as auth_services
 from music.track.services import NonExistentTrackException
+from music.domainmodel.track import Track, Review
+from music.domainmodel.user import User
+from music.track.services import get_recommended_tracks
+
+#cool feature
+# def test_can_get_recommended_tracks(in_memory_repo):
+#     track = Track(7, 'Song for testing')
+#     in_memory_repo.add_liked_track(track)
+#     print("test")
+#     recommended_tracks, random_track = get_recommended_tracks('fmercury', in_memory_repo)
+#     print("test end")
+#     assert recommended_tracks is not None
+
 
 def test_can_add_user(in_memory_repo):
     new_user_name = 'jzzzz'
