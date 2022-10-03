@@ -38,8 +38,6 @@ class MemoryRepository(AbstractRepository):
         # print(self.__users)
 
     def get_user(self, user_name) -> User:
-        # print("user")
-        # print(user_name)
         if type(user_name) == str:
             return next((user for user in self.__users if user.user_name == user_name), None)
 
