@@ -46,6 +46,7 @@ genre_table = Table(
     Column('id', Integer, primary_key=True, autoincrement=True),   
     Column('genre_name', String(64), nullable=False)
     )
+    
 track_genres_table = Table(
     'track_genres', metadata,
     Column('id', Integer, primary_key=True, autoincrement=True),

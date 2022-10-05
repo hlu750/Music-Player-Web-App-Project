@@ -1,14 +1,18 @@
 from datetime import date
+import math
 from typing import List
 
 from sqlalchemy import desc, asc
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
 from sqlalchemy.orm import scoped_session
+from  sqlalchemy.sql.expression import func, select
 
 from music.domainmodel.user import User
 from music.domainmodel.track import Track, Review
 from music.domainmodel.artist import Artist
+from music.domainmodel.album import Album
+from music.domainmodel.genre import Genre
 
 from music.adapters.repository import AbstractRepository
 
@@ -27,25 +31,6 @@ class SqlAlchemyRepository(AbstractRepository):
         with self._session_cm as scm:
             scm.session.add(user)
             scm.commit()
-    def get_user(self, user_name: str) -> User:
-        user = None
-        try:
-            user = self._session_cm.session.query(User).filter(User._User__user_name == user_name).one()
-        except NoResultFound:
-            # Ignore any exception and return None.
-            pass
-    def get_track(self, id):
-        track = None
-        try:
-            track = self._session_cm.session.query(Track).filter(Track._Track__track_id == id).one()
-        except NoResultFound:
-            pass
-        return track
-
-    def add_user(self, user: User):
-        with self._session_cm as scm:
-            scm.session.add(user)
-            scm.commit()
 
     def get_user(self, user_name: str) -> User:
         user = None
@@ -57,9 +42,18 @@ class SqlAlchemyRepository(AbstractRepository):
 
         return user
 
+    def get_number_of_users(self):
+        number_of_users = self._session_cm.session.query(User).count()
+        return number_of_users
+
     def add_track(self, track: Track):
         with self._session_cm as scm:
             scm.session.add(track)
+            scm.commit()
+
+    def add_album(self, album: Album):
+        with self._session_cm as scm:
+            scm.session.add(album)
             scm.commit()
 
     def get_track(self, id: int) -> Track:
@@ -72,6 +66,63 @@ class SqlAlchemyRepository(AbstractRepository):
 
         return track
 
+    def get_random_track(self): # session.query(MyModel).order_by(func.rand()).first()
+        track = None
+        try:
+            track = self._session_cm.session.query(Track).order_by(func.rand()).first()
+        except NoResultFound:
+            # Ignore any exception and return None.
+            pass
+
+        return track
+        
+    def get_track_by_genre(self, target_genre: Genre) -> List[Track]:
+        # if target_genre is None:
+        #     tracks = self._session_cm.session.query(Track).all()
+        #     return tracks
+        # else:
+        #     tracks = self._session_cm.session.query(Track).filter(Track._Track__genre == target_genre).all()
+        #     return tracks  
+        pass 
+        
+    def get_filtered_tracks(self, title, type) -> List[Track]:
+        title = title.lower()
+        filtered_tracks =[]
+        if type == 'track':
+            filtered_tracks = self._session_cm.session.query(Track).filter(Track._Track__title == title).all()
+        elif type == 'artist':
+            filtered_tracks = self._session_cm.session.query(Track).filter(Track._Track__artist == title).all()
+        elif type == 'album':
+            filtered_tracks = self._session_cm.session.query(Track).filter(Track._Track__album == title).all()
+        elif type == 'genre':
+            filtered_tracks = self._session_cm.session.query(Track).filter(title in Track._Track__genre).all() 
+        else:                           
+            pass
+        return filtered_tracks 
+
+    def get_number_of_tracks(self) -> int:
+        number_of_tracks = self._session_cm.session.query(Track).count()
+        return number_of_tracks
+
+    def get_tracks_by_id(self, id_list):
+        tracks = self._session_cm.session.query(Track).filter(Track._Track__id.in_(id_list)).all()
+        return tracks
+
+    def get_tracks_by_quantity(self, startIndex, quantity):
+        number_of_tracks = self._session_cm.session.query(Track).count()
+        tracks = self._session_cm.session.query(Track).all()
+        if startIndex >= 0 and startIndex + quantity < number_of_tracks:
+            return tracks[startIndex: startIndex + quantity]
+        elif startIndex >= 0:
+            return tracks[startIndex:]
+        else:
+            return None
+
+    def get_number_of_pages(self, quantity):
+        number_of_tracks = self._session_cm.session.query(Track).count()
+        number_of_pages = math.ceil(number_of_tracks / quantity)
+        return number_of_pages
+
     def get_reviews(self) -> List[Review]:
         reviews = self._session_cm.session.query(Review).all()
         return reviews
@@ -81,6 +132,16 @@ class SqlAlchemyRepository(AbstractRepository):
         with self._session_cm as scm:
             scm.session.add(review)
             scm.commit()
+
+    def add_liked_track(self, track):
+        super().add_liked_track(track)
+        with self._session_cm as scm:
+            scm.session.add(track)
+            scm.commit()
+
+    def get_liked_tracks(self, user):
+        liked_tracks = self._session_cm.session.query(User._User__liked_tracks).all()
+        return liked_tracks
 
 
 class SessionContextManager:
