@@ -1,6 +1,6 @@
 from sqlalchemy import select, inspect
 
-from covid.adapters.orm import metadata
+from music.adapters.orm import metadata
 
 def test_database_populate_inspect_table_names(database_engine):
 

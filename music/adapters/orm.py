@@ -33,9 +33,10 @@ artist_table = Table(
 track_table = Table(
     'track', metadata,
     Column('id', Integer, primary_key=True, autoincrement=True),
+    Column('title', String(255)),
     Column('artist_id', ForeignKey('artists.id')),
     Column('album_id', ForeignKey('albums.id')),
-    Column('hyperlinke', String(255)),
+    Column('hyperlink', String(255)),
     Column('duration', Integer, nullable=False),
     Column('genre', String(255))
 )
