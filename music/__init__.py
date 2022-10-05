@@ -7,8 +7,8 @@ from flask import Flask, render_template
 # TODO: Access to the tracks should be implemented via the repository pattern and using blueprints, so this can not
 #  stay here!
 from music.domainmodel.track import Track
-from music.adapters import memory_repository, database_repository
-from music.adapters.memory_repository import MemoryRepository, populate
+from music.adapters import memory_repository, database_repository, repository_populate
+from music.adapters.memory_repository import MemoryRepository
 from music.adapters.orm import metadata, map_model_to_tables
 import music.adapters.repository as repo
 # TODO: Access to the tracks should be implemented via the repository pattern and using blueprints, so this can not
@@ -37,7 +37,7 @@ def create_app(test_config=None):
         repo.repo_instance = MemoryRepository()
         # fill the content of the repository from the provided csv files (has to be done every time we start app!)
         database_mode = False
-        memory_repository.populate(data_path, repo.repo_instance, database_mode)
+        repository_populate.populate(data_path, repo.repo_instance, database_mode)
     elif app.config['REPOSITORY'] == 'database':
         # Configure database.
         database_uri = app.config['SQLALCHEMY_DATABASE_URI']
@@ -56,29 +56,29 @@ def create_app(test_config=None):
         # Create the SQLAlchemy DatabaseRepository instance for an sqlite3-based repository.
         repo.repo_instance = database_repository.SqlAlchemyRepository(session_factory)
 
-    if app.config['TESTING'] == 'True' or len(database_engine.table_names()) == 0:
-            print("REPOPULATING DATABASE...")
-            # For testing, or first-time use of the web application, reinitialise the database.
-            clear_mappers()
-            metadata.create_all(database_engine)  # Conditionally create database tables.
-            for table in reversed(metadata.sorted_tables):  # Remove any data from the tables.
-                database_engine.execute(table.delete())
+        if app.config['TESTING'] == 'True' or len(database_engine.table_names()) == 0:
+                print("REPOPULATING DATABASE...")
+                # For testing, or first-time use of the web application, reinitialise the database.
+                clear_mappers()
+                metadata.create_all(database_engine)  # Conditionally create database tables.
+                for table in reversed(metadata.sorted_tables):  # Remove any data from the tables.
+                    database_engine.execute(table.delete())
 
-            # Generate mappings that map domain model classes to the database tables.
+                # Generate mappings that map domain model classes to the database tables.
+                map_model_to_tables()
+
+                database_mode = True
+                repository_populate.populate(data_path, repo.repo_instance, database_mode)
+                print("REPOPULATING DATABASE... FINISHED")
+
+        else:
+            # Solely generate mappings that map domain model classes to the database tables.
             map_model_to_tables()
 
-            database_mode = True
-            repository_populate.populate(data_path, repo.repo_instance, database_mode)
-            print("REPOPULATING DATABASE... FINISHED")
-
-    else:
-        # Solely generate mappings that map domain model classes to the database tables.
-        map_model_to_tables()
-
-    album_file = "raw_albums_excerpt.csv"
-    track_file = "raw_tracks_excerpt.csv"
-    repo.repo_instance = MemoryRepository()
-    populate(data_path,album_file,track_file, repo.repo_instance)
+    # album_file = "raw_albums_excerpt.csv"
+    # track_file = "raw_tracks_excerpt.csv"
+    # repo.repo_instance = MemoryRepository()
+    # populate(data_path,album_file,track_file, repo.repo_instance)
     app.debug = True
     with app.app_context():
         from .home import home

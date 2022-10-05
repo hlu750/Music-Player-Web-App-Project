@@ -163,7 +163,7 @@ class TrackCSVReader:
 
             self.__dataset_of_tracks.append(track)
         # print(reader.__albums_csv_file)
-        return self.__dataset_of_tracks
+        return self.__dataset_of_tracks, self.__dataset_of_albums
 
     # def read_csv_file(filename: str):
     #     with open(filename, encoding='utf-8-sig') as infile:
@@ -271,11 +271,25 @@ def read_csv_file(filename: str):
     return users_rows
 
 
-def load_tracks(album_path: Path, track_path: Path,repo:AbstractRepository ):
+# def load_tracks_and_albums(album_path: Path, track_path: Path,repo:AbstractRepository ):
+#     reader = TrackCSVReader(album_path, track_path)
+#     tracks, albums = reader.read_csv_files()
+#     for track in tracks:
+#         repo.add_track(track)
+
+#     for album in albums:
+#         repo.add_album(album)
+
+def load_tracks_and_albums(data_path:Path,repo:AbstractRepository, databse_mode = bool ):
+    album_path = str(data_path /"raw_albums_excerpt.csv")
+    track_path = str(data_path /"raw_tracks_excerpt.csv")
     reader = TrackCSVReader(album_path, track_path)
-    for track in reader.read_csv_files():
+    tracks, albums = reader.read_csv_files()
+    for track in tracks:
         repo.add_track(track)
 
+    for album in albums:
+        repo.add_album(album)
 def load_users(data_path: Path, repo: AbstractRepository):
     users = dict()
 
@@ -306,7 +320,7 @@ def load_reviews(data_path: Path, repo: AbstractRepository, users):
         repo.add_review(review)
 
 def populate(data_path, album_path,track_path ,repo:AbstractRepository):
-    load_tracks(album_path, track_path,repo)
+    load_tracks_and_albums(album_path, track_path,repo)
     # print (data_path )
     # Load users into the repository.
     users = load_users(data_path, repo) 

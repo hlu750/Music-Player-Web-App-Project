@@ -31,7 +31,8 @@ class MemoryRepository(AbstractRepository):
         self.__users = list()
         self.__reviews = list()
         self.__liked_tracks = list()
-
+        self.__albums = list()
+        self.__album_index = dict()
     def add_user(self, user: User):
         # print(user.user_name)
         self.__users.append(user)
@@ -47,8 +48,11 @@ class MemoryRepository(AbstractRepository):
     def add_track(self, track: Track):
         insort_left(self.__tracks, track)
         self.__track_index[track.track_id] = track 
-
     
+    
+    def add_album(self, album: Album):
+        insort_left(self.__albums, album)
+        self.__album_index[album.album_id] = album
     def get_track(self, id:int) -> Track:
         track = None
         prev_track = None
