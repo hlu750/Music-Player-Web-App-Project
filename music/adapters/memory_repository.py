@@ -49,10 +49,10 @@ class MemoryRepository(AbstractRepository):
         insort_left(self.__tracks, track)
         self.__track_index[track.track_id] = track 
     
-    
     def add_album(self, album: Album):
         insort_left(self.__albums, album)
         self.__album_index[album.album_id] = album
+
     def get_track(self, id:int) -> Track:
         track = None
         prev_track = None

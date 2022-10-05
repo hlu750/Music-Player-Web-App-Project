@@ -43,6 +43,9 @@ Alternatively, from a terminal in the root folder of the project, you can also c
 
 ```command prompt
 python –m pytest –v tests
+
+python –m pytest test_folder
+python –m pytest –v tests_db
 ```
 
 or
