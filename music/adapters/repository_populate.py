@@ -10,8 +10,8 @@ def populate(data_path: Path, repo: AbstractRepository, database_mode: bool):
     load_tracks_and_albums(data_path, repo, database_mode)
 
     # Load users into the repository.
-    users = load_users(data_path, repo)
+    # users = load_users(data_path, repo)
 
     # Load comments into the repository.
     # load_comments(data_path, repo, users)
-    load_reviews(data_path, repo, users)
+    # load_reviews(data_path, repo, users)

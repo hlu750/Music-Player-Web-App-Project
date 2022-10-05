@@ -26,7 +26,7 @@ review_table = Table(
 )
 artist_table = Table(
     'artists', metadata,
-    Column('id', Integer, primary_key=True, autoincrement=True),
+    Column('id', Integer, primary_key=True,autoincrement=True),
     Column('full_name', String(255), nullable=False)
 )
 album_table = Table(
@@ -39,10 +39,10 @@ track_table = Table(
     Column('id', Integer, primary_key=True, autoincrement=True),
     Column('title', String(255)),
     Column('artist_id', ForeignKey('artists.id')),
-    Column('album_id', ForeignKey('albums.id'))
-    # Column('hyperlink', String(255)),
-    # Column('duration', Integer, nullable=False),
-    # Column('genre', String(255))
+    Column('album_id', ForeignKey('albums.id')),
+    Column('hyperlink', String(255)),
+    Column('duration', Integer, nullable=False),
+    Column('genre', String(255))
 )
 
 genre_table = Table(
@@ -75,10 +75,10 @@ def map_model_to_tables():
         '_Track__track_id': track_table.c.id, 
         '_Track__title': track_table.c.title, 
         '_Track__artist': relationship(artist.Artist),
-        '_Track__album': relationship(album.Album)
-        # '_Track__duration': track_table.c.duration,
-        # '_Track__genre:': relationship(genre.Genre, secondary=track_genres_table),
-        # '_Track__reviews': relationship(track.Review)
+        '_Track__album': relationship(album.Album),
+        '_Track__track_duration': track_table.c.duration,
+        '_Track__genres:': relationship(genre.Genre, secondary=track_genres_table),
+        '_Track__reviews': relationship(track.Review)
     })
     
     mapper(genre.Genre, genre_table, properties={
@@ -87,6 +87,7 @@ def map_model_to_tables():
 
     })
     mapper(artist.Artist,artist_table, properties={
+        
         '_Artist__artist_id': artist_table.c.id,
         '_Artist__full_name': artist_table.c.full_name
     })

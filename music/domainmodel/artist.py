@@ -9,11 +9,11 @@ class Artist:
             self.__full_name: str = full_name.strip()
         else:
             self.__full_name = None
-
+        self.__tracks = []
     @property
     def artist_id(self) -> int:
         return self.__artist_id
-
+    
     @property
     def full_name(self) -> str:
         return self.__full_name

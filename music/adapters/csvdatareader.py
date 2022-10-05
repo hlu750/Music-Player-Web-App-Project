@@ -103,7 +103,21 @@ class TrackCSVReader:
                 album_dict[album_id] = album
         print("2")
         return album_dict
-
+    def read_artist_file_as_dict(self) -> dict:
+        artist_dict = dict()
+        # encoding of unicode_escape is required to decode successfully
+        with open(self.__tracks_csv_file, encoding="unicode_escape") as artist_csv:
+            reader = csv.DictReader(artist_csv)
+            for row in reader:
+                artist_id = int(row['artist_id']) if row['artist_id'].isdigit() else row['artist_id']
+                if type(artist_id) is not int:
+                    print(f'Invalid album_id: {artist_id}')
+                    print(row)
+                    continue
+                artist = create_artist_object(row)
+                artist_dict[artist_id] = artist
+        # print("2")
+        return artist_dict
     def read_tracks_file(self):
         # with open(self.__tracks_csv_file, encoding='utf-8-sig') as infile:
         #     reader = csv.reader(infile)
@@ -127,47 +141,51 @@ class TrackCSVReader:
         # print(track_rows)
         return track_rows
 
-    # def read_csv_files(self):
-    #     # key is album_id
-    #     albums_dict: dict = self.read_albums_file_as_dict()
-    #     # list of track csv rows, not track objects
-    #     track_rows: list = self.read_tracks_file()
+    def read_csv_files(self):
+        # key is album_id
+        albums_dict: dict = self.read_albums_file_as_dict()
+        # list of track csv rows, not track objects
+        track_rows: list = self.read_tracks_file()
+        artist_dict: dict = self.read_artist_file_as_dict()
+        # Make sure re-initialize to empty list, so that calling this function multiple times does not create
+        # duplicated dataset.
+        self.__dataset_of_tracks = []
+        for track_row in track_rows:
+            track = create_track_object(track_row)
+            
+            # artist = create_artist_object(track_row) 
+            artist_id = int(
+                track_row['artist_id']) if track_row['artist_id'].isdigit() else None
+            artist = artist_dict[artist_id] if artist_id in artist_dict else None
+            track.artist = artist
+            album_id = int(
+                track_row['album_id']) if track_row['album_id'].isdigit() else None
+
+            album = albums_dict[album_id] if album_id in albums_dict else None
+            track.album = album
+            # Extract track_genres attributes and assign genres to the track.
+            track_genres = extract_genres(track_row)
+            # print(track_genres)
+            for genre in track_genres:
+                track.add_genre(genre)
+
+           
+            # track.artist = album
+            # Populate datasets for Artist and Genre
+            if artist not in self.__dataset_of_artists:
+                self.__dataset_of_artists.add(artist)
+
+            if album is not None and album not in self.__dataset_of_albums:
+                self.__dataset_of_albums.add(album)
+
+            for genre in track_genres:
+                if genre not in self.__dataset_of_genres:
+                    self.__dataset_of_genres.add(genre)
+
+            self.__dataset_of_tracks.append(track)
+        # print(reader.__albums_csv_file)
         
-    #     # Make sure re-initialize to empty list, so that calling this function multiple times does not create
-    #     # duplicated dataset.
-    #     self.__dataset_of_tracks = []
-    #     for track_row in track_rows:
-    #         track = create_track_object(track_row)
-    #         artist = create_artist_object(track_row)
-    #         track.artist = artist
-
-    #         # Extract track_genres attributes and assign genres to the track.
-    #         track_genres = extract_genres(track_row)
-    #         # print(track_genres)
-    #         for genre in track_genres:
-    #             track.add_genre(genre)
-
-    #         album_id = int(
-    #             track_row['album_id']) if track_row['album_id'].isdigit() else None
-
-    #         album = albums_dict[album_id] if album_id in albums_dict else None
-    #         track.album = album
-
-    #         # Populate datasets for Artist and Genre
-    #         if artist not in self.__dataset_of_artists:
-    #             self.__dataset_of_artists.add(artist)
-
-    #         if album is not None and album not in self.__dataset_of_albums:
-    #             self.__dataset_of_albums.add(album)
-
-    #         for genre in track_genres:
-    #             if genre not in self.__dataset_of_genres:
-    #                 self.__dataset_of_genres.add(genre)
-
-    #         self.__dataset_of_tracks.append(track)
-    #     # print(reader.__albums_csv_file)
-        
-    #     return self.__dataset_of_tracks, self.__dataset_of_albums
+        return self.__dataset_of_tracks, self.__dataset_of_albums
 
     def read_csv_file(filename: str):
         with open(filename, encoding='utf-8-sig') as infile:
@@ -215,6 +233,7 @@ def create_track_object(track_row):
 
 
 def create_artist_object(track_row):
+
     artist_id = int(track_row['artist_id'])
     artist = Artist(artist_id, track_row['artist_name'])
     return artist
@@ -287,15 +306,15 @@ def read_csv_file(filename: str):
 def load_tracks_and_albums(data_path:Path,repo:AbstractRepository, database_mode = bool ):
     album_path = str(data_path /"raw_albums_excerpt.csv")
     track_path = str(data_path /"raw_tracks_excerpt.csv")
-    print(album_path)
+    # print(album_path)
     reader = TrackCSVReader(album_path, track_path)
     tracks, albums = reader.read_csv_files()
-    print("asiduf uioasdhf ouidsauj fhiosdau fisadfjuio   "+str(type(albums)))
+    
     for track in tracks:
         repo.add_track(track)
 
-    for album in albums:
-        repo.add_album(album)
+    # for album in albums:
+    #     repo.add_album(album)
 def load_users(data_path: Path, repo: AbstractRepository):
     users = dict()
 

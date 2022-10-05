@@ -9,6 +9,7 @@ from sqlalchemy.orm import scoped_session
 from music.domainmodel.user import User
 from music.domainmodel.track import Track, Review
 from music.domainmodel.artist import Artist
+from music.domainmodel.album import Album
 from music.domainmodel.genre import Genre
 from music.adapters.repository import AbstractRepository
 
@@ -60,6 +61,10 @@ class SqlAlchemyRepository(AbstractRepository):
     def add_track(self, track: Track):
         with self._session_cm as scm:
             scm.session.add(track)
+            scm.commit()
+    def add_album(self, album: Album):
+        with self._session_cm as scm:
+            scm.session.add(album)
             scm.commit()
     def add_liked_track(self, track):
         pass
