@@ -21,7 +21,27 @@ class SqlAlchemyRepository(AbstractRepository):
 
     def reset_session(self):
         self._session_cm.reset_session()
+    
+    def add_user(self, user: User):
+        with self._session_cm as scm:
+            scm.session.add(user)
+            scm.commit()
+    def get_user(self, user_name: str) -> User:
+        user = None
+        try:
+            user = self._session_cm.session.query(User).filter(User._User__user_name == user_name).one()
+        except NoResultFound:
+            # Ignore any exception and return None.
+            pass
+    def get_track(self, id):
+        track = None
+        try:
+            track = self._session_cm.session.query(Track).filter(Track._Track__track_id == id).one()
+        except NoResultFound:
+            pass
+        return track
 
+        return user
 class SessionContextManager:
     def __init__(self, session_factory):
         self.__session_factory = session_factory
