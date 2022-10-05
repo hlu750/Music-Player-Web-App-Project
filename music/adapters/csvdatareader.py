@@ -1,3 +1,4 @@
+from math import frexp
 import os
 import csv
 import ast
@@ -7,10 +8,14 @@ from music.domainmodel.artist import Artist
 from music.domainmodel.album import Album
 from music.domainmodel.track import Track
 from music.domainmodel.genre import Genre
+from music.domainmodel.user import User
 
 from pathlib import Path
 from utils import get_project_root
+from datetime import date, datetime
+from werkzeug.security import generate_password_hash
 
+from music.adapters.repository import AbstractRepository
 class TrackCSVReader:
 
     def __init__(self, albums_csv_file: str, tracks_csv_file: str):
@@ -80,6 +85,7 @@ class TrackCSVReader:
         print("1")
         if not os.path.exists(self.__albums_csv_file):
             print(f"path {self.__albums_csv_file} does not exist!")
+            return 
 
         album_dict = dict()
         # encoding of unicode_escape is required to decode successfully
@@ -157,7 +163,7 @@ class TrackCSVReader:
 
             self.__dataset_of_tracks.append(track)
         # print(reader.__albums_csv_file)
-        return self.__dataset_of_tracks
+        return self.__dataset_of_tracks, self.__dataset_of_albums
 
     # def read_csv_file(filename: str):
     #     with open(filename, encoding='utf-8-sig') as infile:
@@ -264,112 +270,60 @@ def read_csv_file(filename: str):
             users_rows.append(users_rows)
     return users_rows
 
-# class TrackCSVReader:
 
-#     def __init__(self, albums_csv_file: str, tracks_csv_file: str):
-#         if type(albums_csv_file) is str:
-#             self.__albums_csv_file = albums_csv_file
-#         else:
-#             raise TypeError('albums_csv_file should be a type of string')
+# def load_tracks_and_albums(album_path: Path, track_path: Path,repo:AbstractRepository ):
+#     reader = TrackCSVReader(album_path, track_path)
+#     tracks, albums = reader.read_csv_files()
+#     for track in tracks:
+#         repo.add_track(track)
 
-#         if type(tracks_csv_file) is str:
-#             self.__tracks_csv_file = tracks_csv_file
-#         else:
-#             raise TypeError('tracks_csv_file should be a type of string')
+#     for album in albums:
+#         repo.add_album(album)
 
-#         # List of unique tracks
-#         self.__dataset_of_tracks = []
-#         # Set of unique artists
-#         self.__dataset_of_artists = set()
-#         # Set of unique albums
-#         self.__dataset_of_albums = set()
-#         # Set of unique genres
-#         self.__dataset_of_genres = set()
+def load_tracks_and_albums(data_path:Path,repo:AbstractRepository, databse_mode = bool ):
+    album_path = str(data_path /"raw_albums_excerpt.csv")
+    track_path = str(data_path /"raw_tracks_excerpt.csv")
+    reader = TrackCSVReader(album_path, track_path)
+    tracks, albums = reader.read_csv_files()
+    for track in tracks:
+        repo.add_track(track)
 
-#     @property
-#     def dataset_of_tracks(self) -> list:
-#         return self.__dataset_of_tracks
+    for album in albums:
+        repo.add_album(album)
+def load_users(data_path: Path, repo: AbstractRepository):
+    users = dict()
 
-#     @property
-#     def dataset_of_albums(self) -> set:
-#         return self.__dataset_of_albums
+    users_filename = str(Path(data_path) / "users.csv")
 
-#     @property
-#     def dataset_of_artists(self) -> set:
-#         return self.__dataset_of_artists
+    for data_row in read_csv_file(users_filename):
+        user_num  = repo.get_number_of_users()
+        user = User(
+            user_id=user_num + 1,
+            user_name=data_row[1],
+            password=generate_password_hash(data_row[2])
+           
+        )
+        repo.add_user(user)
+        users[data_row[0]] = user
+    return users
 
-#     @property
-#     def dataset_of_genres(self) -> set:
-#         return self.__dataset_of_genres
 
-#     def read_albums_file_as_dict(self) -> dict:
-#         if not os.path.exists(self.__albums_csv_file):
-#             print(f"path {self.__albums_csv_file} does not exist!")
+def load_reviews(data_path: Path, repo: AbstractRepository, users):
+    reviews_filename = str(Path(data_path) / "reviews.csv")
+    for data_row in read_csv_file(reviews_filename):
+        review = User.add_review(
+            review_text=data_row[3],
+            user=users[data_row[1]],
+            track=repo.get_track(int(data_row[2])),
+            timestamp=datetime.fromisoformat(data_row[4])
+        )
+        repo.add_review(review)
 
-#         album_dict = dict()
-#         # encoding of unicode_escape is required to decode successfully
-#         with open(self.__albums_csv_file, encoding="unicode_escape") as album_csv:
-#             reader = csv.DictReader(album_csv)
-#             for row in reader:
-#                 album_id = int(
-#                     row['album_id']) if row['album_id'].isdigit() else row['album_id']
-#                 if type(album_id) is not int:
-#                     print(f'Invalid album_id: {album_id}')
-#                     print(row)
-#                     continue
-#                 album = create_album_object(row)
-#                 album_dict[album_id] = album
-
-#         return album_dict
-
-#     def read_tracks_file(self):
-#         if not os.path.exists(self.__tracks_csv_file):
-#             print(f"path {self.__tracks_csv_file} does not exist!")
-#             return
-#         track_rows = []
-#         # encoding of unicode_escape is required to decode successfully
-#         with open(self.__tracks_csv_file, encoding='unicode_escape') as track_csv:
-#             reader = csv.DictReader(track_csv)
-#             for track_row in reader:
-#                 track_rows.append(track_row)
-#         return track_rows
-
-#     def read_csv_files(self):
-#         # key is album_id
-#         albums_dict: dict = self.read_albums_file_as_dict()
-#         # list of track csv rows, not track objects
-#         track_rows: list = self.read_tracks_file()
-
-#         # Make sure re-initialize to empty list, so that calling this function multiple times does not create
-#         # duplicated dataset.
-#         self.__dataset_of_tracks = []
-#         for track_row in track_rows:
-#             track = create_track_object(track_row)
-#             artist = create_artist_object(track_row)
-#             track.artist = artist
-
-#             # Extract track_genres attributes and assign genres to the track.
-#             track_genres = extract_genres(track_row)
-#             for genre in track_genres:
-#                 track.add_genre(genre)
-
-#             album_id = int(
-#                 track_row['album_id']) if track_row['album_id'].isdigit() else None
-
-#             album = albums_dict[album_id] if album_id in albums_dict else None
-#             track.album = album
-
-#             # Populate datasets for Artist and Genre
-#             if artist not in self.__dataset_of_artists:
-#                 self.__dataset_of_artists.add(artist)
-
-#             if album is not None and album not in self.__dataset_of_albums:
-#                 self.__dataset_of_albums.add(album)
-
-#             for genre in track_genres:
-#                 if genre not in self.__dataset_of_genres:
-#                     self.__dataset_of_genres.add(genre)
-
-#             self.__dataset_of_tracks.append(track)
-
-#         return self.__dataset_of_tracks
+def populate(data_path, album_path,track_path ,repo:AbstractRepository):
+    load_tracks_and_albums(album_path, track_path,repo)
+    # print (data_path )
+    # Load users into the repository.
+    users = load_users(data_path, repo) 
+    # print(users)
+    # # Load comments into the repository.
+    # load_reviews(track_path, repo, users)

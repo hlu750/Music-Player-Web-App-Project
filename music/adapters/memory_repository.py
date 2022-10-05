@@ -31,7 +31,8 @@ class MemoryRepository(AbstractRepository):
         self.__users = list()
         self.__reviews = list()
         self.__liked_tracks = list()
-
+        self.__albums = list()
+        self.__album_index = dict()
     def add_user(self, user: User):
         # print(user.user_name)
         self.__users.append(user)
@@ -47,8 +48,11 @@ class MemoryRepository(AbstractRepository):
     def add_track(self, track: Track):
         insort_left(self.__tracks, track)
         self.__track_index[track.track_id] = track 
-
     
+    
+    def add_album(self, album: Album):
+        insort_left(self.__albums, album)
+        self.__album_index[album.album_id] = album
     def get_track(self, id:int) -> Track:
         track = None
         prev_track = None
@@ -155,45 +159,3 @@ class MemoryRepository(AbstractRepository):
 
 
 
-def load_tracks(album_path: Path, track_path: Path,repo:MemoryRepository ):
-    reader = TrackCSVReader(album_path, track_path)
-    for track in reader.read_csv_files():
-        repo.add_track(track)
-
-def load_users(data_path: Path, repo: MemoryRepository):
-    users = dict()
-
-    users_filename = str(Path(data_path) / "users.csv")
-
-    for data_row in read_csv_file(users_filename):
-        user_num  = repo.get_number_of_users()
-        user = User(
-            user_id=user_num + 1,
-            user_name=data_row[1],
-            password=generate_password_hash(data_row[2])
-           
-        )
-        repo.add_user(user)
-        users[data_row[0]] = user
-    return users
-
-
-def load_reviews(data_path: Path, repo: MemoryRepository, users):
-    reviews_filename = str(Path(data_path) / "reviews.csv")
-    for data_row in read_csv_file(reviews_filename):
-        review = User.add_review(
-            review_text=data_row[3],
-            user=users[data_row[1]],
-            track=repo.get_track(int(data_row[2])),
-            timestamp=datetime.fromisoformat(data_row[4])
-        )
-        repo.add_review(review)
-
-def populate(data_path, album_path,track_path ,repo:MemoryRepository):
-    load_tracks(album_path, track_path,repo)
-    # print (data_path )
-    # Load users into the repository.
-    users = load_users(data_path, repo) 
-    # print(users)
-    # # Load comments into the repository.
-    # load_reviews(track_path, repo, users)
