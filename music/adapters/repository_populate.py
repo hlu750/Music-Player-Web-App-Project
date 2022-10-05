@@ -1,7 +1,11 @@
 from pathlib import Path
 
 from music.adapters.repository import AbstractRepository
+<<<<<<< HEAD
 from music.adapters.csvdatareader import load_reviews, load_users, load_tracks_and_albums
+=======
+from music.adapters.memory_repository import load_reviews, load_tracks, load_users
+>>>>>>> 390d0c6d75386b9c51d94f782580819ad3515f84
 
 
 def populate(data_path: Path, repo: AbstractRepository, database_mode: bool):
@@ -13,3 +17,4 @@ def populate(data_path: Path, repo: AbstractRepository, database_mode: bool):
 
     # Load comments into the repository.
     # load_comments(data_path, repo, users)
+    load_reviews(data_path, repo, users)

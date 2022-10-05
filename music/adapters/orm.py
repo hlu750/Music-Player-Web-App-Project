@@ -20,7 +20,7 @@ review_table = Table(
     'reviews', metadata,
     Column('id', Integer, primary_key=True, autoincrement=True),
     Column('user_name', String(255), nullable=False),
-    Column('track_id', ForeignKey('tracks.id')), 
+    Column('track_id', ForeignKey('track.id')), 
     Column('review', String(1024), nullable=False),
     Column('timestamp', DateTime, nullable=False)
 )
@@ -31,7 +31,7 @@ artist_table = Table(
 )
 
 track_table = Table(
-    'tracks', metadata,
+    'track', metadata,
     Column('id', Integer, primary_key=True, autoincrement=True),
     Column('artist_id', ForeignKey('artists.id')),
     Column('album_id', ForeignKey('albums.id')),
@@ -48,7 +48,7 @@ genre_table = Table(
 track_genres_table = Table(
     'track_genres', metadata,
     Column('id', Integer, primary_key=True, autoincrement=True),
-    Column('track_id', ForeignKey('tracks.id')),
+    Column('track_id', ForeignKey('track.id')),
     Column('genre_id', ForeignKey('genres.id'))
 )
 
@@ -63,7 +63,8 @@ def map_model_to_tables():
     })
     mapper(track.Review, review_table, properties={
         '_Review__review_text': review_table.c.review, 
-        '_Review__timestamp': review_table.c.timestamp})
+        '_Review__timestamp': review_table.c.timestamp
+    })
 
     mapper(track.Track, track_table, properties={
         '_Track__track_id': track_table.c.id, 

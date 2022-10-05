@@ -11,6 +11,7 @@ from music.domainmodel.track import Track, Review
 from music.domainmodel.artist import Artist
 
 from music.adapters.repository import AbstractRepository
+
 class SqlAlchemyRepository(AbstractRepository):
 
     def __init__(self, session_factory):
@@ -41,7 +42,47 @@ class SqlAlchemyRepository(AbstractRepository):
             pass
         return track
 
+    def add_user(self, user: User):
+        with self._session_cm as scm:
+            scm.session.add(user)
+            scm.commit()
+
+    def get_user(self, user_name: str) -> User:
+        user = None
+        try:
+            user = self._session_cm.session.query(User).filter(User._User__user_name == user_name).one()
+        except NoResultFound:
+            # Ignore any exception and return None.
+            pass
+
         return user
+
+    def add_track(self, track: Track):
+        with self._session_cm as scm:
+            scm.session.add(track)
+            scm.commit()
+
+    def get_track(self, id: int) -> Track:
+        track = None
+        try:
+            track = self._session_cm.session.query(Track).filter(Track._Track__id == id).one()
+        except NoResultFound:
+            # Ignore any exception and return None.
+            pass
+
+        return track
+
+    def get_reviews(self) -> List[Review]:
+        reviews = self._session_cm.session.query(Review).all()
+        return reviews
+
+    def add_review(self, review: Review):
+        super().add_review(review)
+        with self._session_cm as scm:
+            scm.session.add(review)
+            scm.commit()
+
+
 class SessionContextManager:
     def __init__(self, session_factory):
         self.__session_factory = session_factory
@@ -70,5 +111,5 @@ class SessionContextManager:
         self.__session = scoped_session(self.__session_factory)
 
     def close_current_session(self):
-        if not self.__session is None:
+        if self.__session is not None:
             self.__session.close()
