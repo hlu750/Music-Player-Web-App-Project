@@ -1,3 +1,4 @@
+from re import M
 from sqlalchemy import (
     Table, MetaData, Column, Integer, String, Date, DateTime,
     ForeignKey
@@ -57,30 +58,26 @@ def map_model_to_tables():
     mapper(user.User, users_table, properties={
         '_User__user_name': users_table.c.user_name,
         '_User__password': users_table.c.password,
-        '_User__reviews': relationship(track.Review, backref='_Review__user')
+        '_User__reviews': relationship(track.Review, backref='_Review__user'),
+        '_User__liked_tracks': relationship(track.Track)
     })
     mapper(track.Review, review_table, properties={
-        '_Review__user_name': review_table.c.user_name
-        '_Review__track': review_table.c.track_id,
         '_Review__review_text': review_table.c.review, 
         '_Review__timestamp': review_table.c.timestamp
     })
 
     mapper(track.Track, track_table, properties={
-        '_Track__id': track_table.c.id,
-        '_Track__date': track_table.c.date,
-        '_Track__title': track_table.c.title,
-        '_Track__hyperlink': track_table.c.hyperlink,
-        '_Track__image_hyperlink': track_table.c.image_hyperlink,
-        '_Track__comments': relationship(track.Review, backref='_Comment__track'),
-        '_Track__tags': relationship(track.Genre, secondary=track_tags_table,
-                                       back_populates='_Tag__tagged_track')
+        '_Track__track_id': track_table.c.id, 
+        '_Track__title': track_table.c.title, 
+        '_Track__artist': relationship(artist.Artist),
+        '_Track__album': relationship(album.Album),
+        '_Track__duration': track_table.c.duration,
+        '_Track__genre:': relationship(genre.Genre, secondary=track_genres_table),
+        '_Track__reviews': relationship(track.Review)
     })
-    mapper(model.Tag, tags_table, properties={
-        '_Tag__tag_name': tags_table.c.tag_name,
-        '_Tag__tagged_track': relationship(
-            model.Track,
-            secondary=track_tags_table,
-            back_populates="_Track__tags"
-        )
+    
+    mapper(genre.Genre, genre_table, properties={
+        '_Genre__genre_id': genre_table.c.id, 
+        '_Genre__name': genre_table.c.id,
+
     })

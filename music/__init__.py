@@ -7,7 +7,7 @@ from flask import Flask, render_template
 # TODO: Access to the tracks should be implemented via the repository pattern and using blueprints, so this can not
 #  stay here!
 from music.domainmodel.track import Track
-from music.adapters import memory_repository, database_repository
+from music.adapters import memory_repository, database_repository, repository_populate
 from music.adapters.memory_repository import MemoryRepository, populate
 from music.adapters.orm import metadata, map_model_to_tables
 import music.adapters.repository as repo
@@ -32,12 +32,14 @@ def create_app(test_config=None):
         # Load test configuration, and override any configuration settings.
         app.config.from_mapping(test_config)
         data_path = app.config['TEST_DATA_PATH']
+
     if app.config['REPOSITORY'] == 'memory':
         # Create the MemoryRepository implementation for a memory-based repository.
         repo.repo_instance = MemoryRepository()
         # fill the content of the repository from the provided csv files (has to be done every time we start app!)
         database_mode = False
         memory_repository.populate(data_path, repo.repo_instance, database_mode)
+
     elif app.config['REPOSITORY'] == 'database':
         # Configure database.
         database_uri = app.config['SQLALCHEMY_DATABASE_URI']
