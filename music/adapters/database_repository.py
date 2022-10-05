@@ -9,7 +9,7 @@ from sqlalchemy.orm import scoped_session
 from music.domainmodel.user import User
 from music.domainmodel.track import Track, Review
 from music.domainmodel.artist import Artist
-
+from music.domainmodel.genre import Genre
 from music.adapters.repository import AbstractRepository
 
 class SqlAlchemyRepository(AbstractRepository):
@@ -56,12 +56,15 @@ class SqlAlchemyRepository(AbstractRepository):
             pass
 
         return user
-
+    
     def add_track(self, track: Track):
         with self._session_cm as scm:
             scm.session.add(track)
             scm.commit()
-
+    def add_liked_track(self, track):
+        pass
+    def get_liked_tracks(self, user: User):
+        pass 
     def get_track(self, id: int) -> Track:
         track = None
         try:
@@ -71,11 +74,24 @@ class SqlAlchemyRepository(AbstractRepository):
             pass
 
         return track
-
+    def get_filtered_tracks(self, title, type):
+        pass
     def get_reviews(self) -> List[Review]:
         reviews = self._session_cm.session.query(Review).all()
         return reviews
+    def get_number_of_tracks(self):
+        pass
+    def get_number_of_users(self):
+        pass
+    def get_random_track(self):
+        pass
+    def get_track_by_genre(self, target_genre: Genre) -> List[Track]:
+        pass
 
+    def get_tracks_by_id(self, id_list):
+        pass
+    def get_tracks_by_quantity( self, startIndex, quantity):
+        pass
     def add_review(self, review: Review):
         super().add_review(review)
         with self._session_cm as scm:
