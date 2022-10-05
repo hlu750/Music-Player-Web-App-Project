@@ -123,7 +123,7 @@ class TrackCSVReader:
         albums_dict: dict = self.read_albums_file_as_dict()
         # list of track csv rows, not track objects
         track_rows: list = self.read_tracks_file()
-
+        
         # Make sure re-initialize to empty list, so that calling this function multiple times does not create
         # duplicated dataset.
         self.__dataset_of_tracks = []
@@ -157,7 +157,7 @@ class TrackCSVReader:
 
             self.__dataset_of_tracks.append(track)
         # print(reader.__albums_csv_file)
-        return self.__dataset_of_tracks
+        return self.__dataset_of_tracks, self.__dataset_of_albums
 
     # def read_csv_file(filename: str):
     #     with open(filename, encoding='utf-8-sig') as infile:

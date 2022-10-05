@@ -31,7 +31,8 @@ class MemoryRepository(AbstractRepository):
         self.__users = list()
         self.__reviews = list()
         self.__liked_tracks = list()
-
+        self.__albums = list()
+        self.__album_index = dict()
     def add_user(self, user: User):
         # print(user.user_name)
         self.__users.append(user)
@@ -50,7 +51,9 @@ class MemoryRepository(AbstractRepository):
         insort_left(self.__tracks, track)
         self.__track_index[track.track_id] = track 
 
-    
+    def add_album(self, album: Album):
+        insort_left(self.__albums, album)
+        self.__album_index[album.album_id] = album
     def get_track(self, id:int) -> Track:
         track = None
         prev_track = None
@@ -157,10 +160,13 @@ class MemoryRepository(AbstractRepository):
 
 
 
-def load_tracks(album_path: Path, track_path: Path,repo:MemoryRepository ):
+def load_tracks_and_albums(album_path: Path, track_path: Path,repo:MemoryRepository ):
     reader = TrackCSVReader(album_path, track_path)
-    for track in reader.read_csv_files():
+    tracks, albums = reader.read_csv_files()
+    for track in tracks:
         repo.add_track(track)
+    for album in albums:
+        repo.add_album(album)
 
 def load_users(data_path: Path, repo: MemoryRepository):
     users = dict()
@@ -192,7 +198,7 @@ def load_reviews(data_path: Path, repo: MemoryRepository, users):
         repo.add_review(review)
 
 def populate(data_path, album_path,track_path ,repo:MemoryRepository):
-    load_tracks(album_path, track_path,repo)
+    load_tracks_and_albums(album_path, track_path,repo)
     # print (data_path )
     # Load users into the repository.
     users = load_users(data_path, repo) 
