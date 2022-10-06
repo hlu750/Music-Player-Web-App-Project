@@ -8,11 +8,12 @@ from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 from sqlalchemy.orm import scoped_session
 from  sqlalchemy.sql.expression import func, select
 
-from music.domainmodel.user import User
-from music.domainmodel.track import Track, Review
-from music.domainmodel.artist import Artist
-from music.domainmodel.album import Album
-from music.domainmodel.genre import Genre
+# from music.domainmodel.user import User
+# from music.domainmodel.track import Track, Review, Genre
+# from music.domainmodel.artist import Artist
+# from music.domainmodel.album import Album
+# from music.domainmodel.genre import Genre
+from music.domainmodel.model import Track, Genre, Review,Album, User, Artist
 from music.adapters.repository import AbstractRepository
 
 class SqlAlchemyRepository(AbstractRepository):

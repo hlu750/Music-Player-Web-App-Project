@@ -1,13 +1,13 @@
 import abc
 from typing import List
-from music.domainmodel.track import Track
-from music.domainmodel.album import  Album
-from music.domainmodel.artist import Artist
-from music.domainmodel.genre  import Genre
-from music.domainmodel.playlist  import PlayList
-from music.domainmodel.track import Review
-from music.domainmodel.user import User 
-
+# from music.domainmodel.track import Track, Genre, Review
+# from music.domainmodel.album import  Album
+# from music.domainmodel.artist import Artist
+# # from music.domainmodel.genre  import Genre
+# from music.domainmodel.playlist  import PlayList
+# # from music.domainmodel.track import Review
+# from music.domainmodel.user import User 
+from music.domainmodel.model import Track, Genre, Review,Album, User, Artist
 
 
 

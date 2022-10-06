@@ -6,7 +6,7 @@ from music.adapters.csvdatareader import load_reviews, load_users, load_tracks_a
 
 def populate(data_path: Path, repo: AbstractRepository, database_mode: bool):
     # Load articles and tags into the repository.
-    print(data_path)
+    # print(data_path)
     load_tracks_and_albums(data_path, repo, database_mode)
 
     # Load users into the repository.

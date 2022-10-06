@@ -6,7 +6,8 @@ from flask import Flask, render_template
 
 # TODO: Access to the tracks should be implemented via the repository pattern and using blueprints, so this can not
 #  stay here!
-from music.domainmodel.track import Track
+# from music.domainmodel.track import Track
+from music.domainmodel.model import Track
 from music.adapters import memory_repository, database_repository, repository_populate
 from music.adapters.memory_repository import MemoryRepository
 from music.adapters.orm import metadata, map_model_to_tables
@@ -27,7 +28,7 @@ def create_app(test_config=None):
     app = Flask(__name__)
     app.config.from_object('config.Config')
     data_path = Path('music') / 'adapters' / 'data'
-    print(data_path)
+    # print(data_path)
     if test_config is not None:
         # Load test configuration, and override any configuration settings.
         app.config.from_mapping(test_config)
@@ -42,7 +43,7 @@ def create_app(test_config=None):
     elif app.config['REPOSITORY'] == 'database':
         # Configure database.
         database_uri = app.config['SQLALCHEMY_DATABASE_URI']
-
+        print("helloo")
         # We create a comparatively simple SQLite database, which is based on a single file (see .env for URI).
         # For example the file database could be located locally and relative to the application in covid-19.db,
         # leading to a URI of "sqlite:///covid-19.db".
@@ -66,15 +67,18 @@ def create_app(test_config=None):
                     database_engine.execute(table.delete())
 
                 # Generate mappings that map domain model classes to the database tables.
+                print("pls")
                 map_model_to_tables()
-
+                print("bn")
                 database_mode = True
                 repository_populate.populate(data_path, repo.repo_instance, database_mode)
                 print("REPOPULATING DATABASE... FINISHED")
 
         else:
             # Solely generate mappings that map domain model classes to the database tables.
+            print("pls")
             map_model_to_tables()
+            # print("omg")
 
     # album_file = "raw_albums_excerpt.csv"
     # track_file = "raw_tracks_excerpt.csv"

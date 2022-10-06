@@ -3,15 +3,16 @@ from pathlib import Path
 import random
 from re import T
 from music.adapters.repository import AbstractRepository, RepositoryException
-from music.domainmodel.track import Track
-from music.domainmodel.album import  Album
-from music.domainmodel.artist import Artist
-from music.domainmodel.genre  import Genre
-from music.domainmodel.playlist  import PlayList
-from music.domainmodel.track import Review
-from music.domainmodel.user import User
+# from music.domainmodel.track import Track,Review,Genre
+# from music.domainmodel.album import  Album
+# from music.domainmodel.artist import Artist
+# # from music.domainmodel.genre  import Genre
+# from music.domainmodel.playlist  import PlayList
+# # from music.domainmodel.track import Review
+# from music.domainmodel.user import User
+
 from .csvdatareader import TrackCSVReader, read_csv_file
-# from csvdatareader import TrackCSVReader
+from music.domainmodel.model import Track, Genre, Review,Album, User, Artist
 from typing import List
 import math 
 from bisect import bisect, bisect_left, insort_left
