@@ -33,10 +33,19 @@ class AbstractRepository(abc.ABC):
     @abc.abstractmethod
     def add_track(self, track:Track):
         raise NotImplementedError
+    @abc.abstractmethod
     def add_album(self, album:Album):
         raise NotImplementedError
     @abc.abstractmethod
     def get_track(self, id:int):
+        raise NotImplementedError
+    def add_genre(self, genre:Genre):
+        raise NotImplementedError
+    @abc.abstractmethod
+    def tracks(self) -> List[Track]:
+        raise NotImplementedError
+    @abc.abstractmethod
+    def track_index(self) -> dict:
         raise NotImplementedError
         
     @abc.abstractmethod
@@ -45,7 +54,12 @@ class AbstractRepository(abc.ABC):
         
     @abc.abstractmethod
     def get_track_by_genre(self, target_genre: Genre) -> List[Track]:
-        raise NotImplementedError    
+        raise NotImplementedError  
+
+    @abc.abstractmethod
+    def get_number_of_pages(self, quantity):
+        raise NotImplementedError
+
     @abc.abstractmethod
     def get_filtered_tracks(self, title, type) -> List[Track]:
         raise NotImplementedError
@@ -80,7 +94,7 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_tracks_by_id(self, id_list):
+    def get_tracks_by_id(self, id_list)-> Track:
         """ Returns a list of tracks, whose ids match those in id_list, from the repository.
 
         If there are no matches, this method returns an empty list.

@@ -5,6 +5,7 @@ from typing import List, Iterable
 class Genre:
 
     def __init__(self, genre_id: int, genre_name: str):
+        
         if type(genre_id) is not int or genre_id < 0:
             raise ValueError('Genre ID should be an integer!')
         self.__genre_id = genre_id
@@ -32,6 +33,12 @@ class Genre:
     @property
     def tracks(self):
         return iter(self.__tracks)
+    
+    def is_applied_to(self, track: Track) -> bool:
+        return track in self.__tracks
+    
+    def add_track(self, track: Track):
+        self.__tracks.append(track)
     def __repr__(self) -> str:
         return f'<Genre {self.name}, genre id = {self.genre_id}>'
 

@@ -6,7 +6,7 @@ from tokenize import String
 
 from music.domainmodel.artist import Artist
 from music.domainmodel.album import Album
-from music.domainmodel.track import Track
+from music.domainmodel.track import Track ,make_tag_association
 from music.domainmodel.genre import Genre
 from music.domainmodel.user import User
 
@@ -21,28 +21,17 @@ class TrackCSVReader:
     def __init__(self, albums_csv_file: str, tracks_csv_file: str):
         
         current_path = os.path.dirname(__file__)
-        print("over here:")
+        
         print(type(albums_csv_file))
         if type(albums_csv_file) is str:
-            # self.__albums_csv_file = albums_csv_file
-            # self.__albums_csv_file = os.path.relpath('..\\data\\{}'.format(albums_csv_file), current_path) ##Changed path to this
-            # self.__albums_csv_file = os.path.join(albums_csv_file)
-            # self.__albums_csv_file = os.path.join(current_path, 'data\\' + albums_csv_file)
-            # self.__albums_csv_file =  albums_csv_file
+           
             self.__albums_csv_file = str(get_project_root() / "tests" / "data" / albums_csv_file)
             self.__albums_csv_file = albums_csv_file
-            # self.__albums_csv_file = os.path.join(os.path.dirname(__file__), 'data\\' + albums_csv_file)
-            # self.__tracks_csv_file = str(Path('covid') / 'adapters' / 'data' / albums_csv_file)
+          
         else:
             raise TypeError('albums_csv_file should be a type of string')
 
         if type(tracks_csv_file) is str:
-            # self.__tracks_csv_file = tracks_csv_file
-            # self.__tracks_csv_file = os.path.relpath('..\\data\\{}'.format(tracks_csv_file), current_path)##Changed path to this
-            # self.__tracks_csv_file = os.path.join(tracks_csv_file)
-            # self.__tracks_csv_file =os.path.join(current_path, 'data\\' + tracks_csv_file)
-            # self.__tracks_csv_file = os.path.join(os.path.dirname(__file__), 'data\\' + tracks_csv_file)
-            # self.__tracks_csv_file = tracks_csv_file
             self.__tracks_csv_file = str(get_project_root() / "tests" / "data" / tracks_csv_file)
             self.__tracks_csv_file = tracks_csv_file
             # self.__tracks_csv_file = str(Path('covid' / 'adapters' / 'data') / tracks_csv_file)
@@ -71,24 +60,11 @@ class TrackCSVReader:
         return self.__dataset_of_artists
 
     @property
-    def dataset_of_genres(self) -> set:
+    def dataset_of_genres(self) -> dict:
         return self.__dataset_of_genres
 
     def read_albums_file_as_dict(self) -> dict:
-        # with open(self.__albums_csv_file, encoding='utf-8-sig') as infile:
-        #     reader = csv.reader(infile)
-        #     # Read first line of the the CSV file.
-        #     headers = next(reader)
-        #     # Read remaining rows from the CSV file.
-        #     for row in reader:
-        #         # Strip any leading/trailing white space from data read.
-        #         row = [item.strip() for item in row]
-        #         yield row
-        print("1")
-        # if not os.path.exists(self.__albums_csv_file):
-        #     print(f"path {self.__albums_csv_file} does not exist!")
-        #     return 
-
+        
         album_dict = dict()
         # encoding of unicode_escape is required to decode successfully
         with open(self.__albums_csv_file, encoding="unicode_escape") as album_csv:
@@ -149,6 +125,7 @@ class TrackCSVReader:
         artist_dict: dict = self.read_artist_file_as_dict()
         # Make sure re-initialize to empty list, so that calling this function multiple times does not create
         # duplicated dataset.
+        genre_dict: dict = {}
         self.__dataset_of_tracks = []
         for track_row in track_rows:
             track = create_track_object(track_row)
@@ -165,14 +142,15 @@ class TrackCSVReader:
             track.album = album
             # Extract track_genres attributes and assign genres to the track.
             track_genres = extract_genres(track_row)
-            print(track_genres)
+            # print(track_genres)
             # print(track_genres)
             for genre in track_genres:
-                track.add_genre(genre)
-               
-
-           
-            # track.artist = album
+                if genre.name not in [genre.name for genre in genre_dict.keys()]:
+                    
+                    genre_dict[genre] = list()
+                    
+                genre_dict[genre].append(track.track_id)
+    
             # Populate datasets for Artist and Genre
             if artist not in self.__dataset_of_artists:
                 self.__dataset_of_artists.add(artist)
@@ -187,7 +165,9 @@ class TrackCSVReader:
             self.__dataset_of_tracks.append(track)
         # print(reader.__albums_csv_file)
         
-        return self.__dataset_of_tracks, self.__dataset_of_albums
+
+
+        return self.__dataset_of_tracks, self.__dataset_of_albums,genre_dict
 
     def read_csv_file(filename: str):
         with open(filename, encoding='utf-8-sig') as infile:
@@ -201,27 +181,6 @@ class TrackCSVReader:
                 # Strip any leading/trailing white space from data read.
                 row = [item.strip() for item in row]
                 yield row
-
-    # def read_csv_files2(self):
-    #     # TODO
-    #     with open(self.__tracks_csv_file, 'r', encoding='unicode_escape') as file:
-    #         track_file = csv.DictReader(file)
-    #         for row in track_file:
-    #             try:
-    #                 track = Track(int(row['track_id']), row['track_title'])
-    #                 self.__dataset_of_tracks.append(track)
-    #                 artist = Artist(int(row['artist_id']),row['artist_name'])
-    #                 self.__dataset_of_artists.add(artist) 
-    #                 try:
-    #                     track_genres = row['track_genres']
-    #                     genre_list = ast.literal_eval(track_genres)
-    #                     for genre_dict in genre_list:
-    #                         genre = Genre(int(genre_dict['genre_id']), genre_dict['genre_title'])
-    #                         self.__dataset_of_genres.add(genre)
-    #                 except SyntaxError:
-    #                     pass
-    #             except ValueError:
-    #                 pass
 
 def create_track_object(track_row):
     track = Track(int(track_row['track_id']), track_row['track_title'])
@@ -257,6 +216,7 @@ def extract_genres(track_row: dict):
     # List of dictionaries inside the string.
     track_genres_raw = track_row['track_genres']
     # Populate genres. track_genres can be empty (None)
+    # genres_dictionary ={}
     genres = []
     if track_genres_raw:
         try:
@@ -264,13 +224,15 @@ def extract_genres(track_row: dict):
                 track_genres_raw) if track_genres_raw != "" else []
 
             for genre_dict in genre_dicts:
+
                 genre = Genre(
                     int(genre_dict['genre_id']), genre_dict['genre_title'])
                 genres.append(genre)
+
         except Exception as e:
             print(track_genres_raw)
             print(f'Exception occurred while parsing genres: {e}')
-
+    # print(genres)
     return genres
 
 def read_csv_file(filename: str):
@@ -296,25 +258,26 @@ def read_csv_file(filename: str):
     return users_rows
 
 
-# def load_tracks_and_albums(album_path: Path, track_path: Path,repo:AbstractRepository ):
-#     reader = TrackCSVReader(album_path, track_path)
-#     tracks, albums = reader.read_csv_files()
-#     for track in tracks:
-#         repo.add_track(track)
-
-#     for album in albums:
-#         repo.add_album(album)
-
 def load_tracks_and_albums(data_path:Path,repo:AbstractRepository, database_mode = bool ):
     album_path = str(data_path /"raw_albums_excerpt.csv")
     track_path = str(data_path /"raw_tracks_excerpt.csv")
     # print(album_path)
     reader = TrackCSVReader(album_path, track_path)
-    tracks, albums = reader.read_csv_files()
+    tracks, albums, genres = reader.read_csv_files()
     
     for track in tracks:
         repo.add_track(track)
-
+    
+    for genre in genres.keys():
+            for track_id in genres[genre]:
+                track = repo.get_tracks_by_id(track_id)
+                
+                if database_mode is True:
+                    track.add_genre(genre)  
+                else:
+                    make_tag_association  
+                print(track, genre)
+            repo.add_genre(genre)
     # for album in albums:
     #     repo.add_album(album)
 def load_users(data_path: Path, repo: AbstractRepository):

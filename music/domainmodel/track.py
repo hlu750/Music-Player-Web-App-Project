@@ -1,7 +1,9 @@
 from music.domainmodel.artist import Artist
 from music.domainmodel.genre import Genre
 from music.domainmodel.album import Album
+from typing import List
 # from music.domainmodel.user import User
+
 # from music.domainmodel.review import Review
 from datetime import datetime
 class Track:
@@ -19,7 +21,7 @@ class Track:
         self.__track_url: str | None = None
         # duration in seconds
         self.__track_duration: int | None = None
-        self.__genres: list = []
+        self.__genres: List[Genre] = list()
         self.__reviews: list = []
 
     @property
@@ -176,3 +178,11 @@ class Review:
     def __repr__(self):
         return f'<Review of track {self.track}, rating = {self.rating}, review_text = {self.review_text}>'
 
+class ModelException(Exception):
+    pass
+
+def make_tag_association(track: Track, genre: Genre):
+    if genre.is_applied_to(track):
+        raise ModelException(f'Tag {genre.name} already applied to Article "{track.title}"')
+    track.add_genre(genre)
+    genre.add_track(track)
