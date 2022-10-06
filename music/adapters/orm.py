@@ -78,13 +78,20 @@ def map_model_to_tables():
         '_Track__artist': relationship(artist.Artist),
         '_Track__album': relationship(album.Album),
         '_Track__track_duration': track_table.c.duration,
-        '_Track__genres:': relationship(genre.Genre, secondary=track_genres_table),
-        '_Track__reviews': relationship(track.Review)
+        '_Track__reviews': relationship(track.Review),
+        '_Track__genres:': relationship(
+            genre.Genre, secondary=track_genres_table,
+            back_populates='_Genre__tracks'),
+        
     })
     
     mapper(genre.Genre, genre_table, properties={
         '_Genre__genre_id': genre_table.c.id, 
         '_Genre__name': genre_table.c.id,
+        '_Genre__tracks': relationship(
+            track.Track,
+            secondary=track_genres_table, 
+            back_populates='_Track__genres')
 
     })
     mapper(artist.Artist,artist_table, properties={

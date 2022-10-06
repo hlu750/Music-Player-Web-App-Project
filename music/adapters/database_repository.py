@@ -40,35 +40,19 @@ class SqlAlchemyRepository(AbstractRepository):
             pass
 
         return user
-<<<<<<< HEAD
-    
-=======
 
     def get_number_of_users(self):
         number_of_users = self._session_cm.session.query(User).count()
         return number_of_users
 
->>>>>>> 71ecd45de23997633594200c89a43e9c1173e573
     def add_track(self, track: Track):
         with self._session_cm as scm:
             scm.session.add(track)
             scm.commit()
-<<<<<<< HEAD
-=======
-
->>>>>>> 71ecd45de23997633594200c89a43e9c1173e573
     def add_album(self, album: Album):
         with self._session_cm as scm:
             scm.session.add(album)
             scm.commit()
-<<<<<<< HEAD
-    def add_liked_track(self, track):
-        pass
-    def get_liked_tracks(self, user: User):
-        pass 
-=======
-
->>>>>>> 71ecd45de23997633594200c89a43e9c1173e573
     def get_track(self, id: int) -> Track:
         track = None
         try:
@@ -78,10 +62,6 @@ class SqlAlchemyRepository(AbstractRepository):
             pass
 
         return track
-<<<<<<< HEAD
-    def get_filtered_tracks(self, title, type):
-        pass
-=======
 
     def get_random_track(self): # session.query(MyModel).order_by(func.rand()).first()
         track = None
@@ -140,7 +120,6 @@ class SqlAlchemyRepository(AbstractRepository):
         number_of_pages = math.ceil(number_of_tracks / quantity)
         return number_of_pages
 
->>>>>>> 71ecd45de23997633594200c89a43e9c1173e573
     def get_reviews(self) -> List[Review]:
         reviews = self._session_cm.session.query(Review).all()
         return reviews

@@ -1,10 +1,14 @@
+# from __future__ import annotations
+import music.domainmodel.track as Track
+from typing import List, Iterable
+
 class Genre:
 
     def __init__(self, genre_id: int, genre_name: str):
         if type(genre_id) is not int or genre_id < 0:
             raise ValueError('Genre ID should be an integer!')
         self.__genre_id = genre_id
-
+        self.__tracks : List[Track.Track] = list()
         if type(genre_name) is str:
             self.__name = genre_name.strip()
         else:
@@ -25,7 +29,9 @@ class Genre:
             name = name.strip()
             if name != '':
                 self.__name = name
-
+    @property
+    def tracks(self):
+        return iter(self.__tracks)
     def __repr__(self) -> str:
         return f'<Genre {self.name}, genre id = {self.genre_id}>'
 

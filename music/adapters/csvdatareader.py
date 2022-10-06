@@ -165,9 +165,11 @@ class TrackCSVReader:
             track.album = album
             # Extract track_genres attributes and assign genres to the track.
             track_genres = extract_genres(track_row)
+            print(track_genres)
             # print(track_genres)
             for genre in track_genres:
                 track.add_genre(genre)
+               
 
            
             # track.artist = album
