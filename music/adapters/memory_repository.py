@@ -34,7 +34,7 @@ class MemoryRepository(AbstractRepository):
         self.__liked_tracks = list()
         self.__albums = list()
         self.__album_index = dict()
-        
+
     def add_user(self, user: User):
         # print(user.user_name)
         self.__users.append(user)
@@ -91,6 +91,7 @@ class MemoryRepository(AbstractRepository):
 
     def get_tracks_by_id(self, id_list):
             # Strip out any ids in id_list that don't represent track ids in the repository.
+            print(id_list)
             existing_ids = [id for id in id_list if id in self.__track_index]
 
             # Fetch the tracks.

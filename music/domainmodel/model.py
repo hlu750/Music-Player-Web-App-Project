@@ -124,6 +124,18 @@ class Artist:
         return hash(self.__artist_id)
 
 from datetime import datetime
+from typing import List
+
+
+class ModelException(Exception):
+    pass
+
+# def make_tag_association(track: Track, genre: Genre):
+#     if genre.is_applied_to(track):
+#         raise ModelException(f'Tag {genre.name} already applied to Article "{track.title}"')
+#     track.add_genre(genre)
+#     genre.add_track(track)
+
 class Track:
     def __init__(self, track_id: int, track_title: str):
         if type(track_id) is not int or track_id < 0:
@@ -139,7 +151,7 @@ class Track:
         self.__track_url: str | None = None
         # duration in seconds
         self.__track_duration: int | None = None
-        self.__genres: List[Genre] = list()
+        self.__genres= []
         self.__reviews: list = []
 
     @property
@@ -203,7 +215,7 @@ class Track:
 
     @property
     def genres(self) -> list:
-        return iter(self.__genres)
+        return (self.__genres)
     @property 
     def reviews(self) -> list:
         return self.__reviews
@@ -212,10 +224,11 @@ class Track:
             self.__reviews.append(review)
         else:
             print("error when adding review to track") 
+
     def add_genre(self, new_genre):
-        if not isinstance(new_genre, Genre) or new_genre in self.__genres:
+        if not isinstance(new_genre, Genre) or new_genre in self.genres:
             return
-        self.__genres.append(new_genre)
+        self.genres.append(new_genre)
 
     def __repr__(self):
         return f"<Track {self.title}, track id = {self.track_id}>"
@@ -232,6 +245,59 @@ class Track:
 
     def __hash__(self):
         return hash(self.track_id)
+
+class Genre:
+
+    def __init__(self, genre_id: int, genre_name: str):
+        
+        if type(genre_id) is not int or genre_id < 0:
+            raise ValueError('Genre ID should be an integer!')
+        self.__genre_id = genre_id
+        # self.__tracks : List[Track] = list()
+        if type(genre_name) is str:
+            self.__name = genre_name.strip()
+        else:
+            self.__name = None
+
+    @property
+    def genre_id(self) -> int:
+        return self.__genre_id
+
+    @property
+    def name(self) -> str:
+        return self.__name
+
+    @name.setter
+    def name(self, name: str):
+        self.__name = None
+        if type(name) is str:
+            name = name.strip()
+            if name != '':
+                self.__name = name
+    # @property
+    # def tracks(self):
+    #     return iter(self.__tracks)
+    
+    # def is_applied_to(self, track: Track) -> bool:
+    #     return track in self.__tracks
+    
+    # def add_track(self, track: Track):
+    #     self.__tracks.append(track)
+    def __repr__(self) -> str:
+        return f'<Genre {self.name}, genre id = {self.genre_id}>'
+
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, self.__class__):
+            return False
+        return self.genre_id == other.genre_id
+
+    def __lt__(self, other):
+        if not isinstance(other, self.__class__):
+            return True
+        return self.genre_id < other.genre_id
+
+    def __hash__(self):
+        return hash(self.genre_id)
 class Review:
 
     def __init__(self, track: Track, review_text: str, rating: int, user_name:str):
@@ -295,67 +361,6 @@ class Review:
 
     def __repr__(self):
         return f'<Review of track {self.track}, rating = {self.rating}, review_text = {self.review_text}>'
-class Genre:
-
-    def __init__(self, genre_id: int, genre_name: str):
-        
-        if type(genre_id) is not int or genre_id < 0:
-            raise ValueError('Genre ID should be an integer!')
-        self.__genre_id = genre_id
-        self.__tracks : List[Track.Track] = list()
-        if type(genre_name) is str:
-            self.__name = genre_name.strip()
-        else:
-            self.__name = None
-
-    @property
-    def genre_id(self) -> int:
-        return self.__genre_id
-
-    @property
-    def name(self) -> str:
-        return self.__name
-
-    @name.setter
-    def name(self, name: str):
-        self.__name = None
-        if type(name) is str:
-            name = name.strip()
-            if name != '':
-                self.__name = name
-    @property
-    def tracks(self):
-        return iter(self.__tracks)
-    
-    def is_applied_to(self, track: Track) -> bool:
-        return track in self.__tracks
-    
-    def add_track(self, track: Track):
-        self.__tracks.append(track)
-    def __repr__(self) -> str:
-        return f'<Genre {self.name}, genre id = {self.genre_id}>'
-
-    def __eq__(self, other) -> bool:
-        if not isinstance(other, self.__class__):
-            return False
-        return self.genre_id == other.genre_id
-
-    def __lt__(self, other):
-        if not isinstance(other, self.__class__):
-            return True
-        return self.genre_id < other.genre_id
-
-    def __hash__(self):
-        return hash(self.genre_id)
-
-class ModelException(Exception):
-    pass
-
-def make_tag_association(track: Track, genre: Genre):
-    if genre.is_applied_to(track):
-        raise ModelException(f'Tag {genre.name} already applied to Article "{track.title}"')
-    track.add_genre(genre)
-    genre.add_track(track)
 
 
 class User:

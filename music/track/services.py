@@ -5,11 +5,11 @@ from typing import List, Iterable
 from urllib.parse import non_hierarchical
 
 from music.adapters.repository import AbstractRepository
-from music.domainmodel.track import Review
-from music.domainmodel.track import Track
-from music.domainmodel.genre import Genre
-from music.domainmodel.user import User
-
+# from music.domainmodel.track import Review
+# from music.domainmodel.track import Track
+# from music.domainmodel.genre import Genre
+# from music.domainmodel.user import User
+from music.domainmodel.model import Review, Track ,Genre, User
 class NonExistentTrackException(Exception):
     pass
 

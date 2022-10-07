@@ -17,8 +17,8 @@ from music.authentication.services import get_user
 
 import  music.utilities.utilities as utilities
 import  music.track.services as services
-from music.domainmodel.track import Track
-from music.domainmodel.user import User
+from music.domainmodel.model import Track, User
+# from music.domainmodel.user import User
 
 
 track_blueprint = Blueprint('track_blueprint', __name__, url_prefix='/browse')

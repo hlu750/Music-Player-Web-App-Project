@@ -35,6 +35,7 @@ def in_memory_repo():
 
 @pytest.fixture
 def client():
+    
     my_app = create_app({
         'TESTING': True,                                # Set to True during testing.
         'TEST_DATA_PATH': TEST_DATA_PATH,               # Path for loading test data into the repository.

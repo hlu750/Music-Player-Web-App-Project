@@ -48,15 +48,20 @@ class SqlAlchemyRepository(AbstractRepository):
     
     def add_track(self, track: Track):
         with self._session_cm as scm:
-            scm.session.add(track)
+            scm.session.merge(track)
+            scm.commit()
+
+    def add_many_genres(self, genres: List[Genre]):
+        with self._session_cm as scm:
+            scm.session.add_all(genres)
             scm.commit()
     def add_genre(self, genre: Genre):
         with self._session_cm as scm:
-            scm.session.add(genre)
+            scm.session.merge(genre)
             scm.commit()
     def add_album(self, album: Album):
         with self._session_cm as scm:
-            scm.session.add(album)
+            scm.session.merge(album)
             scm.commit()
     def get_track(self, id: int) -> Track:
         track = None

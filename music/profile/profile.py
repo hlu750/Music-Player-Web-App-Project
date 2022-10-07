@@ -12,8 +12,8 @@ from music.authentication.authentication import login_required
 
 import  music.utilities.utilities as utilities
 import  music.track.services as services
-from music.domainmodel.track import Track
-from music.domainmodel.user import User
+from music.domainmodel.model import Track, User
+# from music.domainmodel.user import User
 
 
 profile_blueprint = Blueprint('profile_bp', __name__, url_prefix='/profile')

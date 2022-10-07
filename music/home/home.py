@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, url_for
 import music.track.track as track_bp
 import music.utilities.utilities as utilities
-from music.domainmodel.track import Track
+from music.domainmodel.model import Track
 home_blueprint = Blueprint('home_bp', __name__)
 
 @home_blueprint.route('/', methods=['GET'])

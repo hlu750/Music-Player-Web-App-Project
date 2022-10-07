@@ -1,3 +1,4 @@
+from cgi import print_form
 from math import frexp
 import os
 import csv
@@ -9,7 +10,7 @@ from tokenize import String
 # from music.domainmodel.track import Track ,make_tag_association, Genre
 # # from music.domainmodel.genre import Genre
 # from music.domainmodel.user import User
-from music.domainmodel.model import Track, Genre,Album, User, Artist, make_tag_association
+from music.domainmodel.model import Track, Genre,Album, User, Artist
 from pathlib import Path
 from utils import get_project_root
 from datetime import date, datetime
@@ -149,9 +150,11 @@ class TrackCSVReader:
             track.album = album
             # Extract track_genres attributes and assign genres to the track.
             track_genres = extract_genres(track_row)
+
             # print(track_genres)
             # print(track_genres)
             for genre in track_genres:
+                track.add_genre(genre)
                 if genre.name not in [genre.name for genre in genre_dict.keys()]:
                     
                     genre_dict[genre] = list()
@@ -192,7 +195,7 @@ class TrackCSVReader:
 def create_track_object(track_row):
  
     track = Track(int(track_row['track_id']), track_row['track_title'])
-    print("Here")
+    # print("Here")
     track.track_url = track_row['track_url']
     track_duration = round(float(
         track_row['track_duration'])) if track_row['track_duration'] is not None else None
@@ -275,21 +278,29 @@ def load_tracks_and_albums(data_path:Path,repo:AbstractRepository, database_mode
     # print(album_path)
     reader = TrackCSVReader(album_path, track_path)
     tracks, albums, genres = reader.read_csv_files()
-   
+    print("hello", genres.keys())
+    
     for track in tracks:
         
         repo.add_track(track)
-    
     for genre in genres.keys():
-            for track_id in genres[genre]:
-                track = repo.get_tracks_by_id(track_id)
-                
-                if database_mode is True:
-                    track.add_genre(genre)  
-                else:
-                    make_tag_association  
-                print(track, genre)
-            repo.add_genre(genre)
+        repo.add_genre(genre)
+    # repo.add_many_genres(genres.keys()) 
+    # for genre in genres.keys():
+    #         # for track_id in genres[genre]:
+    #         #     # track = repo.get_tracks_by_id(track_id)
+    #         #     track = repo.get_track(track_id)
+    #         #     # print(track)
+    #         #     if database_mode is True:
+    #         #         track.add_genre(genre)  
+    #         #         # print(track.genres)
+    #         #         pass
+    #         #     #else:
+    #         #         # make_tag_association 
+    #         #         #  
+    #         #         pass
+    #             # print(track, genre)
+    #     repo.add_genre(genre)
     # for album in albums:
     #     repo.add_album(album)
 def load_users(data_path: Path, repo: AbstractRepository):

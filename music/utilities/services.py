@@ -1,5 +1,5 @@
 from music.adapters.repository import AbstractRepository
-from music.domainmodel.track import Track
+from music.domainmodel.model import Track
 
 from typing import Iterable
 import random

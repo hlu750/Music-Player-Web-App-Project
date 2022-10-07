@@ -69,7 +69,7 @@ def create_app(test_config=None):
                 # Generate mappings that map domain model classes to the database tables.
                 print("pls")
                 map_model_to_tables()
-                print("bn")
+                # print("bn")
                 database_mode = True
                 repository_populate.populate(data_path, repo.repo_instance, database_mode)
                 print("REPOPULATING DATABASE... FINISHED")
@@ -84,7 +84,7 @@ def create_app(test_config=None):
     # track_file = "raw_tracks_excerpt.csv"
     # repo.repo_instance = MemoryRepository()
     # populate(data_path,album_file,track_file, repo.repo_instance)
-    app.debug = True
+    # app.debug = True
     with app.app_context():
         from .home import home
         app.register_blueprint(home.home_blueprint)
