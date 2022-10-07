@@ -142,8 +142,11 @@ class AbstractRepository(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
+    def get_number_of_reviews(self):
+        raise NotImplementedError
+
+    @abc.abstractmethod
     def add_liked_track(self, track):
-        print("hello? why?")
         raise NotImplementedError
 
     @abc.abstractmethod

@@ -5,6 +5,7 @@ import csv
 import ast
 from tokenize import String
 
+# from music.domainmodel.model import make_genre_association, make_review, ModelException
 # from music.domainmodel.artist import Artist
 # from music.domainmodel.album import Album
 # from music.domainmodel.track import Track ,make_tag_association, Genre
@@ -289,7 +290,7 @@ def load_users(data_path: Path, repo: AbstractRepository):
         )
         repo.add_user(user)
         users[data_row[0]] = user
-    return users
+    return users        
 
 
 def load_reviews(data_path: Path, repo: AbstractRepository, users):

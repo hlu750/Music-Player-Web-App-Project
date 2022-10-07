@@ -15,7 +15,7 @@ users_table = Table(
     Column('password', String(255), nullable=False)
 )
 
-review_table = Table(
+review_table = Table( 
     'reviews', metadata,
     Column('id', Integer, primary_key=True, autoincrement=True),
     Column('user_id', ForeignKey('users.id')),

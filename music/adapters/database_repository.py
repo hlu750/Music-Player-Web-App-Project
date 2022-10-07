@@ -86,7 +86,7 @@ class SqlAlchemyRepository(AbstractRepository):
     def get_random_track(self): # session.query(MyModel).order_by(func.rand()).first()
         track = None
         try:
-            track = self._session_cm.session.query(Track).order_by(func.rand()).first()
+            track = self._session_cm.session.query(Track).order_by(func.random()).first()
         except NoResultFound:
             # Ignore any exception and return None.
             pass
@@ -144,10 +144,14 @@ class SqlAlchemyRepository(AbstractRepository):
         return reviews
 
     def add_review(self, review: Review):
-        super().add_review(review)
+        # super().add_review(review)
         with self._session_cm as scm:
             scm.session.add(review)
             scm.commit()
+
+    def get_number_of_reviews(self) -> int:
+        number_of_reviews = self._session_cm.session.query(Review).count()
+        return number_of_reviews
 
     def add_liked_track(self, track):
         super().add_liked_track(track)
