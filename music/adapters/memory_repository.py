@@ -55,7 +55,7 @@ class MemoryRepository(AbstractRepository):
         insort_left(self.__albums, album)
         self.__album_index[album.album_id] = album
 
-    def get_track(self, id:int) -> Track:
+    def get_track(self, id:int) -> tuple():
         track = None
         prev_track = None
         next_track =None
