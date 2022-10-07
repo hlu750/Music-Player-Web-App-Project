@@ -300,12 +300,14 @@ class Genre:
         return hash(self.genre_id)
 class Review:
 
-    def __init__(self, track: Track, review_text: str, rating: int, user_name:str):
+    def __init__(self, track: Track, review_text: str, rating: int, user):
         self.__track = None
-        if (isinstance(user_name, str)):
-            self.__user_name = user_name
+        if (isinstance(user, User)):
+            self.__user = user
+        # if (isinstance(user_name, str)):
+        #     self.__user_name = user_name
         else:
-            self.__user_name = None
+            self.__user = None
         if isinstance(track, Track):
             self.__track = track
 
@@ -320,8 +322,8 @@ class Review:
 
         self.__timestamp = datetime.now()
     @property
-    def username(self):
-        return self.__user_name
+    def user(self):
+        return self.__user
         
     @property
     def track(self) -> Track:

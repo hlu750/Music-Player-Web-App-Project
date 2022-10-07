@@ -261,8 +261,8 @@ def read_csv_file(filename: str):
 
 def load_tracks_and_albums(data_path:Path,repo:AbstractRepository, database_mode = bool ):
     print("Loading")
-    album_path = str(data_path /"raw_albums_excerpt.csv")
-    track_path = str(data_path /"raw_tracks_excerpt.csv")
+    album_path = str(data_path /"raw_albums_excerptTest.csv")
+    track_path = str(data_path /"raw_tracks_excerptTest.csv")
     # print(album_path)
     reader = TrackCSVReader(album_path, track_path)
     tracks, albums, genres = reader.read_csv_files()
@@ -294,7 +294,9 @@ def load_users(data_path: Path, repo: AbstractRepository):
 
 def load_reviews(data_path: Path, repo: AbstractRepository, users):
     reviews_filename = str(Path(data_path) / "reviews.csv")
+    
     for data_row in read_csv_file(reviews_filename):
+        print(users[data_row[1]])
         review = make_comment(
             review_text=data_row[3],
             user=users[data_row[1]],
