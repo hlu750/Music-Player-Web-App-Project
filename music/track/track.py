@@ -35,6 +35,7 @@ def track():
             song_page = 0
         # track_list = (utilities.get_ordered_tracks())
         tracks = utilities.get_ordered_tracks(int(song_page))
+        print("get_ordered_tracks works")
         # print(tracks)
         if tracks is not None:
             song_page = int(song_page)
@@ -43,6 +44,7 @@ def track():
             next_tracks_url = url_for('track_blueprint.track', page = song_page + 1 )
             prev_tracks_url = url_for('track_blueprint.track', page = song_page - 1 )
             number_of_pages = utilities.get_number_of_pages()
+            print("get_number_of_pages works")
             # print(number_of_pages)
             if song_page + 1> number_of_pages:
                 next_tracks_url = None
@@ -63,6 +65,7 @@ def track():
 @track_blueprint.route('/track/<int:track_id>', methods=['GET'])
 def track_page(track_id):
     prev_track, track, next_track = utilities.get_selected_track(track_id)
+    print("get_selected_track works")
     if track:
         track_to_show_reviews = request.args.get('view_reviews_for')
         if track_to_show_reviews == None:
@@ -118,6 +121,7 @@ def filter_track(title, type):
         return redirect(url_for('track_blueprint.filter_track', title = form.title.data, type = form.select.data))
     else:
         filtered_tracks = utilities.get_filtered_tracks(title.lower(), type.lower())
+        print("get_filtered_tracks works")
         if filtered_tracks is not None:
                 return render_template('track/track.html', tracks = filtered_tracks, 
                 next_tracks_url = None, 
@@ -135,8 +139,9 @@ def review_on_track():
     if form.validate_on_submit():
         track_id = int(form.track_id.data)
         services.add_review(track_id, form.review.data, user_name, repo.repo_instance)
-
+        print("add_review works")
         prev, track,next = services.get_track(track_id, repo.repo_instance)
+        print("get_track works")
         return redirect(url_for('track_blueprint.track_page', track_id=track_id,view_reviews_for=track_id))
     
     if request.method == 'GET':
@@ -149,29 +154,36 @@ def review_on_track():
     else:
         track_id = int(form.track_id.data)
     prev, track,next = services.get_track(track_id, repo.repo_instance)
+    print("get_track works")
     user: User = get_user(user_name, repo.repo_instance)
+    print("get_user works")
+    selected_track=utilities.get_selected_track(track_id)
+    print("get_selected_track works")
     return render_template(
         'track/review_on_track.html',
         title='Edit track',
         track=track, user=user, track_id = track_id,
         form=form,
         handler_url=url_for('track_blueprint.review_on_track'),
-        selected_track=utilities.get_selected_track(track_id)
+        selected_track=selected_track
     )
 @track_blueprint.route('/track/like', methods=['GET', 'POST'])
 @login_required
 def like_track():
     user_name = session['user_name']
     user: User = get_user(user_name, repo.repo_instance)
+    print("get_user works")
     if request.args.get('track_id') == None:
         track_id = 2
     else:
         track_id = int(request.args.get('track_id'))
 
     prev, track, next = services.get_track(track_id, repo.repo_instance)
+    print("get_track works")
     services.add_liked_track(track, user_name, repo.repo_instance)
+    print("add_liked_track works")
     tracks = services.get_liked_tracks(user_name, repo.repo_instance)
-    
+    print("get_liked_tracks works")
     return render_template('profile/favourites.html', 
     title='Liked Tracks', track = track, tracks = tracks, user = user
     )
@@ -181,15 +193,18 @@ def like_track():
 def unlike_track():
     user_name = session['user_name']
     user: User = get_user(user_name, repo.repo_instance)
+    print("get_user works")
     if request.args.get('track_id') == None:
         track_id = 2
     else:
         track_id = int(request.args.get('track_id'))
 
     prev, track, next = services.get_track(track_id, repo.repo_instance)
+    print("get_track works")
     services.remove_liked_track(track, user_name, repo.repo_instance)
+    print("remove_liked_track works")
     tracks = services.get_liked_tracks(user_name, repo.repo_instance)
-    
+    print("get_liked_tracks works")
     return render_template('profile/favourites.html', 
     title='Liked Tracks', track = track, tracks = tracks, user = user
     )
