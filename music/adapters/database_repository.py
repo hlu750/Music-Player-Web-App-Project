@@ -65,8 +65,8 @@ class SqlAlchemyRepository(AbstractRepository):
             scm.commit()
     def get_track(self, id: int) -> Track:
         track = None
-        try:
-            track = self._session_cm.session.query(Track).filter(Track._Track__track_id == id).one()
+        try: func.row_number().over(order_by=Data.id)
+            track = self._session_cm.session.query(Track).offset((Track._Track__track_id == id )-1).limit(3).all()
         except NoResultFound:
             # Ignore any exception and return None.
             pass
