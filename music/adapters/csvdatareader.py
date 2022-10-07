@@ -11,8 +11,7 @@ from tokenize import String
 # from music.domainmodel.track import Track ,make_tag_association, Genre
 # # from music.domainmodel.genre import Genre
 # from music.domainmodel.user import User
-from music.domainmodel.model import *
-from music.domainmodel.model import Track, Genre,Album, User, Artist, Review, make_review
+from music.domainmodel.model import Track, Genre,Album, User, Artist, Review, make_comment
 from pathlib import Path
 from utils import get_project_root
 from datetime import date, datetime
@@ -92,7 +91,7 @@ class TrackCSVReader:
             for row in reader:
                 artist_id = int(row['artist_id']) if row['artist_id'].isdigit() else row['artist_id']
                 if type(artist_id) is not int:
-                    print(f'Invalid album_id: {artist_id}')
+                    print(f'Invalid artist_id: {artist_id}')
                     print(row)
                     continue
                 artist = create_artist_object(row)
@@ -100,19 +99,7 @@ class TrackCSVReader:
         # print("2")
         return artist_dict
     def read_tracks_file(self):
-        # with open(self.__tracks_csv_file, encoding='utf-8-sig') as infile:
-        #     reader = csv.reader(infile)
-        #     # Read first line of the the CSV file.
-        #     headers = next(reader)
-        #     # Read remaining rows from the CSV file.
-        #     for row in reader:
-        #         # Strip any leading/trailing white space from data read.
-        #         row = [item.strip() for item in row]
-        #         yield row
         
-        # if not os.path.exists(self.__tracks_csv_file):
-        #     print(f"path {self.__tracks_csv_file} does not exist!")
-        #     return
         track_rows = []
         # encoding of unicode_escape is required to decode successfully
         with open(self.__tracks_csv_file, encoding='unicode_escape') as track_csv:
@@ -287,24 +274,7 @@ def load_tracks_and_albums(data_path:Path,repo:AbstractRepository, database_mode
         repo.add_track(track)
     for genre in genres.keys():
         repo.add_genre(genre)
-    # repo.add_many_genres(genres.keys()) 
-    # for genre in genres.keys():
-    #         # for track_id in genres[genre]:
-    #         #     # track = repo.get_tracks_by_id(track_id)
-    #         #     track = repo.get_track(track_id)
-    #         #     # print(track)
-    #         #     if database_mode is True:
-    #         #         track.add_genre(genre)  
-    #         #         # print(track.genres)
-    #         #         pass
-    #         #     #else:
-    #         #         # make_tag_association 
-    #         #         #  
-    #         #         pass
-    #             # print(track, genre)
-    #     repo.add_genre(genre)
-    # for album in albums:
-    #     repo.add_album(album)
+
 def load_users(data_path: Path, repo: AbstractRepository):
     users = dict()
 
@@ -326,35 +296,21 @@ def load_users(data_path: Path, repo: AbstractRepository):
 def load_reviews(data_path: Path, repo: AbstractRepository, users):
     reviews_filename = str(Path(data_path) / "reviews.csv")
     for data_row in read_csv_file(reviews_filename):
-        # track = repo.get_track(data_row[0])
-        # review = Review(
-        #     # review_id=review_num + 1,
-        #     track=track,
-        #     review_text=data_row[1],
-        #     rating=5,
-        #     user_name=data_row[3]
-        # )
-        review_num = repo.get_number_of_reviews()
-        review = make_review(
-            review_id=review_num + 1,
+        review = make_comment(
+            review_text=data_row[3],
             user=users[data_row[1]],
             track=repo.get_track(int(data_row[2])),
-            review_text=data_row[3]
+            timestamp=datetime.fromisoformat(data_row[4])
+            
         )
+        print(review)
         repo.add_review(review)
 
-def make_review(review_id: int, user: User, review_text: str, track: Track):
-    user_name = user.user_name
-    review = Review(track, review_text, 5, user_name)
-    user.add_review(review)
-    track.add_review(review)
-    return review
-
-def populate(data_path, album_path,track_path ,repo:AbstractRepository):
-    load_tracks_and_albums(album_path, track_path,repo)
-    # print (data_path )
-    # Load users into the repository.
-    users = load_users(data_path, repo) 
-    # print(users)
-    # # Load comments into the repository.
-    load_reviews(track_path, repo, users)
+# def populate(data_path, album_path,track_path ,repo:AbstractRepository):
+#     load_tracks_and_albums(album_path, track_path,repo)
+#     # print (data_path )
+#     # Load users into the repository.
+#     users = load_users(data_path, repo) 
+#     # print(users)
+#     # # Load comments into the repository.
+#     # load_reviews(track_path, repo, users)

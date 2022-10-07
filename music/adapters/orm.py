@@ -19,10 +19,10 @@ review_table = Table(
     'reviews', metadata,
     Column('id', Integer, primary_key=True, autoincrement=True),
     Column('user_id', ForeignKey('users.id')),
-    Column('track_id', ForeignKey('tracks.id')),
-    Column('review_text', String(1024), nullable=False)
-) 
-
+    Column('track_id', ForeignKey('tracks.id')), 
+    Column('review', String(1024), nullable=False),
+    Column('timestamp', DateTime, nullable=False)
+)
 artist_table = Table(
     'artists', metadata,
     Column('id', Integer, primary_key=True,autoincrement=True),
@@ -92,7 +92,7 @@ def map_model_to_tables():
         '_Track__artist': relationship(Artist),
         '_Track__album': relationship(Album),
         '_Track__track_duration': track_table.c.duration,
-        # '_Track__reviews': relationship(Review),
+        '_Track__reviews': relationship(Review),
        
     })
     
