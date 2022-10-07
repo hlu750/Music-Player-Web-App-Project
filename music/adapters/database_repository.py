@@ -65,13 +65,25 @@ class SqlAlchemyRepository(AbstractRepository):
             scm.commit()
     def get_track(self, id: int) -> Track:
         track = None
+        prev_track = None
+        next_track = None
         try:
+            
             track = self._session_cm.session.query(Track).filter(Track._Track__track_id == id).one()
+            
         except NoResultFound:
             # Ignore any exception and return None.
             pass
-
-        return track
+        try:
+            prev_track = self._session_cm.session.query(Track).order_by(Track._Track__track_id.desc()).filter(Track._Track__track_id < id).first()
+        except NoResultFound:
+            # Ignore any exception and return None.
+            pass
+        try: 
+            next_track = self._session_cm.session.query(Track).order_by(Track._Track__track_id.asc()).filter(Track._Track__track_id > id).first()
+        except NoResultFound:
+            pass
+        return prev_track,track,next_track
 
     @property
     def tracks(self) -> List[Track]:
