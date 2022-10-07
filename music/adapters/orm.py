@@ -46,6 +46,13 @@ track_table = Table(
     Column('duration', Integer, nullable=False)
 )
 
+user_tracks_table = Table(
+    'user_tracks', metadata,
+    Column('id', Integer, primary_key=True, autoincrement=True),
+    Column('user_id', ForeignKey('users.id')),
+    Column('track_id', ForeignKey('tracks.id'))
+)
+
 genre_table = Table(
     'genres', metadata,
     Column('genre_id', Integer, primary_key=True),   
@@ -67,7 +74,7 @@ def map_model_to_tables():
         '_User__user_name': users_table.c.user_name,
         '_User__password': users_table.c.password,
         # '_User__reviews': relationship(track.Review, backref='_Review__user'),
-        # '_User__liked_tracks': relationship(track.Track)
+        '_User__liked_tracks': relationship(Track, secondary=user_tracks_table)
     })
     mapper(Review, review_table, properties={
         '_Review__review_text': review_table.c.review, 
