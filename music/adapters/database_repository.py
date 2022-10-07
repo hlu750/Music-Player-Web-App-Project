@@ -86,7 +86,7 @@ class SqlAlchemyRepository(AbstractRepository):
     def get_random_track(self): # session.query(MyModel).order_by(func.rand()).first()
         track = None
         try:
-            track = self._session_cm.session.query(Track).order_by(func.rand()).first()
+            track = self._session_cm.session.query(Track).order_by(func.random()).first()
         except NoResultFound:
             # Ignore any exception and return None.
             pass
