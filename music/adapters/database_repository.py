@@ -65,13 +65,25 @@ class SqlAlchemyRepository(AbstractRepository):
             scm.commit()
     def get_track(self, id: int) -> Track:
         track = None
-        try: func.row_number().over(order_by=Data.id)
-            track = self._session_cm.session.query(Track).offset((Track._Track__track_id == id )-1).limit(3).all()
+        prev_track = None
+        next_track = None
+        try:
+            
+            track = self._session_cm.session.query(Track).filter(Track._Track__track_id == id).one()
+            
         except NoResultFound:
             # Ignore any exception and return None.
             pass
-
-        return track
+        try:
+            prev_track = self._session_cm.session.query(Track).order_by(Track._Track__track_id.desc()).filter(Track._Track__track_id < id).first()
+        except NoResultFound:
+            # Ignore any exception and return None.
+            pass
+        try: 
+            next_track = self._session_cm.session.query(Track).order_by(Track._Track__track_id.asc()).filter(Track._Track__track_id > id).first()
+        except NoResultFound:
+            pass
+        return prev_track,track,next_track
 
     @property
     def tracks(self) -> List[Track]:
@@ -144,7 +156,7 @@ class SqlAlchemyRepository(AbstractRepository):
         return reviews
 
     def add_review(self, review: Review):
-        # super().add_review(review)
+        super().add_review(review)
         with self._session_cm as scm:
             scm.session.merge(review)
             scm.commit()
@@ -153,14 +165,14 @@ class SqlAlchemyRepository(AbstractRepository):
         number_of_reviews = self._session_cm.session.query(Review).count()
         return number_of_reviews
 
-    def add_liked_track(self, track):
+    def add_liked_track(self, track: Track):
         super().add_liked_track(track)
         with self._session_cm as scm:
             scm.session.merge(track)
             scm.commit()
 
-    def get_liked_tracks(self, user):
-        liked_tracks = self._session_cm.session.query(User._User__liked_tracks).all()
+    def get_liked_tracks(self, user: User):
+        liked_tracks = self._session_cm.session.query(Track).filter(Track._Track__track_id.in_(User._User__liked_tracks)).all()
         return liked_tracks
 
 
