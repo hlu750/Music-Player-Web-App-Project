@@ -15,14 +15,14 @@ users_table = Table(
     Column('password', String(255), nullable=False)
 )
 
-review_table = Table(
+review_table = Table( 
     'reviews', metadata,
     Column('id', Integer, primary_key=True, autoincrement=True),
-    Column('user_name', String(255), nullable=False),
-    Column('track_id', ForeignKey('tracks.id')), 
-    Column('review', String(1024), nullable=False),
-    Column('timestamp', DateTime, nullable=False)
-)
+    Column('user_id', ForeignKey('users.id')),
+    Column('track_id', ForeignKey('tracks.id')),
+    Column('review_text', String(1024), nullable=False)
+) 
+
 artist_table = Table(
     'artists', metadata,
     Column('id', Integer, primary_key=True,autoincrement=True),
@@ -69,8 +69,8 @@ def map_model_to_tables():
         # '_User__liked_tracks': relationship(track.Track)
     })
     mapper(Review, review_table, properties={
-        '_Review__review_text': review_table.c.review, 
-        '_Review__timestamp': review_table.c.timestamp
+        '_Review__review_track': review_table.c.track_id,
+        '_Review__review_text': review_table.c.review
     })
     mapper(Artist,artist_table, properties={
         

@@ -5,12 +5,14 @@ import csv
 import ast
 from tokenize import String
 
+# from music.domainmodel.model import make_genre_association, make_review, ModelException
 # from music.domainmodel.artist import Artist
 # from music.domainmodel.album import Album
 # from music.domainmodel.track import Track ,make_tag_association, Genre
 # # from music.domainmodel.genre import Genre
 # from music.domainmodel.user import User
-from music.domainmodel.model import Track, Genre,Album, User, Artist
+from music.domainmodel.model import *
+from music.domainmodel.model import Track, Genre,Album, User, Artist, Review, make_review
 from pathlib import Path
 from utils import get_project_root
 from datetime import date, datetime
@@ -318,19 +320,35 @@ def load_users(data_path: Path, repo: AbstractRepository):
         )
         repo.add_user(user)
         users[data_row[0]] = user
-    return users
+    return users        
 
 
 def load_reviews(data_path: Path, repo: AbstractRepository, users):
     reviews_filename = str(Path(data_path) / "reviews.csv")
     for data_row in read_csv_file(reviews_filename):
-        review = User.add_review(
-            review_text=data_row[3],
+        # track = repo.get_track(data_row[0])
+        # review = Review(
+        #     # review_id=review_num + 1,
+        #     track=track,
+        #     review_text=data_row[1],
+        #     rating=5,
+        #     user_name=data_row[3]
+        # )
+        review_num = repo.get_number_of_reviews()
+        review = make_review(
+            review_id=review_num + 1,
             user=users[data_row[1]],
             track=repo.get_track(int(data_row[2])),
-            timestamp=datetime.fromisoformat(data_row[4])
+            review_text=data_row[3]
         )
         repo.add_review(review)
+
+def make_review(review_id: int, user: User, review_text: str, track: Track):
+    user_name = user.user_name
+    review = Review(track, review_text, 5, user_name)
+    user.add_review(review)
+    track.add_review(review)
+    return review
 
 def populate(data_path, album_path,track_path ,repo:AbstractRepository):
     load_tracks_and_albums(album_path, track_path,repo)
@@ -339,4 +357,4 @@ def populate(data_path, album_path,track_path ,repo:AbstractRepository):
     users = load_users(data_path, repo) 
     # print(users)
     # # Load comments into the repository.
-    # load_reviews(track_path, repo, users)
+    load_reviews(track_path, repo, users)
