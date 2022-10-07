@@ -66,7 +66,7 @@ class SqlAlchemyRepository(AbstractRepository):
     def get_track(self, id: int) -> Track:
         track = None
         try:
-            track = self._session_cm.session.query(Track).filter(Track._Track__id == id)
+            track = self._session_cm.session.query(Track).filter(Track._Track__track_id == id).one()
         except NoResultFound:
             # Ignore any exception and return None.
             pass
