@@ -69,6 +69,7 @@ def add_liked_track(track, user_name: str, repo: AbstractRepository):
     # print(track)
     # Update the repository.
     user.add_liked_track(track)
+    print("3:" + user.liked_tracks)
 def get_liked_tracks_list(user_name, repo: AbstractRepository):
     user : User = repo.get_user(user_name)
     if user is None:

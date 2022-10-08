@@ -13,7 +13,7 @@ users_table = Table(
     Column('id', Integer, primary_key=True, autoincrement=True),
     Column('user_name', String(255), unique=True, nullable=False),
     Column('password', String(255), nullable=False),
-    # Column('track_id', ForeignKey('tracks.id'))
+    Column('liked_tracks', ForeignKey('tracks.id'))
 )
 
 review_table = Table( 
@@ -76,9 +76,9 @@ def map_model_to_tables():
         '_User__password': users_table.c.password,
         '_User__reviews': relationship(Review, backref='_Review__user'),
         # '_User__liked_tracks': relationship(Track, backref='_Track__user')
-        # '_User__liked_tracks': relationship(Track, secondary=user_tracks_table)
-        # '_User__liked_tracks': relationship(Track, secondary=user_tracks_table,
-        #                                back_populates='_Track__track_users')
+        # '_User__user_tracks': relationship(Track, secondary=user_tracks_table)
+        '_User__user_tracks': relationship(Track, secondary=user_tracks_table,
+                                       back_populates='_Track__track_users')
         # '_User__reviews': relationship(Review),
         # '_User__tracks': relationship(Track, secondary=user_tracks_table)
     })
@@ -114,8 +114,9 @@ def map_model_to_tables():
         '_Track__track_duration': track_table.c.duration,
         # '_Track__reviews': relationship(Review),
         '_Track__reviews': relationship(Review, backref='_Review__track'),
-        # '_Track__track_users': relationship(User, secondary=user_tracks_table,
-        #                                back_populates='_User__liked_tracks')
+        # '_Track__track_users': relationship(User, secondary=user_tracks_table)
+        '_Track__track_users': relationship(User, secondary=user_tracks_table,
+                                       back_populates='_User__user_tracks')
        
     })
     
