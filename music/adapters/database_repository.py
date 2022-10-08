@@ -32,7 +32,7 @@ class SqlAlchemyRepository(AbstractRepository):
             scm.session.merge(user)
             scm.commit()
 
-    def get_user(self, user_name: str) -> User:
+    def get_user(self, user_name: str) -> User: #works
         user = None
         try:
             user = self._session_cm.session.query(User).filter(User._User__user_name == user_name).one()
@@ -63,7 +63,7 @@ class SqlAlchemyRepository(AbstractRepository):
         with self._session_cm as scm:
             scm.session.merge(album)
             scm.commit()
-    def get_track(self, id: int) -> Track:
+    def get_track(self, id: int) -> Track: #works
         track = None
         prev_track = None
         next_track = None
@@ -110,7 +110,7 @@ class SqlAlchemyRepository(AbstractRepository):
             tracks = self._session_cm.session.query(Track).all()
             return tracks
         else:
-            tracks = self._session_cm.session.query(Track).filter(target_genre.in_(Track._Track__genre)).all()
+            tracks = self._session_cm.session.query(Track).filter(target_genre.in_(Track._Track__genres)).all()
             return tracks   
         
     def get_filtered_tracks(self, title, type) -> List[Track]:
@@ -118,12 +118,14 @@ class SqlAlchemyRepository(AbstractRepository):
         filtered_tracks =[]
         if type == 'track':
             filtered_tracks = self._session_cm.session.query(Track).filter(Track._Track__title == title).all()
-        elif type == 'artist':
-            filtered_tracks = self._session_cm.session.query(Track).filter(Track._Track__artist == title).all()
+        elif type == 'artist': #Track._Track__artist.has(**criteria)
+            filtered_tracks = self._session_cm.session.query(Track, Artist).filter(Track._Track__artist == Artist._Artist__artist_id and Artist._Artist__full_name.has(title)).all()
+            filtered_tracks = self._session_cm.session.execute('SELECT full_name FROM artists WHERE full_name like '%:tag_name'%', {'tag_name': tag_name}).fetchone()
+
         elif type == 'album':
             filtered_tracks = self._session_cm.session.query(Track).filter(Track._Track__album == title).all()
-        elif type == 'genre':
-            filtered_tracks = self._session_cm.session.query(Track).filter(title in Track._Track__genre).all() 
+        elif type == 'genre': 
+            filtered_tracks = self._session_cm.session.query(Track).filter(title.in_(Track._Track__genres)).all() 
         else:                           
             pass
         return filtered_tracks 
@@ -136,7 +138,7 @@ class SqlAlchemyRepository(AbstractRepository):
         tracks = self._session_cm.session.query(Track).filter(Track._Track__track_id == id).first()
         return tracks
 
-    def get_tracks_by_quantity(self, startIndex, quantity):
+    def get_tracks_by_quantity(self, startIndex, quantity): #works
         number_of_tracks = self._session_cm.session.query(Track).count()
         tracks = self._session_cm.session.query(Track).all()
         if startIndex >= 0 and startIndex + quantity < number_of_tracks:
@@ -146,7 +148,7 @@ class SqlAlchemyRepository(AbstractRepository):
         else:
             return None
 
-    def get_number_of_pages(self, quantity):
+    def get_number_of_pages(self, quantity): #works
         number_of_tracks = self._session_cm.session.query(Track).count()
         number_of_pages = math.ceil(number_of_tracks / quantity)
         return number_of_pages
@@ -155,7 +157,7 @@ class SqlAlchemyRepository(AbstractRepository):
         reviews = self._session_cm.session.query(Review).all()
         return reviews
 
-    def add_review(self, review: Review):
+    def add_review(self, review: Review): #works
         super().add_review(review)
         with self._session_cm as scm:
             scm.session.merge(review)
@@ -165,14 +167,14 @@ class SqlAlchemyRepository(AbstractRepository):
         number_of_reviews = self._session_cm.session.query(Review).count()
         return number_of_reviews
 
-    def add_liked_track(self, track: Track):
+    def add_liked_track(self, track: Track): #works
         super().add_liked_track(track)
         with self._session_cm as scm:
             scm.session.merge(track)
             scm.commit()
 
-    def get_liked_tracks(self, user: User):
-        liked_tracks = self._session_cm.session.query(Track).filter(Track._Track__track_id.in_(User._User__liked_tracks)).all()
+    def get_liked_tracks(self, user: User): #works 
+        liked_tracks = self._session_cm.session.query(Track).filter(Track._Track__track_id.in_(User._User__tracks)).all()
         return liked_tracks
 
 

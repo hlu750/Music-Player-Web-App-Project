@@ -140,7 +140,7 @@ def review_on_track():
         track_id = int(form.track_id.data)
         services.add_review(track_id, form.review.data, user_name, repo.repo_instance)
         print("add_review works")
-        prev, track,next = services.get_track(track_id, repo.repo_instance)
+        prev, track, next = services.get_track(track_id, repo.repo_instance)
         print("get_track works")
         return redirect(url_for('track_blueprint.track_page', track_id=track_id,view_reviews_for=track_id))
     
