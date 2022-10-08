@@ -446,9 +446,11 @@ class User:
         return hash(self.user_id)
 
 def make_comment(review_text: str, user: User, track: Track, timestamp: datetime = datetime.today()):
-    comment = Review(track, review_text, 5, user )
-    user.add_review(comment)
     print(track)
+    comment = Review(track, review_text, 5, user )
+    # print(comment)
+    user.add_review(comment)
+    # print(track
     track.add_review(comment)
 
     return comment

@@ -265,12 +265,12 @@ def load_tracks_and_albums(data_path:Path,repo:AbstractRepository, database_mode
     # album_path = str(data_path /"raw_albums_excerptTest.csv")
     # track_path = str(data_path /"raw_tracks_excerptTest.csv")
     
-    album_path = str(data_path /"raw_albums_excerpt.csv")
-    track_path = str(data_path /"raw_tracks_excerpt.csv")
+    album_path = str(data_path /"raw_albums_excerptTest.csv")
+    track_path = str(data_path /"raw_tracks_excerptTest.csv")
     # print(album_path)
     reader = TrackCSVReader(album_path, track_path)
     tracks, albums, genres = reader.read_csv_files()
-    print("hello", genres.keys())
+    
     
     for track in tracks:
         
@@ -300,11 +300,12 @@ def load_reviews(data_path: Path, repo: AbstractRepository, users):
     reviews_filename = str(Path(data_path) / "reviews.csv")
     
     for data_row in read_csv_file(reviews_filename):
-        print(users[data_row[1]])
+        # print(data_row[1])
+        # print(users[data_row[1]])
         review = make_comment(
             review_text=data_row[3],
             user=users[data_row[1]],
-            track=repo.get_track(int(data_row[2])),
+            track=repo.get_track(int(data_row[2]))[1],
             timestamp=datetime.fromisoformat(data_row[4])
             
         )
