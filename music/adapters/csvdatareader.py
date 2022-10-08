@@ -304,7 +304,7 @@ def load_reviews(data_path: Path, repo: AbstractRepository, users):
         review = make_comment(
             review_text=data_row[3],
             user=users[data_row[1]],
-            track=repo.get_track(int(data_row[2])),
+            track=repo.get_track(int(data_row[2]))[1],
             timestamp=datetime.fromisoformat(data_row[4])
             
         )

@@ -29,7 +29,7 @@ class SqlAlchemyRepository(AbstractRepository):
     
     def add_user(self, user: User):
         with self._session_cm as scm:
-            scm.session.merge(user)
+            scm.session.add(user)
             scm.commit()
 
     def get_user(self, user_name: str) -> User: #works
@@ -106,22 +106,29 @@ class SqlAlchemyRepository(AbstractRepository):
         return track
         
     def get_track_by_genre(self, genre) -> List[Track]:
-        genre = self._session_cm.session.query(Genre).filter(Genre._Genre__name.contains(genre)).all() 
-        tracks = self._session_cm.session.query(Track).filter(Track._Track__genres.contains(genre[0])).all() 
-        return tracks 
-    
+        genres = self._session_cm.session.query(Genre).filter(Genre._Genre__name.contains(genre)).all() 
+        if len(genres) == 0:
+            return genres
+        tracks = self._session_cm.session.query(Track).filter(Track._Track__genres.contains(genres[0])).all() 
+        return tracks
+
     def get_track_by_title(self, title) -> List[Track]:
         tracks = self._session_cm.session.query(Track).filter(Track._Track__title.contains(title)).all() 
         return tracks
 
     def get_track_by_artist(self, artist) -> List[Track]:
-        artist = self._session_cm.session.query(Artist).filter(Artist._Artist__full_name.contains(artist)).all() 
-        tracks = self._session_cm.session.query(Track).filter(Track._Track__artist == artist[0]).all() 
+        artists = self._session_cm.session.query(Artist).filter(Artist._Artist__full_name.contains(artist)).all() 
+        if len(artists) ==0:
+            return artists
+        
+        tracks = self._session_cm.session.query(Track).filter(Track._Track__artist == artists[0]).all() 
         return tracks
 
     def get_track_by_album(self, album) -> List[Track]:
-        album = self._session_cm.session.query(Album).filter(Album._Album__title.contains(album)).all() 
-        tracks = self._session_cm.session.query(Track).filter(Track._Track__album == album[0]).all() 
+        albums = self._session_cm.session.query(Album).filter(Album._Album__title.contains(album)).all() 
+        if len(albums) ==0:
+            return albums
+        tracks = self._session_cm.session.query(Track).filter(Track._Track__album == (albums[0])).all() 
         return tracks
 
     def get_filtered_tracks(self, title, type) -> List[Track]:
@@ -136,7 +143,11 @@ class SqlAlchemyRepository(AbstractRepository):
         elif type == 'genre': 
             filtered_tracks = self.get_track_by_genre(title)
         else:                           
-            pass
+            filtered_tracks = self.get_track_by_title(title)
+            filtered_tracks += self.get_track_by_artist(title)
+            filtered_tracks += self.get_track_by_album(title)
+            filtered_tracks += self.get_track_by_genre(title)
+
         return filtered_tracks 
 
     def get_number_of_tracks(self) -> int:
