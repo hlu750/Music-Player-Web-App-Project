@@ -26,7 +26,7 @@ def add_review(track_id: int, review_text: str, user_name: str, repo: AbstractRe
         raise UnknownUserException
 
     # Create review.
-    review = Review(track, review_text, 5,user_name)
+    review = Review(track, review_text, 5,user)
     repo.add_review(review)
     track.add_review(review)
 
