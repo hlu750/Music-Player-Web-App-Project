@@ -415,11 +415,15 @@ class User:
         return self.__liked_tracks
 
     def add_liked_track(self, track: Track):
+        print("are we here")
         if not isinstance(track, Track) or track in self.__liked_tracks:
-            print("1:" + self.__liked_tracks)
+            print("1:")
+            print(self.__liked_tracks)
             return
+        print("ello?")
         self.__liked_tracks.append(track)
-        print("2:" + self.__liked_tracks)
+        print("2:")
+        print(self.__liked_tracks)
 
     def remove_liked_track(self, track: Track):
         if not isinstance(track, Track) or track not in self.__liked_tracks:

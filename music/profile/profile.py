@@ -15,6 +15,7 @@ import  music.track.services as services
 from music.domainmodel.model import Track, User
 # from music.domainmodel.user import User
 
+from music.authentication.services import get_user
 
 profile_blueprint = Blueprint('profile_bp', __name__, url_prefix='/profile')
 
@@ -45,15 +46,26 @@ def recommended_tracks():
     else:
         return render_template('profile/recommended.html', selected_track = None,tracks = None)
 
+from music.track.services import get_liked_tracks
 
 @profile_blueprint.route('/favourites', methods=['GET', 'POST'])
 @login_required
 def favourites():
     user_name = session['user_name']
     # print(user_name)
-    user : User = MemoryRepository.get_user(user_name, repo.repo_instance)
+    user : User = get_user(user_name, repo.repo_instance)
+    print("user?")
+    print(user)
     # tracks = user.liked_tracks()
-    tracks = services.get_liked_tracks(user_name, repo.repo_instance)
+    # liked_tracks = request.args.get('tracks')
+    print("ooo")
+    # print(liked_tracks)
+    print("right:")
+    
+    tracks = get_liked_tracks(user_name, repo.repo_instance)
+    # print(services.get_liked_tracks(user_name, repo.repo_instance))
+    # tracks = services.get_liked_tracks(user_name, repo.repo_instance)
+    print(tracks)
     like_track_url = url_for('track_blueprint.like_track')
 
     return render_template('profile/favourites.html', 

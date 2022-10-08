@@ -59,9 +59,13 @@ def get_reviews_for_track(track_id, repo: AbstractRepository):
 
 def add_liked_track(track, user_name: str, repo: AbstractRepository):
     # Check that the track exists.
+    print(track)
+    print("um")
     if track is None:
         raise NonExistentTrackException
     user : User = repo.get_user(user_name)
+    print("3:")
+    print(user)
     if user is None:
         raise UnknownUserException
 
@@ -69,7 +73,8 @@ def add_liked_track(track, user_name: str, repo: AbstractRepository):
     # print(track)
     # Update the repository.
     user.add_liked_track(track)
-    print("3:" + user.liked_tracks)
+    print("3:")
+    print(user.liked_tracks)
 def get_liked_tracks_list(user_name, repo: AbstractRepository):
     user : User = repo.get_user(user_name)
     if user is None:
