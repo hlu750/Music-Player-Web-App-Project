@@ -262,9 +262,6 @@ def read_csv_file(filename: str):
 
 def load_tracks_and_albums(data_path:Path,repo:AbstractRepository, database_mode = bool ):
     print("Loading")
-    # album_path = str(data_path /"raw_albums_excerptTest.csv")
-    # track_path = str(data_path /"raw_tracks_excerptTest.csv")
-    
     album_path = str(data_path /"raw_albums_excerptTest.csv")
     track_path = str(data_path /"raw_tracks_excerptTest.csv")
     # print(album_path)
