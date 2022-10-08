@@ -76,9 +76,9 @@ def map_model_to_tables():
         '_User__password': users_table.c.password,
         '_User__reviews': relationship(Review, backref='_Review__user'),
         # '_User__liked_tracks': relationship(Track, backref='_Track__user')
-        # '_User__user_tracks': relationship(Track, secondary=user_tracks_table)
-        '_User__user_tracks': relationship(Track, secondary=user_tracks_table,
-                                       back_populates='_Track__track_users')
+        '_User__liked_tracks': relationship(Track, secondary=user_tracks_table)
+        # '_User__user_tracks': relationship(Track, secondary=user_tracks_table,
+        #                                back_populates='_Track__track_users')
         # '_User__reviews': relationship(Review),
         # '_User__tracks': relationship(Track, secondary=user_tracks_table)
     })
@@ -115,8 +115,8 @@ def map_model_to_tables():
         # '_Track__reviews': relationship(Review),
         '_Track__reviews': relationship(Review, backref='_Review__track'),
         # '_Track__track_users': relationship(User, secondary=user_tracks_table)
-        '_Track__track_users': relationship(User, secondary=user_tracks_table,
-                                       back_populates='_User__user_tracks')
+        # '_Track__track_users': relationship(User, secondary=user_tracks_table,
+        #                                back_populates='_User__user_tracks')
        
     })
     

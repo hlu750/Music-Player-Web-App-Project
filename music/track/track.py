@@ -182,7 +182,7 @@ def like_track():
     print("get_track works")
     print("5")
     services.add_liked_track(track, user_name, repo.repo_instance)
-    print("4:" + user.liked_tracks)
+    # print("4:" + user.liked_tracks)
     print("add_liked_track works")
     tracks = services.get_liked_tracks(user_name, repo.repo_instance)
     print("get_liked_tracks works")
