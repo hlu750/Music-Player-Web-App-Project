@@ -105,13 +105,10 @@ class SqlAlchemyRepository(AbstractRepository):
 
         return track
         
-    def get_track_by_genre(self, target_genre) -> List[Track]:
-        if target_genre is None:
-            tracks = self._session_cm.session.query(Track).all()
-            return tracks
-        else:                                            
-            tracks = self._session_cm.session.query(Track).filter(Track._Track__genres.contains(target_genre)).all()
-            return tracks   
+    def get_track_by_genre(self, genre) -> List[Track]:
+        genre = self._session_cm.session.query(Genre).filter(Genre._Genre__name.contains(genre)).all() 
+        tracks = self._session_cm.session.query(Track).filter(Track._Track__genres.contains(genre[0])).all() 
+        return tracks 
     
     def get_track_by_title(self, title) -> List[Track]:
         tracks = self._session_cm.session.query(Track).filter(Track._Track__title.contains(title)).all() 
