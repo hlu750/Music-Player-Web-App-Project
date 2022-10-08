@@ -112,22 +112,23 @@ class SqlAlchemyRepository(AbstractRepository):
         else:
             tracks = self._session_cm.session.query(Track).filter(target_genre.in_(Track._Track__genres)).all()
             return tracks   
-        
+    def get_track_by_title(self, title) -> List[Track]:
+
+        return self._session_cm.session.query(Track).filter(Track._Track__title.contains(title)).all()
     def get_filtered_tracks(self, title, type) -> List[Track]:
         title = title.lower()
         filtered_tracks =[]
         if type == 'track':
-            filtered_tracks = self._session_cm.session.query(Track).filter(Track._Track__title == title).all()
+            filtered_tracks = self.get_track_by_title(title)
+            print(filtered_tracks)
         elif type == 'artist': #Track._Track__artist.has(**criteria)
-            filtered_tracks = self._session_cm.session.query(Track, Artist).filter(Track._Track__artist == Artist._Artist__artist_id and Artist._Artist__full_name.has(title)).all()
-            filtered_tracks = self._session_cm.session.execute('SELECT full_name FROM artists WHERE full_name like '%:tag_name'%', {'tag_name': tag_name}).fetchone()
-
-        elif type == 'album':
-            filtered_tracks = self._session_cm.session.query(Track).filter(Track._Track__album == title).all()
-        elif type == 'genre': 
-            filtered_tracks = self._session_cm.session.query(Track).filter(title.in_(Track._Track__genres)).all() 
-        else:                           
-            pass
+           
+        # elif type == 'album':
+        #     filtered_tracks = self._session_cm.session.query(Track).filter(Track._Track__album == title).all()
+        # elif type == 'genre': 
+        #     filtered_tracks = self._session_cm.session.query(Track).filter(title.in_(Track._Track__genres)).all() 
+        # else:                           
+        #     pass
         return filtered_tracks 
 
     def get_number_of_tracks(self) -> int:
