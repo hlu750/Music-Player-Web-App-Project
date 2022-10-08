@@ -98,7 +98,7 @@
             <p class="td"> No Reviews</p>
             {% endif %}
             {% for review in track.reviews %}
-                <p style="padding: 20px 0px" class ="td">{{review.review_text}}, by {{review.username}} at {{review.timestamp}}</p>
+                <p style="padding: 20px 0px" class ="td">{{review.review_text}}, by {{review.user.user_name}} at {{review.timestamp}}</p>
             {% endfor %}
     </div>
     </div>
