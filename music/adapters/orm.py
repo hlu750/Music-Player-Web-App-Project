@@ -79,12 +79,16 @@ def map_model_to_tables():
         # '_User__liked_tracks': relationship(Track, secondary=user_tracks_table)
         # '_User__liked_tracks': relationship(Track, secondary=user_tracks_table,
         #                                back_populates='_Track__track_users')
+        # '_User__reviews': relationship(Review),
+        # '_User__tracks': relationship(Track, secondary=user_tracks_table)
     })
     mapper(Review, review_table, properties={
         '_Review__review_text': review_table.c.review, 
         '_Review__timestamp': review_table.c.timestamp,
         # '_Review__user': relationship(User),
         # '_Review__user': relationship(User)
+        # '_Review__user': relationship(User),
+        # '_Review__track':  relationship(Track),
     })
     mapper(Artist,artist_table, properties={
         
