@@ -124,8 +124,8 @@ def map_model_to_tables():
     mapper(Genre, genre_table, properties={
         '_Genre__genre_id': genre_table.c.genre_id, 
         '_Genre__name': genre_table.c.genre_name,
-        '_Genre__genre_tracks': relationship(Track,
-            secondary=track_genres_table, back_populates="_Track__genres"
-        )
+        # '_Genre__genre_tracks': relationship(Track,
+        #     secondary=track_genres_table, back_populates="_Track__genres"
+        # )
     })
     
