@@ -29,7 +29,7 @@ class SqlAlchemyRepository(AbstractRepository):
     
     def add_user(self, user: User):
         with self._session_cm as scm:
-            scm.session.merge(user)
+            scm.session.add(user)
             scm.commit()
 
     def get_user(self, user_name: str) -> User: #works
