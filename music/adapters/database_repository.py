@@ -179,9 +179,8 @@ class SqlAlchemyRepository(AbstractRepository):
 
     def add_review(self, review: Review): #works
         # super().add_review(review)
-        print("hello wh")
         with self._session_cm as scm:
-            scm.session.add(review)
+            scm.session.merge(review)
             scm.commit()
 
     def get_number_of_reviews(self) -> int:

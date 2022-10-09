@@ -22,8 +22,7 @@ def test_database_populate_select_all_genres(database_engine):
         all_genre_names = []
         for row in result:
             all_genre_names.append(row['genre_name'])
-
-        assert all_genre_names == ['Avant-Garde', 'Jazz', 'Pop', 'Folk', 'Hip-Hop', 'Punk', 'Post-Rock', 'Field Recordings', 'Noise', '	Loud-Rock', 'Psych-Rock', 'Experimental Pop', 'Singer-Songwriter']
+        assert all_genre_names[:10] == ['Avant-Garde', 'International', 'Blues', 'Jazz', 'Classical', 'Old-Time / Historic', 'Pop', 'Disco', 'Rock', 'Electronic']
 
 def test_database_populate_select_all_users(database_engine):
 
@@ -40,7 +39,7 @@ def test_database_populate_select_all_users(database_engine):
         for row in result:
             all_users.append(row['user_name'])
 
-        assert all_users == ['thorke', 'fmercury']
+        assert all_users == ['thorke', 'fmercury', 'mjackson']
 
 def test_database_populate_select_all_reviews(database_engine):
 
@@ -59,7 +58,7 @@ def test_database_populate_select_all_reviews(database_engine):
 
         assert all_reviews == [(1, 2, 2, 'Good song'),
                                 (2, 1, 2, 'Annoying'),
-                                (3, 2, 2, 'My favourite!')]
+                                (3, 3, 2, 'My favourite!')]
 
 def test_database_populate_select_all_tracks(database_engine):
 
@@ -77,7 +76,7 @@ def test_database_populate_select_all_tracks(database_engine):
             all_tracks.append((row['id'], row['title']))
 
         nr_tracks = len(all_tracks)
-        assert nr_tracks == 6
+        assert nr_tracks == 2000
 
         assert all_tracks[0] == (2, 'Food')
 
