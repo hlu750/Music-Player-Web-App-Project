@@ -67,7 +67,11 @@ def add_liked_track(track, user_name: str, repo: AbstractRepository):
 
     user.add_liked_track(track)
     repo.add_user(user)
+<<<<<<< HEAD
 
+=======
+    # print("3:" + user.liked_tracks)
+>>>>>>> 487b842c288f6cf2ac61a322737ceece3896f251
 def get_liked_tracks_list(user_name, repo: AbstractRepository):
     user : User = repo.get_user(user_name)
     if user is None:
