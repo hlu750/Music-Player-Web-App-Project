@@ -120,6 +120,7 @@ def remove_liked_track(track, user_name: str, repo: AbstractRepository):
     if user is None:
         raise UnknownUserException
     user.remove_liked_track(track)
+    repo.add_user(user)
 # def get_liked_tracks(user_name, repo: AbstractRepository):
 #     # tracks = repo.get_liked_tracks(user)
 #     user : User = repo.get_user(user_name)
