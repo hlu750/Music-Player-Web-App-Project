@@ -4,7 +4,7 @@ import pytest
 
 import music.adapters.repository as repo
 from music.adapters.database_repository import SqlAlchemyRepository
-from music.domainmodel.model import User, Track, Genre, Review, make_comment
+from music.domainmodel.model import User, Track, Genre, Review, Artist, make_comment
 # from music.domainmodel.user import User
 # from music.domainmodel.track import Track, Review
 # from music.domainmodel.genre import Genre
@@ -34,13 +34,26 @@ def test_repository_does_not_retrieve_a_non_existent_user(session_factory):
     user = repo.get_user('prince')
     assert user is None
 
+def test_repository_can_retrieve_user_count(session_factory):
+    repo = SqlAlchemyRepository(session_factory)
 
-def test_repository_can_add_track(session_factory):
+    number_of_users = repo.get_number_of_users()
+
+    assert number_of_users == 3
+
+def test_repository_can_retrieve_track_count(session_factory):
     repo = SqlAlchemyRepository(session_factory)
 
     number_of_tracks = repo.get_number_of_tracks()
 
-    new_track_id = number_of_tracks + 1
+    assert number_of_tracks == 2000
+
+def test_repository_can_add_track(session_factory):
+    repo = SqlAlchemyRepository(session_factory)
+
+    # number_of_tracks = repo.get_number_of_tracks()
+
+    new_track_id = 3662
 
     track = Track(
         new_track_id,
@@ -55,7 +68,6 @@ def test_repository_can_retrieve_track(session_factory):
 
     prev, track, next = repo.get_track(2)
 
-    # Check that the track has the expected title.
     assert track.title == 'Food'
 
     # Check that the track is reviewed as expected.
@@ -76,6 +88,19 @@ def test_repository_does_not_retrieve_a_non_existent_track(session_factory):
     prev, track, next = repo.get_track(1)
     assert track is None
 
+def test_repository_can_retrieve_tracks_by_genre(session_factory):
+    repo = SqlAlchemyRepository(session_factory)
+
+    tracks = repo.get_track_by_genre('Jazz')
+
+    assert len(tracks) == 31
+
+def test_repository_can_retrieve_tracks_by_type(session_factory):
+    repo = SqlAlchemyRepository(session_factory)
+
+    tracks = repo.get_filtered_tracks('AWOL', 'artist')
+
+    assert len(tracks) == 4
 
 def test_repository_returns_none_when_there_are_no_previous_tracks(session_factory):
     repo = SqlAlchemyRepository(session_factory)
@@ -87,19 +112,23 @@ def test_repository_returns_none_when_there_are_no_previous_tracks(session_facto
 
 def test_repository_returns_none_when_there_are_no_subsequent_tracks(session_factory):
     repo = SqlAlchemyRepository(session_factory)
-    track_count = repo.get_track(3661)
-    prev, track, next = repo.get_track(track_count)
-
+    prev, track, next = repo.get_track(3661)
     assert next is None
+
+# def test_repository_can_add_genre(session_factory):
+#     repo = SqlAlchemyRepository(session_factory)
+    
+#     repo.add_genre(Genre(61, 'New'))
+
+#     assert repo.get_track_by_genre()
 
 
 def test_repository_can_add_a_review(session_factory):
     repo = SqlAlchemyRepository(session_factory)
-
+    
     user = repo.get_user('thorke')
     prev, track, next = repo.get_track(2)
     review = make_comment("Love this!", user, track, datetime.today())
-
     repo.add_review(review)
 
     assert review in repo.get_reviews()
@@ -111,8 +140,7 @@ def test_repository_does_not_add_a_review_without_a_user(session_factory):
     prev, track, next = repo.get_track(2)
     review = Review(track, "Love this!", 5, None)
     repo.add_review(review)
-    reviews = repo.get_reviews()
-    assert len(reviews) == 3
+    assert repo.get_number_of_reviews() == 3
 
     # with pytest.raises(RepositoryException):
     #     repo.add_review(review)
@@ -130,19 +158,20 @@ def make_track():
     )
     return track
 
-# def test_can_retrieve_an_track_and_add_a_review_to_it(session_factory):
-#     repo = SqlAlchemyRepository(session_factory)
+def test_can_retrieve_a_track_and_add_a_review_to_it(session_factory):
+    repo = SqlAlchemyRepository(session_factory)
+    
+    # Fetch track and User.
+    prev, track, next = repo.get_track(2)
+    user = repo.get_user('thorke')
 
-#     # Fetch track and User.
-#     track = repo.get_track(5)
-#     author = repo.get_user('thorke')
+    # Create a new review, connecting it to the track and User.
+    review = make_comment('Yuck', user, track)
 
-#     # Create a new review, connecting it to the track and User.
-#     review = make_review('First death in Australia', author, track)
-
-#     track_fetched = repo.get_track(5)
-#     author_fetched = repo.get_user('thorke')
-
-#     assert review in track_fetched.reviews
-#     assert review in author_fetched.reviews
+    prev, track_fetched, next = repo.get_track(5)
+    user_fetched = repo.get_user('thorke')
+    
+    assert review in repo.get_reviews()
+    # assert review in track_fetched.reviews
+    # assert review in user_fetched.reviews
 

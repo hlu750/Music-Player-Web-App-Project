@@ -44,7 +44,7 @@ track_table = Table(
     Column('artist_id', ForeignKey('artists.id')),
     Column('album_id', ForeignKey('albums.id')),
     Column('hyperlink', String(255)),
-    Column('duration', Integer, nullable=False)
+    Column('duration', Integer, nullable=True)
 )
 
 user_tracks_table = Table(
