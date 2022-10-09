@@ -181,7 +181,7 @@ class SqlAlchemyRepository(AbstractRepository):
         # super().add_review(review)
         print("hello wh")
         with self._session_cm as scm:
-            scm.session.merge(review)
+            scm.session.add(review)
             scm.commit()
 
     def get_number_of_reviews(self) -> int:
@@ -195,7 +195,7 @@ class SqlAlchemyRepository(AbstractRepository):
             scm.commit()
 
     def get_liked_tracks(self, user: User): #works 
-        liked_tracks = self._session_cm.session.query(Track).filter(Track._Track__track_id.in_(User._User__tracks)).all()
+        liked_tracks = self._session_cm.session.query(Track).filter(Track._Track__track_id.in_(User._User__liked_tracks)).all()
         return liked_tracks
 
 

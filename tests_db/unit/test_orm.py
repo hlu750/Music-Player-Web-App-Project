@@ -4,11 +4,11 @@ import datetime
 
 from sqlalchemy.exc import IntegrityError
 
-# from music.domainmodel import User, track, Comment, Tag, make_comment, make_tag_association
-from music.domainmodel.user import User
-from music.domainmodel.track import Track, Review
-from music.domainmodel.genre import Genre
-from music.domainmodel.artist import Artist  
+from music.domainmodel.model import User, Track, Review, Genre, make_comment
+# from music.domainmodel.user import User
+# from music.domainmodel.track import Track, Review
+# from music.domainmodel.genre import Genre
+# from music.domainmodel.artist import Artist  
 
 def insert_user(empty_session, values=None):
     new_name = "Andrew"
@@ -35,25 +35,25 @@ def insert_users(empty_session, values):
 def insert_track(empty_session):
     empty_session.execute(
         'INSERT INTO tracks (title, artist_id, album_id, hyperlink, duration) VALUES '
-        '("A title", 3, 3, "https://en.wikipedia.org/wiki/Hyperlink", 168'
+        '("A title", 3, 3, "https://en.wikipedia.org/wiki/Hyperlink", 168)'
     )
     row = empty_session.execute('SELECT id from tracks').fetchone()
     return row[0]
 
 
-# def insert_tags(empty_session):
-#     empty_session.execute(
-#         'INSERT INTO tags (tag_name) VALUES ("News"), ("New Zealand")'
-#     )
-#     rows = list(empty_session.execute('SELECT id from tags'))
-#     keys = tuple(row[0] for row in rows)
-#     return keys
+def insert_genres(empty_session):
+    empty_session.execute(
+        'INSERT INTO genres (genre_name) VALUES ("Soft-Rock"), ("Hard-Rock")'
+    )
+    rows = list(empty_session.execute('SELECT id from genres'))
+    keys = tuple(row[0] for row in rows)
+    return keys
 
 
-# def insert_track_tag_associations(empty_session, track_key, tag_keys):
-#     stmt = 'INSERT INTO track_tags (track_id, tag_id) VALUES (:track_id, :tag_id)'
-#     for tag_key in tag_keys:
-#         empty_session.execute(stmt, {'track_id': track_key, 'tag_id': tag_key})
+def insert_track_genre_associations(empty_session, track_key, genre_keys):
+    stmt = 'INSERT INTO track_genres (track_id, genre_id) VALUES (:track_id, :genre_id)'
+    for genre_key in genre_keys:
+        empty_session.execute(stmt, {'track_id': track_key, 'genre_id': genre_key})
 
 
 # def insert_commented_track(empty_session):
@@ -74,15 +74,9 @@ def insert_track(empty_session):
 #     return row[0]
 
 
-# def make_track():
-#     track = track(
-#         track_date,
-#         "Coronavirus: First case of virus in New Zealand",
-#         "The first case of coronavirus has been confirmed in New Zealand  and authorities are now scrambling to track down people who may have come into contact with the patient.",
-#         "https://www.stuff.co.nz/national/health/119899280/ministry-of-health-gives-latest-update-on-novel-coronavirus",
-#         "https://resources.stuff.co.nz/content/dam/images/1/z/e/3/w/n/image.related.StuffLandscapeSixteenByNine.1240x700.1zduvk.png/1583369866749.jpg"
-#     )
-#     return track
+def make_track():
+    track = Track("A title", 3, 3, "https://en.wikipedia.org/wiki/Hyperlink", 168)
+    return track
 
 
 def make_user():
@@ -90,9 +84,9 @@ def make_user():
     return user
 
 
-# def make_tag():
-#     tag = Tag("News")
-#     return tag
+def make_genre():
+    genre = genre("New")
+    return genre
 
 
 # def test_loading_of_users(empty_session):
@@ -135,17 +129,17 @@ def make_user():
 #     assert track_key == fetched_track.id
 
 
-# def test_loading_of_tagged_track(empty_session):
+# def test_loading_of_genreged_track(empty_session):
 #     track_key = insert_track(empty_session)
-#     tag_keys = insert_tags(empty_session)
-#     insert_track_tag_associations(empty_session, track_key, tag_keys)
+#     genre_keys = insert_genres(empty_session)
+#     insert_track_genre_associations(empty_session, track_key, genre_keys)
 
 #     track = empty_session.query(track).get(track_key)
-#     tags = [empty_session.query(Tag).get(key) for key in tag_keys]
+#     genres = [empty_session.query(genre).get(key) for key in genre_keys]
 
-#     for tag in tags:
-#         assert track.is_tagged_by(tag)
-#         assert tag.is_applied_to(track)
+#     for genre in genres:
+#         assert track.is_genreged_by(genre)
+#         assert genre.is_applied_to(track)
 
 
 # def test_loading_of_commented_track(empty_session):
@@ -196,15 +190,15 @@ def make_user():
 #                      )]
 
 
-# def test_saving_tagged_track(empty_session):
+# def test_saving_genreged_track(empty_session):
 #     track = make_track()
-#     tag = make_tag()
+#     genre = make_genre()
 
-#     # Establish the bidirectional relationship between the track and the Tag.
-#     make_tag_association(track, tag)
+#     # Establish the bidirectional relationship between the track and the genre.
+#     make_genre_association(track, genre)
 
-#     # Persist the track (and Tag).
-#     # Note: it doesn't matter whether we add the Tag or the track. They are connected
+#     # Persist the track (and genre).
+#     # Note: it doesn't matter whether we add the genre or the track. They are connected
 #     # bidirectionally, so persisting either one will persist the other.
 #     empty_session.add(track)
 #     empty_session.commit()
@@ -213,18 +207,18 @@ def make_user():
 #     rows = list(empty_session.execute('SELECT id FROM tracks'))
 #     track_key = rows[0][0]
 
-#     # Check that the tags table has a new record.
-#     rows = list(empty_session.execute('SELECT id, tag_name FROM tags'))
-#     tag_key = rows[0][0]
+#     # Check that the genres table has a new record.
+#     rows = list(empty_session.execute('SELECT id, genre_name FROM genres'))
+#     genre_key = rows[0][0]
 #     assert rows[0][1] == "News"
 
-#     # Check that the track_tags table has a new record.
-#     rows = list(empty_session.execute('SELECT track_id, tag_id from track_tags'))
+#     # Check that the track_genres table has a new record.
+#     rows = list(empty_session.execute('SELECT track_id, genre_id from track_genres'))
 #     track_foreign_key = rows[0][0]
-#     tag_foreign_key = rows[0][1]
+#     genre_foreign_key = rows[0][1]
 
 #     assert track_key == track_foreign_key
-#     assert tag_key == tag_foreign_key
+#     assert genre_key == genre_foreign_key
 
 
 # def test_save_commented_track(empty_session):

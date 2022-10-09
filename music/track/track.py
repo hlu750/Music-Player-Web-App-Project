@@ -172,20 +172,14 @@ def review_on_track():
 def like_track():
     user_name = session['user_name']
     user: User = get_user(user_name, repo.repo_instance)
-    print("get_user works")
     if request.args.get('track_id') == None:
         track_id = 2
     else:
         track_id = int(request.args.get('track_id'))
 
     prev, track, next = services.get_track(track_id, repo.repo_instance)
-    print("get_track works")
-    print("5")
     services.add_liked_track(track, user_name, repo.repo_instance)
-    # print("4:" + user.liked_tracks)
-    print("add_liked_track works")
     tracks = services.get_liked_tracks(user_name, repo.repo_instance)
-    print("get_liked_tracks works")
     return render_template('profile/favourites.html', 
     title='Liked Tracks', track = track, tracks = tracks, user = user
     )

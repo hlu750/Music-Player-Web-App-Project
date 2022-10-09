@@ -52,6 +52,8 @@ or
 
 ````shell
 $ py.test
+
+pytest tests_db
 ```` 
  
 ## Data sources
