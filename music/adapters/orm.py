@@ -102,7 +102,7 @@ def map_model_to_tables():
         '_Track__album': relationship(Album),
         '_Track__track_duration': track_table.c.duration,
         '_Track__reviews': relationship(Review, backref='_Review__track'),
-        '_Track__track_users': relationship(User, secondary=user_tracks_table)
+        # '_Track__track_users': relationship(User, secondary=user_tracks_table)
        
     })
     

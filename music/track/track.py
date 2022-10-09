@@ -179,6 +179,9 @@ def like_track():
 
     prev, track, next = services.get_track(track_id, repo.repo_instance)
     services.add_liked_track(track, user_name, repo.repo_instance)
+
+    # print("4:" + user.liked_tracks)
+    print("add_liked_track works")
     tracks = services.get_liked_tracks(user_name, repo.repo_instance)
     return render_template('profile/favourites.html', 
     title='Liked Tracks', track = track, tracks = tracks, user = user
