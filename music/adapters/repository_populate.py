@@ -15,3 +15,4 @@ def populate(data_path: Path, repo: AbstractRepository, database_mode: bool):
     # Load comments into the repository.
     # load_comments(data_path, repo, users)
     load_reviews(data_path, repo, users)
+    

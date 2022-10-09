@@ -1,83 +1,84 @@
-# from sqlalchemy import select, inspect
+from sqlalchemy import select, inspect
 
-# from music.adapters.orm import metadata
+from music.adapters.orm import metadata
 
-# def test_database_populate_inspect_table_names(database_engine):
+def test_database_populate_inspect_table_names(database_engine):
 
-#     # Get table information
-#     inspector = inspect(database_engine)
-#     assert inspector.get_table_names() == ['article_tags', 'articles', 'comments', 'tags', 'users']
+    # Get table information
+    inspector = inspect(database_engine)
+    assert inspector.get_table_names() == ['albums', 'artists', 'genres', 'reviews', 'track_genres', 'tracks', 'user_tracks', 'users']
 
-# def test_database_populate_select_all_tags(database_engine):
+def test_database_populate_select_all_genres(database_engine):
 
-#     # Get table information
-#     inspector = inspect(database_engine)
-#     name_of_tags_table = inspector.get_table_names()[3]
+    # Get table information
+    inspector = inspect(database_engine)
+    name_of_genres_table = inspector.get_table_names()[2]
 
-#     with database_engine.connect() as connection:
-#         # query for records in table tags
-#         select_statement = select([metadata.tables[name_of_tags_table]])
-#         result = connection.execute(select_statement)
+    with database_engine.connect() as connection:
+        # query for records in table genres
+        select_statement = select([metadata.tables[name_of_genres_table]])
+        result = connection.execute(select_statement)
 
-#         all_tag_names = []
-#         for row in result:
-#             all_tag_names.append(row['tag_name'])
+        all_genre_names = []
+        for row in result:
+            all_genre_names.append(row['genre_name'])
 
-#         assert all_tag_names == ['New Zealand', 'Health', 'World', 'Politics']
+        assert all_genre_names == ['Avant-Garde', 'Jazz', 'Pop', 'Folk', 'Hip-Hop', 'Punk', 'Post-Rock', 'Field Recordings', 'Noise', '	Loud-Rock', 'Psych-Rock', 'Experimental Pop', 'Singer-Songwriter']
 
-# def test_database_populate_select_all_users(database_engine):
+def test_database_populate_select_all_users(database_engine):
 
-#     # Get table information
-#     inspector = inspect(database_engine)
-#     name_of_users_table = inspector.get_table_names()[4]
+    # Get table information
+    inspector = inspect(database_engine)
+    name_of_users_table = inspector.get_table_names()[7]
 
-#     with database_engine.connect() as connection:
-#         # query for records in table users
-#         select_statement = select([metadata.tables[name_of_users_table]])
-#         result = connection.execute(select_statement)
+    with database_engine.connect() as connection:
+        # query for records in table users
+        select_statement = select([metadata.tables[name_of_users_table]])
+        result = connection.execute(select_statement)
 
-#         all_users = []
-#         for row in result:
-#             all_users.append(row['user_name'])
+        all_users = []
+        for row in result:
+            all_users.append(row['user_name'])
 
-#         assert all_users == ['thorke', 'fmercury']
+        assert all_users == ['thorke', 'fmercury']
 
-# def test_database_populate_select_all_comments(database_engine):
+def test_database_populate_select_all_reviews(database_engine):
 
-#     # Get table information
-#     inspector = inspect(database_engine)
-#     name_of_comments_table = inspector.get_table_names()[2]
+    # Get table information
+    inspector = inspect(database_engine)
+    name_of_reviews_table = inspector.get_table_names()[3]
 
-#     with database_engine.connect() as connection:
-#         # query for records in table comments
-#         select_statement = select([metadata.tables[name_of_comments_table]])
-#         result = connection.execute(select_statement)
+    with database_engine.connect() as connection:
+        # query for records in table reviews
+        select_statement = select([metadata.tables[name_of_reviews_table]])
+        result = connection.execute(select_statement)
 
-#         all_comments = []
-#         for row in result:
-#             all_comments.append((row['id'], row['user_id'], row['article_id'], row['comment']))
+        all_reviews = []
+        for row in result:  
+            all_reviews.append((row['id'], row['user_id'], row['track_id'], row['review']))
 
-#         assert all_comments == [(1, 2, 1, 'Oh no, COVID-19 has hit New Zealand'),
-#                                 (2, 1, 1, 'Yeah Freddie, bad news')]
+        assert all_reviews == [(1, 2, 2, 'Good song'),
+                                (2, 1, 2, 'Annoying'),
+                                (3, 2, 2, 'My favourite!')]
 
-# def test_database_populate_select_all_articles(database_engine):
+def test_database_populate_select_all_tracks(database_engine):
 
-#     # Get table information
-#     inspector = inspect(database_engine)
-#     name_of_articles_table = inspector.get_table_names()[1]
+    # Get table information
+    inspector = inspect(database_engine)
+    name_of_tracks_table = inspector.get_table_names()[5]
 
-#     with database_engine.connect() as connection:
-#         # query for records in table articles
-#         select_statement = select([metadata.tables[name_of_articles_table]])
-#         result = connection.execute(select_statement)
+    with database_engine.connect() as connection:
+        # query for records in table tracks
+        select_statement = select([metadata.tables[name_of_tracks_table]])
+        result = connection.execute(select_statement)
 
-#         all_articles = []
-#         for row in result:
-#             all_articles.append((row['id'], row['title']))
+        all_tracks = []
+        for row in result:
+            all_tracks.append((row['id'], row['title']))
 
-#         nr_articles = len(all_articles)
-#         assert nr_articles == 6
+        nr_tracks = len(all_tracks)
+        assert nr_tracks == 6
 
-#         assert all_articles[0] == (1, 'Coronavirus: First case of virus in New Zealand')
+        assert all_tracks[0] == (2, 'Food')
 
 
