@@ -5,10 +5,10 @@ import pytest
 import music.adapters.repository as repo
 from music.adapters.database_repository import SqlAlchemyRepository
 from music.domainmodel.model import User, Track, Genre, Review, Artist, make_comment
-# from music.domainmodel.user import User
-# from music.domainmodel.track import Track, Review
-# from music.domainmodel.genre import Genre
-# from music.domainmodel.artist import Artist  
+# # from music.domainmodel.user import User
+# # from music.domainmodel.track import Track, Review
+# # from music.domainmodel.genre import Genre
+# # from music.domainmodel.artist import Artist  
 
 from music.adapters.repository import RepositoryException
 
@@ -19,7 +19,7 @@ def test_repository_can_add_a_user(session_factory):
     repo.add_user(user)
     user_id = repo.get_number_of_users() + 1
     repo.add_user(User(user_id, 'Martin', '123456789'))
-    user2 = repo.get_user('Dave')
+    user2 = repo.get_user('dave')
     assert user2 == user and user2 is user
 
 def test_repository_can_retrieve_a_user(session_factory):
@@ -95,12 +95,26 @@ def test_repository_can_retrieve_tracks_by_genre(session_factory):
 
     assert len(tracks) == 31
 
-def test_repository_can_retrieve_tracks_by_type(session_factory):
+def test_repository_can_retrieve_tracks_by_artist(session_factory):
     repo = SqlAlchemyRepository(session_factory)
 
     tracks = repo.get_filtered_tracks('AWOL', 'artist')
 
     assert len(tracks) == 4
+
+def test_repository_can_retrieve_tracks_by_album(session_factory):
+    repo = SqlAlchemyRepository(session_factory)
+
+    tracks = repo.get_filtered_tracks('Niris', 'album')
+
+    assert len(tracks) == 5
+
+def test_repository_can_retrieve_tracks_by_title(session_factory):
+    repo = SqlAlchemyRepository(session_factory)
+
+    tracks = repo.get_filtered_tracks('Untitled', 'track')
+
+    assert len(tracks) == 37
 
 def test_repository_returns_none_when_there_are_no_previous_tracks(session_factory):
     repo = SqlAlchemyRepository(session_factory)
@@ -118,9 +132,9 @@ def test_repository_returns_none_when_there_are_no_subsequent_tracks(session_fac
 # def test_repository_can_add_genre(session_factory):
 #     repo = SqlAlchemyRepository(session_factory)
     
-#     repo.add_genre(Genre(61, 'New'))
+#     repo.add_genre(Genre(1, 'New'))
 
-#     assert repo.get_track_by_genre()
+#     assert repo.ge()
 
 
 def test_repository_can_add_a_review(session_factory):

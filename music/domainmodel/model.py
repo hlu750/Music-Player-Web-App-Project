@@ -302,14 +302,11 @@ class Review:
 
     def __init__(self, track: Track, review_text: str, rating: int, user):
         self.__track = None
-        if (isinstance(user, User)):
+        if (isinstance(user, User)) and (isinstance(track, Track)):
             self.__user = user
-        # if (isinstance(user_name, str)):
-        #     self.__user_name = user_name
+            self.__track = track
         else:
             self.__user = None
-        if isinstance(track, Track):
-            self.__track = track
 
         self.__review_text = 'N/A'
         if isinstance(review_text, str):
@@ -415,27 +412,11 @@ class User:
         return self.__liked_tracks
 
     def add_liked_track(self, track: Track):
-
-        # print("are we here")
         if not isinstance(track, Track) or track in self.__liked_tracks:
-            # print("1:")
-            print(self.__liked_tracks)
             return
-        # print("ello?")
         self.__liked_tracks.append(track)
-        # print("2:")
-        print(self.__liked_tracks)
-
-
-        print("are we here")
         if not isinstance(track, Track) or track in self.__liked_tracks:
-            print("1:")
-            print(self.__liked_tracks)
-
-            # print("1:" + self.__liked_tracks)
-
             return
-        print("ello?")
         self.__liked_tracks.append(track)
 
     def remove_liked_track(self, track: Track):
@@ -460,7 +441,6 @@ class User:
         return hash(self.user_id)
 
 def make_comment(review_text: str, user: User, track: Track, timestamp: datetime = datetime.today()):
-    print(track)
     comment = Review(track, review_text, 5, user )
     # print(comment)
     user.add_review(comment)
