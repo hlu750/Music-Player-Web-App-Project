@@ -11,7 +11,7 @@
     <div>
         <form method="POST" action="{{ handler_url }}">
           {{ form.csrf_token }}
-          <div>{{ form.title.label }} {{ form.title }}{{form.select}}</div>
+          <div> {{ form.title(placeholder = "Enter Keyword") }}{{form.select}}</div>
           
           {{ form.submit}}
         </form>

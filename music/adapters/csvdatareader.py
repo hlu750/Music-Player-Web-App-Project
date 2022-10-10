@@ -76,7 +76,6 @@ class TrackCSVReader:
                 album_id = int(row['album_id']) if row['album_id'].isdigit() else row['album_id']
                 if type(album_id) is not int:
                     print(f'Invalid album_id: {album_id}')
-                    print(row)
                     continue
                 
                 album = create_album_object(row)
@@ -92,7 +91,6 @@ class TrackCSVReader:
                 artist_id = int(row['artist_id']) if row['artist_id'].isdigit() else row['artist_id']
                 if type(artist_id) is not int:
                     print(f'Invalid artist_id: {artist_id}')
-                    print(row)
                     continue
                 artist = create_artist_object(row)
                 artist_dict[artist_id] = artist
@@ -167,7 +165,7 @@ class TrackCSVReader:
 
 
         return self.__dataset_of_tracks, self.__dataset_of_albums,genre_dict
-
+        
     def read_csv_file(filename: str):
         with open(filename, encoding='utf-8-sig') as infile:
             reader = csv.reader(infile)
@@ -232,7 +230,6 @@ def extract_genres(track_row: dict):
                 genres.append(genre)
 
         except Exception as e:
-            print(track_genres_raw)
             print(f'Exception occurred while parsing genres: {e}')
     # print(genres)
     return genres
@@ -261,7 +258,6 @@ def read_csv_file(filename: str):
 
 
 def load_tracks_and_albums(data_path:Path,repo:AbstractRepository, database_mode = bool ):
-    print("Loading")
     # album_path = str(data_path /"raw_albums_excerptTest.csv")
     # track_path = str(data_path /"raw_tracks_excerptTest.csv")
     album_path = str(data_path /"raw_albums_excerpt.csv")
@@ -308,7 +304,6 @@ def load_reviews(data_path: Path, repo: AbstractRepository, users):
             timestamp=datetime.fromisoformat(data_row[4])
             
         )
-        print(review)
         repo.add_review(review)
 
 # def populate(data_path, album_path,track_path ,repo:AbstractRepository):
