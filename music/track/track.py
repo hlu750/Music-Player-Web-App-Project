@@ -1,4 +1,5 @@
 from email.policy import default
+from logging import PlaceHolder
 from flask import Blueprint, render_template, request, render_template, redirect, url_for, session
 from urllib import request
 from flask import Blueprint, render_template, request, url_for
@@ -232,7 +233,7 @@ class SearchForm(FlaskForm):
                 ('Album', 'Album'),
                 ('Artist', 'Artist'),
                 ('Genre', 'Genre')]
-    title = StringField("Title", default = "Enter a track title", validators=[DataRequired(message="Enter a non-empty title")])
+    title = StringField("Title",  validators=[DataRequired(message="Enter a non-empty title")])
     select = SelectField('Search for music:', choices=choices)
     submit = SubmitField("Submit")
 # @track_blueprint.route('/track/like/<int:track_id>', methods=['GET'])
