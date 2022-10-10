@@ -412,27 +412,11 @@ class User:
         return self.__liked_tracks
 
     def add_liked_track(self, track: Track):
-
-        # print("are we here")
         if not isinstance(track, Track) or track in self.__liked_tracks:
-            # print("1:")
-            print(self.__liked_tracks)
             return
-        # print("ello?")
         self.__liked_tracks.append(track)
-        # print("2:")
-        print(self.__liked_tracks)
-
-
-        print("are we here")
         if not isinstance(track, Track) or track in self.__liked_tracks:
-            print("1:")
-            print(self.__liked_tracks)
-
-            # print("1:" + self.__liked_tracks)
-
             return
-        print("ello?")
         self.__liked_tracks.append(track)
 
     def remove_liked_track(self, track: Track):
@@ -457,7 +441,6 @@ class User:
         return hash(self.user_id)
 
 def make_comment(review_text: str, user: User, track: Track, timestamp: datetime = datetime.today()):
-    print(track)
     comment = Review(track, review_text, 5, user )
     # print(comment)
     user.add_review(comment)

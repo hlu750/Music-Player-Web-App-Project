@@ -24,7 +24,7 @@ def register():
 
     if form.validate_on_submit():
         try:
-            services.add_user(form.user_name.data, form.password.data, repo.repo_instance)
+            services.add_user(form.user_name.data.lower(), form.password.data, repo.repo_instance)
             
             return redirect(url_for('authentication_bp.login'))
         except services.NameNotUniqueException:
