@@ -16,7 +16,6 @@ TEST_DATABASE_URI_FILE = 'sqlite:///music-test.db'
 
 @pytest.fixture
 def database_engine():
-    print("whyyyyyy")
     clear_mappers()
     engine = create_engine(TEST_DATABASE_URI_FILE)
     metadata.create_all(engine)  # Conditionally create database tables.
