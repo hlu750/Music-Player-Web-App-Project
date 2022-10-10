@@ -161,11 +161,9 @@ class TrackCSVReader:
 
             self.__dataset_of_tracks.append(track)
         # print(reader.__albums_csv_file)
-        
-
 
         return self.__dataset_of_tracks, self.__dataset_of_albums,genre_dict
-
+        
     def read_csv_file(filename: str):
         with open(filename, encoding='utf-8-sig') as infile:
             reader = csv.reader(infile)

@@ -34,7 +34,7 @@ class MemoryRepository(AbstractRepository):
         self.__liked_tracks = list()
         self.__albums = list()
         self.__album_index = dict()
-
+        
     def add_user(self, user: User):
         # print(user.user_name)
         self.__users.append(user)
@@ -160,6 +160,4 @@ class MemoryRepository(AbstractRepository):
 
     def get_liked_tracks(self, user: User):
         return self.__liked_tracks
-
-
 
